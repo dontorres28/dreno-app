@@ -1,0 +1,27 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "unit-disallowed-list": [
+      [],
+      { "message": "Use --space-* CSS variables or Tailwind spacing classes instead of raw px for spacing." }
+    ],
+    "declaration-property-value-disallowed-list": {
+      "/^(margin|padding|gap|top|right|bottom|left|row-gap|column-gap|inset)/": [
+        "/^[0-9]+px$/",
+        "/^-[0-9]+px$/"
+      ]
+    },
+    "comment-empty-line-before": null,
+    "no-descending-specificity": null,
+    "alpha-value-notation": null,
+    "color-function-notation": null,
+    "import-notation": null,
+    "selector-class-pattern": null,
+    "keyframes-name-pattern": null,
+    "custom-property-pattern": null,
+    "value-keyword-case": null,
+    "media-feature-range-notation": null,
+    "declaration-block-no-redundant-longhand-properties": null
+  },
+  "ignoreFiles": ["dist/**", "node_modules/**"]
+}
