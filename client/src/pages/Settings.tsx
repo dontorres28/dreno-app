@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
+import ThemeToggle from '../components/ThemeToggle';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -40,11 +41,16 @@ const LANGUAGES = [
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div style={{ marginBottom: '2rem' }}>
-      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--w50)', marginBottom: '1rem' }}>
+    <div style={{ marginBottom: '1.5rem' }}>
+      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)', marginBottom: '0.875rem', paddingLeft: 4 }}>
         {title}
       </p>
-      <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 16, overflow: 'hidden' }}>
+      <div style={{
+        background: 'var(--surface-1)',
+        border: '0.5px solid var(--surface-border-2)',
+        borderRadius: 18,
+        overflow: 'hidden',
+      }}>
         {children}
       </div>
     </div>
@@ -55,11 +61,11 @@ function Row({ label, children, border = true }: { label: string; children: Reac
   return (
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      padding: '14px 18px',
+      padding: '15px 18px',
       borderBottom: border ? '0.5px solid var(--surface-border)' : 'none',
-      gap: '1rem',
+      gap: '1rem', minHeight: 52,
     }}>
-      <p style={{ fontSize: 14, color: 'var(--w60)', flexShrink: 0 }}>{label}</p>
+      <p style={{ fontSize: 14, color: 'var(--w70)', flexShrink: 0, fontWeight: 500 }}>{label}</p>
       <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
         {children}
       </div>
@@ -69,14 +75,16 @@ function Row({ label, children, border = true }: { label: string; children: Reac
 
 const inputStyle: React.CSSProperties = {
   background: 'transparent', border: 'none', outline: 'none',
-  color: 'var(--white)', fontSize: 14, fontFamily: 'var(--font-body)',
+  color: 'var(--white)', fontSize: 15, fontFamily: 'var(--font-body)',
   textAlign: 'right', width: '100%', maxWidth: 240,
+  letterSpacing: '-0.005em',
 };
 
 const selectStyle: React.CSSProperties = {
   background: 'transparent', border: 'none', outline: 'none',
-  color: 'var(--white)', fontSize: 14, fontFamily: 'var(--font-body)',
+  color: 'var(--white)', fontSize: 15, fontFamily: 'var(--font-body)',
   textAlign: 'right', cursor: 'pointer',
+  letterSpacing: '-0.005em',
 };
 
 export default function Settings() {
@@ -209,52 +217,70 @@ export default function Settings() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 560, margin: '0 auto', padding: '3rem 1.5rem 6rem' }}>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '2.5rem' }}>
+      <div style={{ maxWidth: 620, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
           {t('settings.title')}
         </h1>
 
-        {/* Profile — Apple-style */}
-        <div style={{ marginBottom: '2rem' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--w50)', marginBottom: '1rem' }}>
-            {t('settings.profile')}
-          </p>
+        {/* Profile hero — gradient card matching Dashboard next session / Coach profile */}
+        <div style={{
+          position: 'relative',
+          background: 'linear-gradient(135deg, rgba(255,48,64,0.08) 0%, rgba(255,48,64,0.02) 100%)',
+          border: '0.5px solid var(--surface-border-2)',
+          borderRadius: 22,
+          padding: '1.5rem',
+          marginBottom: '1.5rem',
+          overflow: 'hidden',
+          display: 'flex', alignItems: 'center', gap: 18,
+        }}>
+          <div style={{
+            position: 'absolute', top: -50, right: -50,
+            width: 180, height: 180, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,48,64,0.18) 0%, transparent 65%)',
+            pointerEvents: 'none',
+          }} />
 
-          {/* Avatar */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <label style={{ cursor: 'pointer', position: 'relative' }}>
-              <input type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: 'none' }} />
-              <div style={{
-                width: 80, height: 80, borderRadius: '50%',
-                background: avatarUrl ? 'transparent' : 'var(--red)',
-                overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0, color: '#fff', fontWeight: 700, fontSize: 28,
-                fontFamily: 'var(--font-display)', userSelect: 'none',
-                border: '2px solid var(--surface-border)',
-              }}>
-                {avatarUrl
-                  ? <img src={avatarUrl} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : (name ? name.trim()[0].toUpperCase() : email[0]?.toUpperCase())}
-              </div>
-              <div style={{
-                position: 'absolute', bottom: 0, right: 0,
-                width: 24, height: 24, borderRadius: '50%',
-                background: 'var(--bg-2)', border: '1.5px solid var(--surface-border)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                {avatarUploading
-                  ? <Spinner size={12} />
-                  : <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 8.5l2.5-.5L10 2.5a1.414 1.414 0 0 0-2-2L2.5 6 2 8.5Z" stroke="var(--w60)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                }
-              </div>
-            </label>
-            <p style={{ fontSize: 12, color: 'var(--w40)', marginTop: '0.625rem' }}>
-              {avatarUploading ? 'Uploading...' : 'Tap to change photo'}
+          <label style={{ cursor: 'pointer', position: 'relative', flexShrink: 0 }}>
+            <input type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: 'none' }} />
+            <div style={{
+              width: 72, height: 72, borderRadius: '50%',
+              background: avatarUrl ? 'transparent' : 'linear-gradient(135deg, #ff5566 0%, #FF3040 60%, #cc1e2c 100%)',
+              overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0, color: '#fff', fontWeight: 700, fontSize: 26,
+              fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', userSelect: 'none',
+              boxShadow: avatarUrl ? 'none' : '0 4px 16px rgba(255,48,64,0.35)',
+            }}>
+              {avatarUrl
+                ? <img src={avatarUrl} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : (name ? name.trim()[0].toUpperCase() : email[0]?.toUpperCase())}
+            </div>
+            <div style={{
+              position: 'absolute', bottom: -2, right: -2,
+              width: 26, height: 26, borderRadius: '50%',
+              background: 'var(--bg-2)', border: '0.5px solid var(--line-2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+            }}>
+              {avatarUploading
+                ? <Spinner size={12} />
+                : <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 8.5l2.5-.5L10 2.5a1.414 1.414 0 0 0-2-2L2.5 6 2 8.5Z" stroke="var(--w80)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              }
+            </div>
+          </label>
+
+          <div style={{ position: 'relative', flex: 1, minWidth: 0 }}>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: 22, letterSpacing: '-0.025em', lineHeight: 1.05, color: 'var(--white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {name || 'Your name'}
+            </p>
+            <p style={{ fontSize: 13, color: 'var(--w70)', marginTop: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {email}
             </p>
           </div>
+        </div>
 
-          {/* Fields */}
-          <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 16, overflow: 'hidden' }}>
+        {/* Contact section */}
+        <Section title={t('settings.profile')}>
+          <div style={{ display: 'contents' }}>
             <Row label={t('settings.name')}>
               <input
                 value={name}
@@ -283,7 +309,7 @@ export default function Settings() {
             </Row>
             <Row label="Instagram" border={false}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 14, color: 'var(--w40)' }}>@</span>
+                <span style={{ fontSize: 15, color: 'var(--w60)' }}>@</span>
                 <input
                   value={instagram.replace(/^@/, '')}
                   onChange={e => setInstagram(e.target.value)}
@@ -293,7 +319,7 @@ export default function Settings() {
               </div>
             </Row>
           </div>
-        </div>
+        </Section>
 
         {/* Athlete-specific */}
         {!isCoach && (
@@ -353,16 +379,16 @@ export default function Settings() {
           <Row label={t('settings.theme')} border={false}>
             <button
               onClick={toggle}
-              className="toggle-btn"
               style={{
-                display: 'flex', alignItems: 'center', gap: 8,
+                display: 'flex', alignItems: 'center', gap: 10,
                 background: 'none', border: 'none', cursor: 'pointer',
-                fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--w60)',
+                fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500, color: 'var(--w80)',
+                padding: 0,
               }}
             >
               {theme === 'dark' ? t('settings.dark') : t('settings.light')}
-              <span style={{ width: 40, height: 23, borderRadius: 12, background: 'var(--surface-border)', position: 'relative', display: 'inline-block', flexShrink: 0 }}>
-                <span style={{ width: 17, height: 17, borderRadius: '50%', background: 'var(--white)', position: 'absolute', top: 3, left: 3, transform: `translateX(${theme === 'dark' ? 17 : 0}px)`, transition: 'transform 0.2s ease', display: 'block', willChange: 'transform' }} />
+              <span style={{ width: 40, height: 24, borderRadius: 50, background: theme === 'dark' ? 'var(--red)' : 'var(--surface-2)', position: 'relative', display: 'inline-block', flexShrink: 0, transition: 'background 220ms cubic-bezier(0.23, 1, 0.32, 1)' }}>
+                <span style={{ width: 18, height: 18, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: 3, transform: `translateX(${theme === 'dark' ? 16 : 0}px)`, transition: 'transform 260ms cubic-bezier(0.4, 0, 0.2, 1)', display: 'block', boxShadow: '0 1px 2px rgba(0,0,0,0.15)' }} />
               </span>
             </button>
           </Row>
@@ -373,8 +399,17 @@ export default function Settings() {
           <Row label={t('settings.signOut')} border={false}>
             <button
               onClick={handleSignOut}
-              className="btn-danger"
-              style={{ fontSize: 13, padding: '7px 16px' }}
+              className="signout-btn"
+              style={{
+                fontSize: 13, fontWeight: 700, minHeight: 36, padding: '0 18px',
+                borderRadius: 50, border: 'none', cursor: 'pointer',
+                fontFamily: 'var(--font-body)', letterSpacing: '-0.005em',
+                background: 'var(--nav-active-bg)',
+                color: 'var(--nav-active-color)',
+                transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
+              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             >
               {t('settings.signOut')}
             </button>
@@ -386,7 +421,7 @@ export default function Settings() {
           onClick={save}
           disabled={saving}
           className="btn-primary"
-          style={{ width: '100%', padding: '15px', fontSize: 15, marginTop: '0.5rem' }}
+          style={{ width: '100%', height: 50, marginTop: '1rem' }}
         >
           {saving ? <Spinner size={18} /> : t('settings.saveChanges')}
         </button>

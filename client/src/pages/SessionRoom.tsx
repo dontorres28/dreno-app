@@ -151,7 +151,7 @@ export default function SessionRoom() {
         {/* Header row */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', letterSpacing: '-0.03em', lineHeight: 1 }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', letterSpacing: '-0.035em', lineHeight: 1 }}>
               {profile?.role === 'athlete' ? t('session.sessionWith', { name: coachName }) : t('session.sessionRoom')}
             </h1>
             <p style={{ fontSize: 13, color: 'var(--w40)', marginTop: 4 }}>
@@ -176,7 +176,7 @@ export default function SessionRoom() {
             {isCompleted && (
               <span style={{
                 fontSize: 12, fontWeight: 600, padding: '5px 14px', borderRadius: 50,
-                background: 'rgba(52,211,153,0.12)', color: 'rgba(52,211,153,0.9)',
+                background: 'rgba(255,48,64,0.12)', color: 'var(--white)',
               }}>
                 {t('session.completed')}
               </span>

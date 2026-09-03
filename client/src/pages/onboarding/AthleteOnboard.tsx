@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../../components/Spinner';
+import Stepper from '../../components/Stepper';
+import ThemeToggle from '../../components/ThemeToggle';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -107,11 +109,12 @@ export default function AthleteOnboard() {
       onClick={onClick}
       style={{
         padding: small ? '9px 16px' : '12px 20px',
-        borderRadius: 50, fontSize: small ? 13 : 14, fontWeight: 500,
-        cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'var(--font-body)',
-        background: active ? 'rgba(255,48,64,0.12)' : 'var(--surface-1)',
-        border: active ? '0.5px solid rgba(255,48,64,0.4)' : '0.5px solid var(--surface-border)',
-        color: active ? 'var(--white)' : 'var(--w60)',
+        borderRadius: 50, fontSize: small ? 13 : 14, fontWeight: 600,
+        cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s',
+        fontFamily: 'var(--font-body)',
+        background: active ? 'var(--red)' : 'var(--surface-1)',
+        border: active ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
+        color: active ? '#fff' : 'var(--w80)',
       }}
     >
       {label}
@@ -121,32 +124,30 @@ export default function AthleteOnboard() {
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased' }}>
       {/* Top bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 28px', flexShrink: 0 }}>
-        {step > 0 && step < TOTAL_STEPS ? (
-          <button onClick={() => setStep(s => s - 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w60)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
+        {step > 0 && step < TOTAL_STEPS && (
+          <button onClick={() => setStep(s => s - 1)} style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
             Back
           </button>
-        ) : <span />}
-        {step < TOTAL_STEPS && (
-          <div style={{ display: 'flex', gap: 6 }}>
-            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-              <div key={i} style={{ width: i === step ? 20 : 6, height: 6, borderRadius: 3, background: i <= step ? 'var(--red)' : 'var(--surface-border)', transition: 'width 0.3s ease, background 0.3s ease' }} />
-            ))}
-          </div>
         )}
+        {step < TOTAL_STEPS && (
+          <Stepper step={step} total={TOTAL_STEPS} />
+        )}
+        <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
+          <ThemeToggle />
+        </div>
       </div>
 
-      <div ref={scrollRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '2rem 6vw 0', overflowY: 'auto' }}>
+      <div ref={scrollRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2.5rem 6vw 0', overflowY: 'auto' }}>
 
         {/* Step 0: Who you are */}
         {step === 0 && (
           <div style={{ maxWidth: 520 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '1.25rem' }}>Step 1 of {TOTAL_STEPS}</p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '1rem' }}>
-              Tell us who<br />you are.
+                        <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
+              Tell us who<br />you are
             </h1>
-            <p style={{ fontSize: 16, color: 'var(--w60)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: 16, color: "var(--w70)", lineHeight: 1.6, marginBottom: "2.5rem" }}>
               This helps us match you with the right coaches.
             </p>
 
@@ -170,7 +171,7 @@ export default function AthleteOnboard() {
               </div>
               <div>
                 <label className="label">Competition level</label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: 4 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginTop: 4 }}>
                   {LEVELS.map(l => pill(l, level === l, () => setLevel(l), true))}
                 </div>
               </div>
@@ -181,20 +182,19 @@ export default function AthleteOnboard() {
         {/* Step 1: Challenges */}
         {step === 1 && (
           <div style={{ maxWidth: 600 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '1.25rem' }}>Step 2 of {TOTAL_STEPS}</p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '1rem' }}>
+                        <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
               What are you<br />working on?
             </h1>
-            <p style={{ fontSize: 16, color: 'var(--w60)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: 16, color: "var(--w70)", lineHeight: 1.6, marginBottom: "2.5rem" }}>
               Pick up to 3. Your order sets the priority.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '2.5rem' }}>
               {CHALLENGES.map(tag => {
                 const idx = selected.indexOf(tag);
                 const on = idx !== -1;
                 return (
-                  <button key={tag} onClick={() => toggleChallenge(tag)} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 20px', borderRadius: 50, fontSize: 14, fontWeight: 500, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'all 0.15s', background: on ? 'rgba(255,48,64,0.12)' : 'var(--surface-1)', border: on ? '0.5px solid rgba(255,48,64,0.4)' : '0.5px solid var(--surface-border)', color: on ? 'var(--white)' : 'var(--w60)' }}>
-                    {on && <span style={{ width: 18, height: 18, borderRadius: '50%', background: 'var(--red)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#fff', flexShrink: 0 }}>{idx + 1}</span>}
+                  <button key={tag} onClick={() => toggleChallenge(tag)} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 20px', borderRadius: 50, fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', background: on ? 'var(--red)' : 'var(--surface-1)', border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', color: on ? '#fff' : 'var(--w80)' }}>
+                    {on && <span style={{ width: 18, height: 18, borderRadius: '50%', background: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: 'var(--red)', flexShrink: 0 }}>{idx + 1}</span>}
                     {tag}
                   </button>
                 );
@@ -206,30 +206,32 @@ export default function AthleteOnboard() {
         {/* Step 2: How you work + language */}
         {step === 2 && (
           <div style={{ maxWidth: 560 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '1.25rem' }}>Step 3 of {TOTAL_STEPS}</p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '1rem' }}>
+                        <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
               How do you<br />want to work?
             </h1>
-            <p style={{ fontSize: 16, color: 'var(--w60)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: 16, color: "var(--w70)", lineHeight: 1.6, marginBottom: "2.5rem" }}>
               You can change this anytime.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', marginBottom: '2rem' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                 <label className="label">Session format</label>
-                {FORMATS.map(f => (
-                  <button key={f.label} onClick={() => setFormat(f.label)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '16px 20px', borderRadius: 14, cursor: 'pointer', transition: 'all 0.15s', background: format === f.label ? 'rgba(255,48,64,0.08)' : 'var(--surface-1)', border: format === f.label ? '0.5px solid rgba(255,48,64,0.35)' : '0.5px solid var(--surface-border)', textAlign: 'left', fontFamily: 'var(--font-body)' }}>
-                    <p style={{ fontSize: 14, fontWeight: 600, color: format === f.label ? 'var(--white)' : 'var(--w80)', marginBottom: 3 }}>{f.label}</p>
-                    <p style={{ fontSize: 12, color: 'var(--w40)', lineHeight: 1.4 }}>{f.sub}</p>
-                  </button>
-                ))}
+                {FORMATS.map(f => {
+                  const on = format === f.label;
+                  return (
+                    <button key={f.label} onClick={() => setFormat(f.label)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '16px 20px', borderRadius: 14, cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', background: on ? 'var(--red)' : 'var(--surface-1)', border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', textAlign: 'left', fontFamily: 'var(--font-body)' }}>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: on ? '#fff' : 'var(--white)', marginBottom: 3 }}>{f.label}</p>
+                      <p style={{ fontSize: 12, color: on ? 'rgba(255,255,255,0.85)' : 'var(--w60)', lineHeight: 1.4 }}>{f.sub}</p>
+                    </button>
+                  );
+                })}
               </div>
 
               <div>
                 <label className="label" style={{ marginBottom: '0.75rem' }}>
                   Languages for sessions <span style={{ color: 'var(--red)', fontSize: 10 }}>*</span>
                 </label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
                   {LANGUAGES.map(l => pill(l, languages.includes(l), () => toggleLanguage(l), true))}
                 </div>
               </div>
@@ -251,7 +253,7 @@ export default function AthleteOnboard() {
             <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,48,64,0.12)', border: '0.5px solid rgba(255,48,64,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M8 18l7 7L28 11" stroke="var(--red)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 9vw, 5.5rem)', lineHeight: 0.92, letterSpacing: '-0.03em', marginBottom: '1.5rem' }}>You're in.</h1>
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(3rem, 9vw, 5.5rem)', lineHeight: 0.92, letterSpacing: '-0.035em', marginBottom: '1.5rem' }}>You're in</h1>
             <p style={{ fontSize: 17, color: 'var(--w60)', lineHeight: 1.7, maxWidth: 320, margin: '0 auto 3rem' }}>
               Your profile is set. Find a coach and book your first session.
             </p>
@@ -263,8 +265,8 @@ export default function AthleteOnboard() {
       </div>
 
       {step < 3 && (
-        <div style={{ padding: '1.5rem 6vw 2.5rem', flexShrink: 0 }}>
-          <button className="btn-primary" style={{ fontSize: 16, padding: '16px 0', width: '100%', maxWidth: 520, opacity: canAdvance ? 1 : 0.35 }} disabled={!canAdvance} onClick={() => setStep(s => s + 1)}>
+        <div style={{ padding: '1.5rem 6vw 2.5rem', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
+          <button className="btn-primary" style={{ fontSize: 15, height: 50, padding: '0 32px', width: '100%', maxWidth: 520, opacity: canAdvance ? 1 : 0.35 }} disabled={!canAdvance} onClick={() => setStep(s => s + 1)}>
             Continue
           </button>
         </div>

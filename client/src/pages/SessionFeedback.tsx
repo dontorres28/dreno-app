@@ -67,7 +67,7 @@ export default function SessionFeedback() {
         <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: '1.5rem' }}>
           {t('feedback.sessionComplete')}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '3rem', textAlign: 'center' }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '3rem', textAlign: 'center' }}>
           {t('feedback.howWasThat')}
         </h1>
 

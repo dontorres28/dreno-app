@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
 import CoachCard from '../components/CoachCard';
 import Spinner from '../components/Spinner';
@@ -75,58 +76,61 @@ export default function Coaches() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '3.5rem 1.5rem 6rem' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
         <h1 style={{
-          fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)',
-          lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '0.75rem',
+          fontFamily: 'var(--font-display)', fontSize: 44,
+          lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1.75rem',
         }}>
-          {t('coaches.title')}
+          Coaches
         </h1>
-        <p style={{ fontSize: 16, color: 'var(--w60)', marginBottom: '2rem' }}>
-          {t('coaches.subtitle')}
-        </p>
 
-        {/* Filters */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: '2rem' }}>
-          <button
-            className="toggle-btn"
-            onClick={() => setSportFilter('')}
-            style={{
-              fontSize: 13, fontWeight: 500, padding: '6px 14px', borderRadius: 50,
-              border: !sportFilter ? '1px solid var(--red)' : '0.5px solid var(--surface-border)',
-              color: !sportFilter ? 'var(--white)' : 'var(--w60)',
-              background: !sportFilter ? 'rgba(255,48,64,0.10)' : 'transparent',
-              cursor: 'pointer', fontFamily: 'var(--font-body)',
-              transition: 'color 0.15s, border-color 0.15s, background 0.15s',
-            }}
-          >
-            {t('coaches.allSports')}
-          </button>
-          {allSports.map((s) => (
-            <button
-              key={s}
-              className="toggle-btn"
-              onClick={() => setSportFilter(s)}
-              style={{
-                fontSize: 13, fontWeight: 500, padding: '6px 14px', borderRadius: 50,
-                border: sportFilter === s ? '1px solid var(--red)' : '0.5px solid var(--surface-border)',
-                color: sportFilter === s ? 'var(--white)' : 'var(--w60)',
-                background: sportFilter === s ? 'rgba(255,48,64,0.10)' : 'transparent',
-                cursor: 'pointer', fontFamily: 'var(--font-body)',
-                transition: 'color 0.15s, border-color 0.15s, background 0.15s',
-              }}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
+        {/* Filters — sliding pill with liquid feel */}
+        {allSports.length > 1 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: '1.75rem' }}>
+            <LayoutGroup id="sport-filters">
+              {[''].concat(allSports).map((s) => {
+                const active = sportFilter === s;
+                const label = s === '' ? 'All' : s;
+                return (
+                  <button
+                    key={s || 'all'}
+                    onClick={() => setSportFilter(s)}
+                    style={{
+                      position: 'relative',
+                      fontSize: 13, fontWeight: active ? 700 : 500, padding: '7px 14px', borderRadius: 50,
+                      border: 'none', background: 'transparent',
+                      color: active ? '#fff' : 'var(--w70)',
+                      cursor: 'pointer', fontFamily: 'var(--font-body)',
+                      transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
+                    }}
+                  >
+                    {active && (
+                      <motion.span
+                        layoutId="sport-active-pill"
+                        initial={false}
+                        transition={{ type: 'spring', stiffness: 520, damping: 38, mass: 0.6 }}
+                        style={{
+                          position: 'absolute', inset: 0,
+                          background: 'var(--red)',
+                          borderRadius: 50,
+                          zIndex: 0,
+                        }}
+                      />
+                    )}
+                    <span style={{ position: 'relative', zIndex: 1 }}>{label}</span>
+                  </button>
+                );
+              })}
+            </LayoutGroup>
+          </div>
+        )}
 
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '5rem' }}><Spinner size={32} /></div>
+          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '4rem' }}><Spinner size={28} /></div>
         ) : filtered.length === 0 ? (
-          <p style={{ color: 'var(--w60)' }}>{t('coaches.noResults')}</p>
+          <p style={{ color: 'var(--w60)', paddingTop: '2rem' }}>No coaches yet.</p>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
             {filtered.map((coach) => (
               <CoachCard
                 key={coach.id}

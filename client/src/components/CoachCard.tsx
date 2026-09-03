@@ -8,7 +8,6 @@ interface Coach {
   expertise_tags: string[];
   photo_url: string | null;
   profiles: { name: string | null } | null;
-  matchScore?: number;
 }
 
 interface Props {
@@ -17,11 +16,11 @@ interface Props {
   matchedTags?: string[];
 }
 
-export default function CoachCard({ coach, sportMatch, matchedTags = [] }: Props) {
+export default function CoachCard({ coach }: Props) {
   const name = coach.profiles?.name ?? 'Coach';
   const initials = name.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2);
   const rate = coach.hourly_rate ? `CHF ${coach.hourly_rate}` : null;
-  const hasMatch = sportMatch || matchedTags.length > 0;
+  const primarySport = coach.sports?.[0];
 
   return (
     <Link
@@ -31,97 +30,57 @@ export default function CoachCard({ coach, sportMatch, matchedTags = [] }: Props
       <div
         style={{
           background: 'var(--surface-1)',
-          border: hasMatch ? '0.5px solid rgba(255,48,64,0.25)' : '0.5px solid var(--surface-border)',
-          borderRadius: 20,
-          overflow: 'hidden',
-          transition: 'background 0.2s, border-color 0.2s, transform 0.2s',
+          border: '0.5px solid var(--surface-border-2)',
+          borderRadius: 16,
+          padding: '1.25rem',
+          display: 'flex', flexDirection: 'column', gap: 14,
+          transition: 'background 0.2s, border-color 0.2s, transform 0.15s',
+          cursor: 'pointer',
         }}
         onMouseEnter={e => {
           const el = e.currentTarget as HTMLElement;
-          el.style.background = 'var(--surface-border)';
-          el.style.transform = 'translateY(-3px)';
+          el.style.background = 'var(--surface-hover)';
+          el.style.borderColor = 'var(--line-2)';
         }}
         onMouseLeave={e => {
           const el = e.currentTarget as HTMLElement;
           el.style.background = 'var(--surface-1)';
-          el.style.transform = 'translateY(0)';
+          el.style.borderColor = 'var(--surface-border-2)';
         }}
       >
-        {/* Header */}
-        <div style={{ padding: '1.5rem', borderBottom: '0.5px solid var(--surface-border)', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+        {/* Photo + name */}
+        <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
           {coach.photo_url ? (
-            <img src={coach.photo_url} alt={name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+            <img src={coach.photo_url} alt={name} style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
           ) : (
             <div style={{
-              width: 48, height: 48, borderRadius: '50%',
-              background: 'var(--surface-2)', border: '0.5px solid var(--surface-border)',
+              width: 52, height: 52, borderRadius: '50%',
+              background: 'var(--surface-2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 15, fontWeight: 700, color: 'var(--w60)', flexShrink: 0,
+              fontSize: 16, fontWeight: 700, color: 'var(--w70)', flexShrink: 0,
               fontFamily: 'var(--font-display)', letterSpacing: '-0.02em',
             }}>
               {initials}
             </div>
           )}
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
-              <p style={{ fontSize: 15, fontWeight: 600 }}>{name}</p>
-              {hasMatch && (
-                <span style={{
-                  flexShrink: 0, fontSize: 11, fontWeight: 700, letterSpacing: '0.06em',
-                  textTransform: 'uppercase', color: 'var(--red)',
-                  background: 'rgba(255,48,64,0.10)', border: '0.5px solid rgba(255,48,64,0.25)',
-                  borderRadius: 50, padding: '3px 8px',
-                }}>
-                  Match
-                </span>
-              )}
-            </div>
-            {coach.headline && (
-              <p style={{ fontSize: 13, color: 'var(--w60)', lineHeight: 1.4, marginTop: 3 }}>{coach.headline}</p>
-            )}
+            <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)', marginBottom: 2 }}>{name}</p>
+            {primarySport && <p style={{ fontSize: 13, color: 'var(--w60)' }}>{primarySport}</p>}
           </div>
         </div>
 
-        {/* Tags */}
-        <div style={{ padding: '1.25rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-          {coach.sports?.length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {coach.sports.slice(0, 3).map(s => (
-                <span
-                  key={s}
-                  className={sportMatch ? 'tag tag-red' : 'tag'}
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          )}
-          {coach.expertise_tags?.length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {coach.expertise_tags.slice(0, 4).map(t => (
-                <span key={t} className={matchedTags.includes(t) ? 'tag tag-red' : 'tag'}>
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Headline */}
+        {coach.headline && (
+          <p style={{ fontSize: 13.5, color: 'var(--w70)', lineHeight: 1.5 }}>{coach.headline}</p>
+        )}
 
-        {/* Footer */}
-        <div style={{
-          padding: '1rem 1.5rem',
-          borderTop: '0.5px solid var(--surface-border)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        }}>
-          {rate ? (
-            <p style={{ fontSize: 14, fontWeight: 600 }}>
-              {rate}<span style={{ fontSize: 12, fontWeight: 400, color: 'var(--w40)', marginLeft: 4 }}>/hr</span>
-            </p>
-          ) : <span />}
-          <span className="btn-primary" style={{ fontSize: 12, padding: '6px 14px' }}>
-            View profile
-          </span>
-        </div>
+        {/* Price */}
+        {rate && (
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 'auto' }}>
+            <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--white)' }}>{rate}</p>
+            <span style={{ fontSize: 12, color: 'var(--w60)' }}>/ hour</span>
+          </div>
+        )}
       </div>
     </Link>
   );

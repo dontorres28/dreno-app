@@ -1,170 +1,120 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from '../components/ThemeToggle';
 
-// Cycle timing (seconds)
-const T_INHALE1  = 4.0;   // bar rises
-const T_INHALE2  = 0.5;   // small tick up
-const T_HOLD     = 0.5;   // hold at top
-const T_EXHALE   = 8.0;   // bar falls
-const T_PAUSE    = 1.0;   // rest at bottom
-const CYCLE_DUR  = T_INHALE1 + T_INHALE2 + T_HOLD + T_EXHALE + T_PAUSE; // 14s
-const TOTAL_CYCLES = 3;
-const TOTAL_DUR  = CYCLE_DUR * TOTAL_CYCLES; // 42s
+// Simple 3-phase cycle: breathe in (4s) → hold (1s) → breathe out (8s). 3 rounds.
+const T_IN   = 4.0;
+const T_HOLD = 1.0;
+const T_OUT  = 8.0;
+const CYCLE  = T_IN + T_HOLD + T_OUT;
+const ROUNDS = 3;
+const TOTAL  = CYCLE * ROUNDS;
 
-const BAR_W  = 44;
-const BAR_BONE = '#EBE4D2';
-const BG     = '#0D1B2A';
+const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
-// Easing helpers
 function easeInOut(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
-function easeOut(t: number)   { return 1 - (1 - t) ** 3; }
 
-// Returns bar fill ratio [0,1] for a given time within a single cycle
-function barRatio(t: number): number {
-  if (t < T_INHALE1) {
-    return easeInOut(t / T_INHALE1) * 0.80;
-  }
-  t -= T_INHALE1;
-  if (t < T_INHALE2) {
-    return 0.80 + easeOut(t / T_INHALE2) * 0.08;
-  }
-  t -= T_INHALE2;
-  if (t < T_HOLD) {
-    return 0.88;
-  }
+// scale [0.18 (tiny) → 1.0 (huge)]
+function scaleAt(t: number): number {
+  const MIN = 0.18, MAX = 1.0, R = MAX - MIN;
+  if (t < T_IN) return MIN + easeInOut(t / T_IN) * R;
+  t -= T_IN;
+  if (t < T_HOLD) return MAX;
   t -= T_HOLD;
-  if (t < T_EXHALE) {
-    return 0.88 * (1 - easeInOut(t / T_EXHALE));
-  }
-  return 0;
+  if (t < T_OUT) return MIN + (1 - easeInOut(t / T_OUT)) * R;
+  return MIN;
 }
 
-// Phase label shown at bottom (very subtle)
-function phaseLabel(t: number): string {
-  if (t < T_INHALE1) return 'inhale';
-  if (t < T_INHALE1 + T_INHALE2) return 'inhale';
-  if (t < T_INHALE1 + T_INHALE2 + T_HOLD) return '';
-  if (t < T_INHALE1 + T_INHALE2 + T_HOLD + T_EXHALE) return 'exhale';
-  return '';
+type Phase = 'in' | 'hold' | 'out';
+function phaseAt(t: number): Phase {
+  if (t < T_IN) return 'in';
+  if (t < T_IN + T_HOLD) return 'hold';
+  return 'out';
 }
 
 type Screen = 'intro' | 'running' | 'done';
 
+const Shell = ({ children, title, onBack }: { children: React.ReactNode; title: string; onBack?: () => void }) => (
+  <div style={{
+    minHeight: '100dvh', background: 'var(--bg)', color: 'var(--white)',
+    fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column',
+    WebkitFontSmoothing: 'antialiased',
+  }}>
+    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
+      {onBack && (
+        <button
+          onClick={onBack}
+          style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Back
+        </button>
+      )}
+      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>
+        {title}
+      </p>
+      <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
+        <ThemeToggle />
+      </div>
+    </div>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem 1.5rem 3rem' }}>
+      {children}
+    </div>
+  </div>
+);
+
 export default function DrillSigh() {
-  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [screen, setScreen] = useState<Screen>('intro');
   const [saving, setSaving] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [scale, setScale] = useState(0.18);
+  const [phase, setPhase] = useState<Phase>('in');
+  const [round, setRound] = useState(1);
+  const [countdown, setCountdown] = useState(4);
   const rafRef = useRef<number>(0);
   const startRef = useRef<number>(0);
   const holdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const holdStartRef = useRef<number>(0);
-  const holdElapsedRef = useRef<number>(0);
+  const savedRef = useRef(false);
 
-  // Canvas draw loop
   useEffect(() => {
     if (screen !== 'running') return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const resize = () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
     startRef.current = performance.now();
+    savedRef.current = false;
 
-    function draw(now: number) {
-      const ctx = canvas!.getContext('2d') as CanvasRenderingContext2D;
-      const elapsed = (now - startRef.current) / 1000; // seconds
-      const clamped  = Math.min(elapsed, TOTAL_DUR);
-      const cycleIdx = Math.min(Math.floor(clamped / CYCLE_DUR), TOTAL_CYCLES - 1);
-      const tInCycle = clamped - cycleIdx * CYCLE_DUR;
+    function tick(now: number) {
+      const elapsed = (now - startRef.current) / 1000;
+      const t = Math.min(elapsed, TOTAL);
+      const rIdx = Math.min(Math.floor(t / CYCLE), ROUNDS - 1);
+      const tInCycle = t - rIdx * CYCLE;
+      const p = phaseAt(tInCycle);
+      const s = scaleAt(tInCycle);
 
-      const ratio = barRatio(tInCycle);
-      const label = phaseLabel(tInCycle);
+      let cd = 0;
+      if (p === 'in') cd = Math.ceil(T_IN - tInCycle);
+      else if (p === 'hold') cd = Math.ceil(T_IN + T_HOLD - tInCycle);
+      else cd = Math.ceil(CYCLE - tInCycle);
 
-      const W = canvas!.width;
-      const H = canvas!.height;
-      const maxBarH = H * 0.55;
-      const barH = ratio * maxBarH;
-      const barX = (W - BAR_W) / 2;
-      const barY = H * 0.62 - barH;      // bottom-anchored at 62% down
+      setScale(s);
+      setPhase(p);
+      setRound(rIdx + 1);
+      setCountdown(cd);
 
-      // Background
-      ctx.fillStyle = BG;
-      ctx.fillRect(0, 0, W, H);
-
-      // Glow (soft diffuse behind bar)
-      if (ratio > 0.01) {
-        const grd = ctx.createRadialGradient(W/2, H*0.62, 0, W/2, H*0.62, maxBarH * 0.7);
-        grd.addColorStop(0,   `rgba(235,228,210,${0.06 * ratio})`);
-        grd.addColorStop(1,   'rgba(235,228,210,0)');
-        ctx.fillStyle = grd;
-        ctx.fillRect(0, 0, W, H);
-      }
-
-      // Bar track (faint)
-      ctx.fillStyle = 'rgba(235,228,210,0.06)';
-      ctx.beginPath();
-      ctx.roundRect(barX, H*0.62 - maxBarH, BAR_W, maxBarH, 4);
-      ctx.fill();
-
-      // Bar fill
-      if (barH > 1) {
-        ctx.fillStyle = BAR_BONE;
-        ctx.globalAlpha = 0.82 + ratio * 0.18;
-        ctx.beginPath();
-        ctx.roundRect(barX, barY, BAR_W, barH, 4);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-
-      // Phase label — bottom center, very quiet
-      if (label) {
-        ctx.fillStyle = `rgba(235,228,210,${0.18 + ratio * 0.08})`;
-        ctx.font = '11px var(--font-body, system-ui)';
-        ctx.letterSpacing = '0.12em';
-        ctx.textAlign = 'center';
-        ctx.fillText(label.toUpperCase(), W/2, H * 0.62 + 36);
-      }
-
-      // Cycle dots
-      const dotY = H * 0.85;
-      const dotSpacing = 14;
-      const dotsStart = W/2 - (TOTAL_CYCLES - 1) * dotSpacing / 2;
-      for (let i = 0; i < TOTAL_CYCLES; i++) {
-        const done = i < cycleIdx || (i === cycleIdx && tInCycle >= CYCLE_DUR - T_PAUSE);
-        ctx.fillStyle = done ? 'rgba(235,228,210,0.6)' : i === cycleIdx ? 'rgba(235,228,210,0.25)' : 'rgba(235,228,210,0.1)';
-        ctx.beginPath();
-        ctx.arc(dotsStart + i * dotSpacing, dotY, 3, 0, Math.PI*2);
-        ctx.fill();
-      }
-
-      if (elapsed < TOTAL_DUR) {
-        rafRef.current = requestAnimationFrame(draw);
-      } else {
-        // All 3 cycles complete
-        cancelAnimationFrame(rafRef.current);
-        complete();
-      }
+      if (elapsed < TOTAL) rafRef.current = requestAnimationFrame(tick);
+      else complete();
     }
 
-    rafRef.current = requestAnimationFrame(draw);
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('resize', resize);
-    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
   }, [screen]);
 
   async function complete() {
+    if (savedRef.current) return;
+    savedRef.current = true;
     setSaving(true);
     setScreen('done');
     try {
@@ -173,160 +123,223 @@ export default function DrillSigh() {
         athlete_id: user.id,
         drill_type: 'the_sigh',
         composite_score: 3,
-        raw_score: TOTAL_CYCLES,
+        raw_score: ROUNDS,
         completed_at: new Date().toISOString(),
       });
     } catch { /* non-blocking */ }
     finally { setSaving(false); }
   }
 
-  // Hold-to-exit anywhere on canvas
   function onPointerDown() {
-    holdStartRef.current = performance.now();
     holdRef.current = setTimeout(() => {
       cancelAnimationFrame(rafRef.current);
       navigate('/drills');
-    }, 1000);
+    }, 900);
   }
   function onPointerUp() {
     if (holdRef.current) clearTimeout(holdRef.current);
   }
 
-  // ── Intro screen ───────────────────────────────────────────────
+  const bigInstruction =
+    phase === 'in' ? 'Breathe in' :
+    phase === 'hold' ? 'Hold' :
+    'Breathe out';
+
+  // ── Intro ──────────────────────────────────────────────────────────────
   if (screen === 'intro') {
     return (
-      <div style={{
-        position: 'fixed', inset: 0, background: BG,
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        fontFamily: 'var(--font-body)', color: BAR_BONE,
-        padding: '2rem', textAlign: 'center',
-      }}>
-        <button
-          onClick={() => navigate('/drills')}
-          style={{
-            position: 'absolute', top: 20, left: 20,
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: 'rgba(235,228,210,0.45)', display: 'flex', alignItems: 'center',
-            gap: 6, fontSize: 14, fontWeight: 500, padding: '8px', fontFamily: 'var(--font-body)',
-          }}
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Back
-        </button>
-        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(235,228,210,0.35)', marginBottom: '1.5rem' }}>
-          {t('drillSigh.title')}
-        </p>
-        <h1 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2.5rem, 10vw, 4rem)',
-          lineHeight: 0.95, letterSpacing: '-0.03em',
-          marginBottom: '2rem', color: BAR_BONE,
-        }}>
-          Three cycles.<br />42 seconds.
-        </h1>
+      <Shell title="Breathe" onBack={() => navigate('/drills')}>
+        <div style={{ textAlign: 'center', maxWidth: 460 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 8vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
+            Breathe with the circle
+          </h1>
+          <p style={{ fontSize: 17, color: 'var(--w70)', lineHeight: 1.5, marginBottom: '2.5rem', maxWidth: 380, margin: '0 auto 2.5rem' }}>
+            When it gets bigger, breathe in. When it gets smaller, breathe out.
+          </p>
 
-        <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '3.5rem', alignItems: 'flex-end' }}>
-          {[
-            { secs: '4s', label: 'inhale' },
-            { secs: '+', label: 'top up' },
-            { secs: '8s', label: 'exhale' },
-          ].map((s, i) => (
-            <div key={i} style={{ textAlign: 'center' }}>
-              <p style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: s.secs === '+' ? '2rem' : '2.8rem',
-                lineHeight: 1, letterSpacing: '-0.04em',
-                color: BAR_BONE, marginBottom: 8,
-              }}>{s.secs}</p>
-              <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(235,228,210,0.3)' }}>{s.label}</p>
-            </div>
-          ))}
+          {/* Live demo circle */}
+          <div style={{
+            width: 200, height: 200, margin: '0 auto 2.5rem',
+            position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <div style={{
+              position: 'absolute', width: 200, height: 200, borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255,48,64,0.35) 0%, rgba(255,48,64,0.08) 45%, transparent 70%)',
+              animation: 'sighDemoGlow 6s ease-in-out infinite',
+            }} />
+            <div style={{
+              width: 140, height: 140, borderRadius: '50%',
+              background: 'radial-gradient(circle at 35% 30%, #ff5566 0%, #FF3040 55%, #cc1e2c 100%)',
+              boxShadow: '0 0 40px rgba(255,48,64,0.35)',
+              animation: 'sighDemo 6s ease-in-out infinite',
+            }} />
+          </div>
+
+          <p style={{ fontSize: 13, color: 'var(--w60)', marginBottom: '2rem', letterSpacing: '0.02em' }}>
+            3 rounds. About 40 seconds.
+          </p>
+
+          <button
+            className="btn-primary"
+            style={{ fontSize: 16, height: 52, padding: '0 44px' }}
+            onClick={() => setScreen('running')}
+          >
+            Start
+          </button>
+
+          <style>{`
+            @keyframes sighDemo {
+              0%, 100% { transform: scale(0.35); }
+              45%, 55% { transform: scale(1); }
+            }
+            @keyframes sighDemoGlow {
+              0%, 100% { transform: scale(0.35); opacity: 0.4; }
+              45%, 55% { transform: scale(1); opacity: 1; }
+            }
+          `}</style>
         </div>
-
-        <p style={{ fontSize: 12, color: 'rgba(235,228,210,0.25)', marginBottom: '2rem' }}>
-          Breathe with the bar. Hold anywhere to exit.
-        </p>
-
-        <button
-          onClick={() => setScreen('running')}
-          style={{
-            background: BAR_BONE, color: BG,
-            fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700,
-            padding: '14px 40px', borderRadius: 50, border: 'none', cursor: 'pointer',
-            letterSpacing: '-0.01em',
-          }}
-        >
-          Begin
-        </button>
-
-      </div>
+      </Shell>
     );
   }
 
-  // ── Running screen ─────────────────────────────────────────────
+  // ── Running — big obvious circle ──────────────────────────────────────
   if (screen === 'running') {
     return (
-      <canvas
-        ref={canvasRef}
-        style={{ display: 'block', cursor: 'none', touchAction: 'none' }}
+      <div
+        style={{
+          minHeight: '100dvh', background: 'var(--bg)', color: 'var(--white)',
+          fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'space-between',
+          userSelect: 'none', WebkitUserSelect: 'none', touchAction: 'none',
+          position: 'relative', overflow: 'hidden',
+          padding: '3rem 1.5rem 2rem',
+        }}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
-      />
+        onPointerCancel={onPointerUp}
+      >
+        {/* Ambient red bloom that grows with the circle */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: `radial-gradient(60% 60% at 50% 50%, rgba(255,48,64,${0.08 + scale * 0.20}), transparent 75%)`,
+        }} />
+
+        {/* Top: big instruction text */}
+        <div style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
+          <p style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(2rem, 5vw, 3rem)',
+            lineHeight: 1, letterSpacing: '-0.035em',
+            color: 'var(--white)',
+            marginBottom: 8,
+          }}>
+            {bigInstruction}
+          </p>
+          <p style={{
+            fontSize: 14, fontWeight: 500, color: 'var(--w60)',
+            letterSpacing: '0.02em', fontVariantNumeric: 'tabular-nums',
+          }}>
+            Round {round} of {ROUNDS}
+          </p>
+        </div>
+
+        {/* Center: the breathing circle */}
+        <div style={{
+          position: 'relative',
+          width: 'min(70vw, 380px)', height: 'min(70vw, 380px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          {/* Outer glow */}
+          <div style={{
+            position: 'absolute', inset: 0, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,48,64,0.35) 0%, rgba(255,48,64,0.05) 50%, transparent 70%)',
+            transform: `scale(${scale * 1.15})`,
+            transition: `transform 80ms linear`,
+            filter: 'blur(8px)',
+            willChange: 'transform',
+          }} />
+
+          {/* Main red orb */}
+          <div style={{
+            position: 'absolute',
+            width: '80%', height: '80%',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 32% 28%, #ff667a 0%, #FF3040 50%, #c81f2b 100%)',
+            boxShadow: '0 0 50px rgba(255,48,64,0.4), inset 0 0 60px rgba(0,0,0,0.12)',
+            transform: `scale(${scale})`,
+            transition: `transform 80ms linear`,
+            willChange: 'transform',
+          }} />
+
+          {/* Countdown number, centered, doesn't scale */}
+          <p style={{
+            position: 'relative', zIndex: 2,
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(4rem, 12vw, 7rem)',
+            lineHeight: 1, letterSpacing: '-0.045em',
+            color: '#fff',
+            fontVariantNumeric: 'tabular-nums',
+            pointerEvents: 'none',
+            textShadow: '0 2px 20px rgba(0,0,0,0.25)',
+          }}>
+            {countdown}
+          </p>
+        </div>
+
+        {/* Bottom: round dots + exit hint */}
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {Array.from({ length: ROUNDS }).map((_, i) => (
+              <span key={i} style={{
+                width: 10, height: 10, borderRadius: '50%',
+                background: i < round - 1 ? 'var(--red)' : i === round - 1 ? 'var(--w60)' : 'var(--w20)',
+                transition: `background 500ms ${EASE}`,
+              }} />
+            ))}
+          </div>
+          <p style={{
+            fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase',
+            color: 'var(--w40)', fontWeight: 600,
+          }}>
+            Hold anywhere to exit
+          </p>
+        </div>
+      </div>
     );
   }
 
-  // ── Done screen ────────────────────────────────────────────────
+  // ── Done ───────────────────────────────────────────────────────────────
   return (
-    <div style={{
-      position: 'fixed', inset: 0, background: BG,
-      display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'var(--font-body)', color: BAR_BONE,
-      textAlign: 'center', padding: '2rem',
-    }}>
-      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(235,228,210,0.3)', marginBottom: '1.5rem' }}>
-        Breathing reset
-      </p>
-      <p style={{
-        fontFamily: 'var(--font-display)',
-        fontSize: 'clamp(4rem, 14vw, 7rem)',
-        lineHeight: 0.9, letterSpacing: '-0.04em',
-        color: BAR_BONE, marginBottom: '0.25rem',
-      }}>
-        {TOTAL_CYCLES}
-      </p>
-      <p style={{ fontSize: 14, color: 'rgba(235,228,210,0.4)', marginBottom: '3rem' }}>
-        cycles complete
-      </p>
+    <Shell title="Breathe">
+      <div style={{ textAlign: 'center', maxWidth: 460 }}>
+        <div style={{
+          width: 100, height: 100, borderRadius: '50%', margin: '0 auto 2rem',
+          background: 'radial-gradient(circle at 35% 30%, #ff5566 0%, #FF3040 55%, #cc1e2c 100%)',
+          boxShadow: '0 0 40px rgba(255,48,64,0.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+            <path d="M12 22l6 6L30 14" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
 
-      <div style={{ display: 'flex', gap: '0.75rem' }}>
-        <button
-          onClick={() => setScreen('running')}
-          style={{
-            background: BAR_BONE, color: BG,
-            fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700,
-            padding: '14px 36px', borderRadius: 50, border: 'none', cursor: 'pointer',
-          }}
-        >
-          Again
-        </button>
-        <button
-          onClick={() => navigate('/drills')}
-          disabled={saving}
-          style={{
-            background: 'none', border: '0.5px solid rgba(235,228,210,0.2)',
-            color: 'rgba(235,228,210,0.5)', fontFamily: 'var(--font-body)',
-            fontSize: 14, padding: '14px 28px', borderRadius: 50, cursor: 'pointer',
-            opacity: saving ? 0.4 : 1,
-          }}
-        >
-          Done
-        </button>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 3.75rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '0.75rem' }}>
+          Nice work
+        </h1>
+        <p style={{ fontSize: 16, color: 'var(--w70)', marginBottom: '2.5rem', lineHeight: 1.5, maxWidth: 340, margin: '0 auto 2.5rem' }}>
+          You just calmed your nervous system.
+        </p>
+
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button className="btn-secondary" onClick={() => navigate('/drills')} disabled={saving}>
+            Done
+          </button>
+          <button className="btn-primary" onClick={() => { savedRef.current = false; setScreen('running'); }}>
+            Again
+          </button>
+        </div>
       </div>
-    </div>
+    </Shell>
   );
 }

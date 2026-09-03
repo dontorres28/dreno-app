@@ -56,10 +56,10 @@ export default function DrillLeaderboard() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 640, margin: '0 auto', padding: '4rem 1.5rem' }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
         <Link
           to="/drills"
-          style={{ fontSize: 13, color: 'var(--w40)', display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: '2.5rem' }}
+          style={{ fontSize: 13, color: 'var(--w70)', display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: '1.5rem', textDecoration: 'none' }}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M11 7H3M6 10L3 7l3-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
@@ -67,86 +67,87 @@ export default function DrillLeaderboard() {
           {t('common.back')}
         </Link>
 
-        <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: '1rem' }}>
-          Last 7 days
-        </p>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '3rem' }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '0.5rem' }}>
           {t('drillLeaderboard.title')}
         </h1>
+        <p style={{ fontSize: 14, color: 'var(--w70)', marginBottom: '2rem' }}>Last 7 days</p>
 
         {myRank > 0 && (
           <div
             style={{
-              background: 'rgba(255,48,64,0.08)',
-              border: '0.5px solid rgba(255,48,64,0.20)',
-              borderRadius: 12,
-              padding: '1rem 1.25rem',
-              marginBottom: '2rem',
+              background: 'var(--red)',
+              borderRadius: 14,
+              padding: '14px 18px',
+              marginBottom: '1.5rem',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            <p style={{ fontSize: 14, color: 'var(--w60)' }}>{t('drillLeaderboard.rank')}</p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: 24, letterSpacing: '-0.02em', color: 'var(--red)' }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.85)', letterSpacing: '-0.005em' }}>{t('drillLeaderboard.rank')}</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: 26, letterSpacing: '-0.02em', color: '#fff', lineHeight: 1 }}>
               #{myRank}
             </p>
           </div>
         )}
 
         {loading ? (
-          <p style={{ color: 'var(--w40)', fontSize: 15 }}>{t('common.loading')}</p>
+          <p style={{ color: 'var(--w60)', fontSize: 15 }}>{t('common.loading')}</p>
         ) : entries.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <p style={{ fontSize: 16, color: 'var(--w40)', marginBottom: '1.5rem' }}>
+            <p style={{ fontSize: 16, color: 'var(--w70)', marginBottom: '1.5rem' }}>
               {t('drillLeaderboard.noData')}
             </p>
-            <Link to="/drills/reaction" className="btn-primary" style={{ fontSize: 14, padding: '12px 28px' }}>
+            <Link to="/drills/reaction" className="btn-primary">
               Be first
             </Link>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5px', background: 'var(--line)', borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{
+            display: 'flex', flexDirection: 'column',
+            background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
+            borderRadius: 16, overflow: 'hidden',
+          }}>
             {entries.map((e, i) => {
               const isMe = e.athlete_id === user?.id;
+              const isTop3 = i < 3;
               return (
                 <div
                   key={e.athlete_id}
                   style={{
-                    background: isMe ? 'rgba(255,48,64,0.06)' : 'var(--bg-1)',
-                    padding: '1rem 1.25rem',
+                    background: isMe ? 'rgba(255,48,64,0.08)' : 'transparent',
+                    padding: '14px 18px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '1rem',
+                    gap: 14,
+                    borderBottom: i < entries.length - 1 ? '0.5px solid var(--surface-border)' : 'none',
                   }}
                 >
                   <span
                     style={{
                       fontFamily: 'var(--font-display)',
-                      fontSize: i < 3 ? 20 : 16,
+                      fontSize: isTop3 ? 22 : 18,
                       letterSpacing: '-0.02em',
-                      color: i === 0 ? '#f59e0b' : i === 1 ? 'var(--w60)' : i === 2 ? '#cd7c3a' : 'var(--w40)',
+                      color: isTop3 ? 'var(--red)' : 'var(--w60)',
                       width: 32,
                       flexShrink: 0,
                       textAlign: 'center',
+                      lineHeight: 1,
                     }}
                   >
-                    {i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : `${i + 1}`}
+                    {i + 1}
                   </span>
 
                   <div
                     style={{
-                      width: 36,
-                      height: 36,
+                      width: 38, height: 38,
                       borderRadius: '50%',
-                      background: 'var(--surface-border)',
-                      border: '0.5px solid var(--surface-border)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: 'var(--w60)',
+                      background: 'var(--surface-2)',
+                      border: '0.5px solid var(--surface-border-2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 14, fontWeight: 700,
+                      fontFamily: 'var(--font-display)',
+                      color: 'var(--w80)',
                       flexShrink: 0,
                     }}
                   >
@@ -154,10 +155,10 @@ export default function DrillLeaderboard() {
                   </div>
 
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 14, fontWeight: isMe ? 600 : 400 }}>
+                    <p style={{ fontSize: 14.5, fontWeight: isMe ? 700 : 500, color: 'var(--white)' }}>
                       {e.name}{isMe ? ' (you)' : ''}
                     </p>
-                    <p style={{ fontSize: 12, color: 'var(--w40)', marginTop: 2 }}>
+                    <p style={{ fontSize: 12, color: 'var(--w60)', marginTop: 2 }}>
                       {e.sessions} session{e.sessions !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -165,9 +166,10 @@ export default function DrillLeaderboard() {
                   <p
                     style={{
                       fontFamily: 'var(--font-display)',
-                      fontSize: 20,
+                      fontSize: 22,
                       letterSpacing: '-0.02em',
                       color: isMe ? 'var(--red)' : 'var(--white)',
+                      lineHeight: 1,
                     }}
                   >
                     {e.avg_composite}

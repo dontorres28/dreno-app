@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -270,10 +271,10 @@ export default function Journal() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 620, margin: '0 auto', padding: '4rem 1.5rem 6rem' }}>
+      <div style={{ maxWidth: 700, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
 
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em' }}>Journal</h1>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em' }}>Journal</h1>
           {streak > 0 && (
             <span style={{ fontSize: 12, color: 'var(--w40)', fontWeight: 500 }}>
               {streak} {streak === 1 ? 'day' : 'days'} in a row
@@ -298,30 +299,50 @@ export default function Journal() {
         <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 20, overflow: 'hidden', marginBottom: '3.5rem' }}>
 
           {/* Share toggle — top of card, always visible */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem 1.25rem', borderBottom: '0.5px solid var(--surface-1)' }}>
-            <span style={{ fontSize: 13, color: shared ? 'var(--w70)' : 'var(--w40)', transition: 'color 0.15s' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem 1.25rem', borderBottom: '0.5px solid var(--surface-border)' }}>
+            <span style={{ fontSize: 13, color: shared ? 'var(--w80)' : 'var(--w60)', transition: 'color 200ms cubic-bezier(0.23, 1, 0.32, 1)' }}>
               {shared ? 'Your coach will see this entry.' : 'Private. Only you see this.'}
             </span>
-            <button type="button" onClick={() => setShared(s => !s)} aria-label="Share with coach" className="toggle-btn"
-              style={{ width: 40, height: 23, borderRadius: 12, border: 'none', cursor: 'pointer', padding: 0, background: shared ? 'rgba(255,48,64,0.65)' : 'var(--surface-border)', position: 'relative', transition: 'background 0.2s ease', flexShrink: 0 }}>
-              <span style={{ width: 17, height: 17, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: 3, transform: `translateX(${shared ? 17 : 0}px)`, transition: 'transform 0.2s ease', display: 'block', willChange: 'transform' }} />
+            <button type="button" onClick={() => setShared(s => !s)} aria-label="Share with coach"
+              style={{ width: 40, height: 24, borderRadius: 50, border: 'none', cursor: 'pointer', padding: 0, background: shared ? 'var(--red)' : 'var(--surface-2)', position: 'relative', transition: 'background 220ms cubic-bezier(0.23, 1, 0.32, 1)', flexShrink: 0 }}>
+              <span style={{ width: 18, height: 18, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: 3, transform: `translateX(${shared ? 16 : 0}px)`, transition: 'transform 260ms cubic-bezier(0.4, 0, 0.2, 1)', display: 'block', boxShadow: '0 1px 2px rgba(0,0,0,0.15)' }} />
             </button>
           </div>
 
-          {/* Mode toggle */}
-          <div style={{ display: 'flex', gap: 4, padding: '0.75rem 1.25rem 0' }}>
-            {(['prompted', 'freeform'] as const).map(m => (
-              <button key={m} onClick={() => setMode(m)} style={{ padding: '5px 16px', borderRadius: 50, fontSize: 13, fontWeight: 500, background: mode === m ? 'var(--surface-hover)' : 'transparent', border: mode === m ? '0.5px solid var(--surface-border-2)' : '0.5px solid transparent', color: mode === m ? 'var(--white)' : 'var(--w40)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' }}>
-                {m === 'prompted' ? 'Prompted' : 'Freeform'}
-              </button>
-            ))}
+          {/* Mode toggle — liquid pill */}
+          <div style={{ display: 'flex', gap: 4, padding: '0.875rem 1.25rem 0' }}>
+            <LayoutGroup id="journal-mode">
+              {(['prompted', 'freeform'] as const).map(m => {
+                const active = mode === m;
+                return (
+                  <button key={m} onClick={() => setMode(m)} style={{
+                    position: 'relative',
+                    padding: '6px 16px', borderRadius: 50, fontSize: 13, fontWeight: active ? 700 : 500,
+                    background: 'transparent', border: 'none',
+                    color: active ? '#fff' : 'var(--w70)',
+                    cursor: 'pointer', fontFamily: 'var(--font-body)',
+                    transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
+                  }}>
+                    {active && (
+                      <motion.span
+                        layoutId="journal-mode-pill"
+                        initial={false}
+                        transition={{ type: 'spring', stiffness: 520, damping: 38, mass: 0.6 }}
+                        style={{ position: 'absolute', inset: 0, background: 'var(--red)', borderRadius: 50, zIndex: 0 }}
+                      />
+                    )}
+                    <span style={{ position: 'relative', zIndex: 1 }}>{m === 'prompted' ? 'Prompted' : 'Freeform'}</span>
+                  </button>
+                );
+              })}
+            </LayoutGroup>
           </div>
 
           {mode === 'prompted' && (
             <div style={{ padding: '0.875rem 1.25rem 1.25rem' }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '1.25rem' }}>
                 {CATEGORY_KEYS.map(k => (
-                  <button key={k} onClick={() => setCategory(k)} style={{ padding: '4px 13px', borderRadius: 50, fontSize: 12, fontWeight: 500, background: category === k ? 'rgba(255,48,64,0.10)' : 'var(--surface-1)', border: category === k ? '0.5px solid rgba(255,48,64,0.3)' : '0.5px solid var(--surface-border)', color: category === k ? 'var(--white)' : 'var(--w45)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' }}>
+                  <button key={k} onClick={() => setCategory(k)} style={{ padding: '5px 13px', borderRadius: 50, fontSize: 12, fontWeight: 600, background: category === k ? 'var(--red)' : 'var(--surface-1)', border: category === k ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', color: category === k ? '#fff' : 'var(--w70)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms' }}>
                     {CATEGORIES[k].label}
                   </button>
                 ))}
@@ -329,7 +350,7 @@ export default function Journal() {
 
               <div style={{ display: 'flex', gap: 6, marginBottom: '1rem' }}>
                 {prompts.map((_, i) => (
-                  <button key={i} onClick={() => setPromptStep(i)} style={{ width: i === promptStep ? 22 : 7, height: 7, borderRadius: 4, border: 'none', padding: 0, background: answers[i]?.trim() ? 'var(--w40)' : i === promptStep ? 'var(--white)' : 'var(--w20)', cursor: 'pointer', transition: 'all 0.25s' }} />
+                  <button key={i} onClick={() => setPromptStep(i)} style={{ width: i === promptStep ? 22 : 7, height: 7, borderRadius: 4, border: 'none', padding: 0, background: answers[i]?.trim() ? 'var(--w40)' : i === promptStep ? 'var(--white)' : 'var(--w20)', cursor: 'pointer', transition: 'width 260ms cubic-bezier(0.23, 1, 0.32, 1), background 220ms cubic-bezier(0.23, 1, 0.32, 1)' }} />
                 ))}
               </div>
 
@@ -350,11 +371,11 @@ export default function Journal() {
                   <button onClick={() => setPromptStep(s => s - 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w50)', fontSize: 13, fontFamily: 'var(--font-body)', padding: 0 }}>Back</button>
                 ) : <span />}
                 {isLastPrompt ? (
-                  <button onClick={save} disabled={saving || !canSavePrompted} style={{ fontSize: 13, fontWeight: 600, padding: '8px 20px', borderRadius: 50, background: canSavePrompted ? 'var(--white)' : 'var(--surface-border)', color: canSavePrompted ? '#000' : 'var(--w30)', border: 'none', cursor: canSavePrompted ? 'pointer' : 'default', fontFamily: 'var(--font-body)', transition: 'all 0.15s' }}>
-                    {saving ? 'Saving...' : 'Save entry'}
+                  <button onClick={save} disabled={saving || !canSavePrompted} className="btn-primary" style={{ fontSize: 13, minHeight: 36, padding: '0 20px' }}>
+                    {saving ? 'Saving…' : 'Save entry'}
                   </button>
                 ) : (
-                  <button onClick={() => setPromptStep(s => s + 1)} style={{ fontSize: 13, fontWeight: 600, padding: '8px 20px', borderRadius: 50, background: currentAnswerFilled ? 'var(--surface-border)' : 'transparent', border: '0.5px solid var(--surface-border)', color: 'var(--w70)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' }}>
+                  <button onClick={() => setPromptStep(s => s + 1)} className="btn-secondary" style={{ fontSize: 13, minHeight: 36, padding: '0 20px' }}>
                     Next
                   </button>
                 )}
@@ -367,8 +388,8 @@ export default function Journal() {
               <textarea ref={taRef} value={body} onChange={e => { setBody(e.target.value); resize(); }} onKeyDown={e => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') save(); }} placeholder="What's on your mind."
                 style={{ display: 'block', width: '100%', minHeight: 120, background: 'transparent', border: 'none', outline: 'none', resize: 'none', padding: '1.25rem 1.25rem 0.625rem', fontSize: 15, lineHeight: 1.75, color: 'var(--white)', fontFamily: 'var(--font-body)', caretColor: 'var(--red)', boxSizing: 'border-box' }} />
               <div style={{ padding: '0 1.25rem 1rem', display: 'flex', justifyContent: 'flex-end' }}>
-                <button onClick={save} disabled={saving || !canSaveFreeform} style={{ fontSize: 13, fontWeight: 600, padding: '8px 20px', borderRadius: 50, background: canSaveFreeform ? 'var(--white)' : 'var(--surface-border)', color: canSaveFreeform ? '#000' : 'var(--w30)', border: 'none', cursor: canSaveFreeform ? 'pointer' : 'default', fontFamily: 'var(--font-body)', transition: 'all 0.15s' }}>
-                  {saving ? 'Saving...' : 'Save'}
+                <button onClick={save} disabled={saving || !canSaveFreeform} className="btn-primary" style={{ fontSize: 13, minHeight: 36, padding: '0 20px' }}>
+                  {saving ? 'Saving…' : 'Save'}
                 </button>
               </div>
             </>

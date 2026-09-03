@@ -2,9 +2,10 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from '../components/ThemeToggle';
 
 type Pattern = 'horizontal' | 'cross' | 'random' | 'dual' | 'rapid';
-type Phase = 'select' | 'session' | 'done';
+type Phase = 'select' | 'brief' | 'session' | 'done';
 
 interface Pos { nx: number; ny: number }
 interface LevelDef {
@@ -20,19 +21,17 @@ interface LevelDef {
 }
 
 const LEVELS: LevelDef[] = [
-  { n: 1, name: 'Saccade',  desc: 'Snap left to right. No tracking, just snap.', pattern: 'horizontal', totalDuration: 45, holdMs: 700,  dotCount: 1 },
-  { n: 2, name: 'Cross',    desc: 'Four directions. Full range of motion.',         pattern: 'cross',      totalDuration: 60, holdMs: 520,  dotCount: 1 },
-  { n: 3, name: 'Random',   desc: 'Unpredictable positions anywhere on screen.',    pattern: 'random',     totalDuration: 75, holdMs: 400,  dotCount: 1 },
-  { n: 4, name: 'Split',    desc: 'Two dots moving independently. Track both.',     pattern: 'dual',       totalDuration: 90, holdMs: 480,  dotCount: 2 },
-  { n: 5, name: 'Rapid',    desc: 'Fast random. Some positions blink and vanish.',  pattern: 'rapid',      totalDuration: 90, holdMs: 260,  dotCount: 1, blinkChance: 0.3, blinkMs: 110 },
+  { n: 1, name: 'Saccade',  desc: 'Snap left to right. No tracking, just snap.',       pattern: 'horizontal', totalDuration: 45, holdMs: 700, dotCount: 1 },
+  { n: 2, name: 'Cross',    desc: 'Four directions. Full range of motion.',            pattern: 'cross',      totalDuration: 60, holdMs: 520, dotCount: 1 },
+  { n: 3, name: 'Random',   desc: 'Unpredictable positions anywhere on screen.',       pattern: 'random',     totalDuration: 75, holdMs: 400, dotCount: 1 },
+  { n: 4, name: 'Split',    desc: 'Two dots moving independently. Track both.',        pattern: 'dual',       totalDuration: 90, holdMs: 480, dotCount: 2 },
+  { n: 5, name: 'Rapid',    desc: 'Fast random. Some positions blink and vanish.',     pattern: 'rapid',      totalDuration: 90, holdMs: 260, dotCount: 1, blinkChance: 0.3, blinkMs: 110 },
 ];
 
 const UNLOCK_AT = 5;
 const DOT_R = 14;
 const MARGIN = 0.12;
-const BG   = '#0D1B2A';
-const BONE = '#EBE4D2';
-const RED  = '#FF3040';
+const RED = '#FF3040';
 
 function lcg(seed: number) {
   let s = seed;
@@ -82,6 +81,45 @@ function fmt(secs: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
+function themeBg() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#000';
+}
+function themeText() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--white').trim() || '#fff';
+}
+
+// Shared shell for select/done
+const Shell = ({ children, showBack = true, title, onBack }: { children: React.ReactNode; showBack?: boolean; title: string; onBack?: () => void }) => (
+  <div style={{
+    minHeight: '100dvh', background: 'var(--bg)', color: 'var(--white)',
+    fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column',
+    WebkitFontSmoothing: 'antialiased',
+  }}>
+    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
+      {showBack && (
+        <button
+          onClick={onBack}
+          style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Back
+        </button>
+      )}
+      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>
+        {title}
+      </p>
+      <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
+        <ThemeToggle />
+      </div>
+    </div>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem 1.5rem 3rem' }}>
+      {children}
+    </div>
+  </div>
+);
+
 export default function DrillEyeTrack() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -125,6 +163,8 @@ export default function DrillEyeTrack() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
     const W = canvas.width, H = canvas.height;
+    const bg = themeBg();
+    const text = themeText();
 
     escapedRef.current = false;
     saveQueuedRef.current = false;
@@ -152,24 +192,22 @@ export default function DrillEyeTrack() {
     const dotStates: { frameIdx: number; frameStart: number; visible: boolean }[] =
       Array.from({ length: level.dotCount }, (_, i) => ({ frameIdx: i * 2, frameStart: 0, visible: true }));
 
-    const DOT_COLORS = [RED, `rgba(235,228,210,0.9)`];
-
     function drawDot(x: number, y: number, scale: number, colorIdx: number) {
       const r = DOT_R * Math.max(0, scale);
       if (r <= 0) return;
-      const color = DOT_COLORS[colorIdx % DOT_COLORS.length];
+      const color = colorIdx === 0 ? RED : text;
       ctx.beginPath(); ctx.arc(x, y, r * 2.8, 0, Math.PI * 2);
-      ctx.fillStyle = colorIdx === 0 ? 'rgba(255,48,64,0.08)' : 'rgba(235,228,210,0.05)'; ctx.fill();
+      ctx.fillStyle = colorIdx === 0 ? 'rgba(255,48,64,0.10)' : `rgba(${hexToRgb(text)},0.08)`; ctx.fill();
       ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fillStyle = color;
-      ctx.shadowColor = colorIdx === 0 ? 'rgba(255,48,64,0.7)' : 'rgba(235,228,210,0.4)';
-      ctx.shadowBlur = 18; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.shadowColor = colorIdx === 0 ? 'rgba(255,48,64,0.7)' : `rgba(${hexToRgb(text)},0.5)`;
+      ctx.shadowBlur = 20; ctx.fill(); ctx.shadowBlur = 0;
     }
 
     function tick(now: number) {
       const elapsed = now - startRef.current;
       ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
 
       for (let d = 0; d < level.dotCount; d++) {
         const ds = dotStates[d];
@@ -225,95 +263,150 @@ export default function DrillEyeTrack() {
   // ── Select screen ─────────────────────────────────────────────────────────
   if (phase === 'select') {
     return (
-      <div style={{
-        position: 'fixed', inset: 0, background: BG, overflowY: 'auto',
-        fontFamily: 'var(--font-body)', color: BONE,
-      }}>
-        <div style={{ maxWidth: 520, margin: '0 auto', padding: '1.5rem 1.5rem 6rem' }}>
-          {/* Back */}
-          <button
-            onClick={() => navigate('/drills')}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(235,228,210,0.4)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)', marginBottom: '2rem' }}
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Back
-          </button>
-
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(235,228,210,0.3)', marginBottom: '1rem' }}>
-            Eye training
-          </p>
+      <Shell title="Eye training" onBack={() => navigate('/drills')}>
+        <div style={{ width: '100%', maxWidth: 480 }}>
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.8rem, 9vw, 5rem)',
-            lineHeight: 0.92, letterSpacing: '-0.03em',
-            marginBottom: '3rem', color: BONE,
+            fontSize: 'clamp(2.5rem, 7vw, 4rem)',
+            lineHeight: 0.95, letterSpacing: '-0.035em',
+            marginBottom: '2rem',
           }}>
-            Five levels.<br />One target.
+            Five levels, one target
           </h1>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {LEVELS.map(lv => {
               const unlocked = isUnlocked(lv.n);
               const done = counts[lv.n] ?? 0;
-
               return (
-                <div
+                <button
                   key={lv.n}
-                  onClick={() => unlocked && (setActiveN(lv.n), setPhase('session'))}
+                  disabled={!unlocked}
+                  onClick={() => { setActiveN(lv.n); setPhase('brief'); }}
                   style={{
-                    padding: '1.25rem 1.5rem',
-                    borderRadius: 18,
-                    background: 'rgba(235,228,210,0.04)',
-                    border: `0.5px solid ${unlocked ? 'rgba(235,228,210,0.12)' : 'rgba(235,228,210,0.05)'}`,
-                    opacity: unlocked ? 1 : 0.35,
-                    cursor: unlocked ? 'pointer' : 'default',
-                    display: 'flex', alignItems: 'center', gap: '1.25rem',
+                    all: 'unset',
+                    padding: '16px 18px',
+                    borderRadius: 14,
+                    background: 'var(--surface-1)',
+                    border: '0.5px solid var(--surface-border-2)',
+                    opacity: unlocked ? 1 : 0.4,
+                    cursor: unlocked ? 'pointer' : 'not-allowed',
+                    display: 'flex', alignItems: 'center', gap: '1rem',
+                    transition: 'background 160ms cubic-bezier(0.23, 1, 0.32, 1), border-color 160ms',
+                    fontFamily: 'var(--font-body)',
                   }}
+                  onMouseEnter={e => { if (unlocked) { e.currentTarget.style.background = 'var(--surface-hover)'; e.currentTarget.style.borderColor = 'var(--line-2)'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface-1)'; e.currentTarget.style.borderColor = 'var(--surface-border-2)'; }}
                 >
                   <span style={{
                     fontFamily: 'var(--font-display)', fontSize: 24, lineHeight: 1,
                     letterSpacing: '-0.03em',
-                    color: unlocked ? RED : 'rgba(235,228,210,0.15)',
-                    minWidth: 32, flexShrink: 0,
+                    color: unlocked ? 'var(--red)' : 'var(--w40)',
+                    minWidth: 34, flexShrink: 0,
                   }}>
-                    {lv.n < 10 ? `0${lv.n}` : lv.n}
+                    0{lv.n}
                   </span>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: 3 }}>
-                      <p style={{ fontSize: 15, fontWeight: 600, color: BONE }}>{lv.name}</p>
-                      <p style={{ fontSize: 11, color: 'rgba(235,228,210,0.25)', letterSpacing: '0.04em' }}>{lv.totalDuration}s</p>
+                  <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 3 }}>
+                      <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)' }}>{lv.name}</p>
+                      <p style={{ fontSize: 11.5, color: 'var(--w60)', letterSpacing: '0.02em' }}>{lv.totalDuration}s</p>
                     </div>
-                    <p style={{ fontSize: 12, color: 'rgba(235,228,210,0.4)', lineHeight: 1.5 }}>{lv.desc}</p>
+                    <p style={{ fontSize: 13, color: 'var(--w70)', lineHeight: 1.5 }}>{lv.desc}</p>
                     {!unlocked && lv.n > 1 && (
-                      <p style={{ fontSize: 11, color: 'rgba(235,228,210,0.2)', marginTop: 4 }}>
+                      <p style={{ fontSize: 11.5, color: 'var(--w60)', marginTop: 4 }}>
                         {needed(lv.n)} more on level {lv.n - 1} to unlock.
                       </p>
                     )}
                   </div>
                   {unlocked && (
-                    <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-                      {done > 0 && <p style={{ fontSize: 11, color: 'rgba(235,228,210,0.3)' }}>{done}x</p>}
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ color: 'rgba(235,228,210,0.25)' }}>
+                    <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10, color: 'var(--w60)' }}>
+                      {done > 0 && <span style={{ fontSize: 11, letterSpacing: '0.04em' }}>{done}×</span>}
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                         <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                   )}
-                </div>
+                </button>
               );
             })}
           </div>
         </div>
-      </div>
+      </Shell>
     );
   }
 
-  // ── Session screen ────────────────────────────────────────────────────────
+  // ── Brief (per-level explanation before start) ────────────────────────────
+  if (phase === 'brief') {
+    return (
+      <Shell title={`Level ${level.n} · ${level.name}`} onBack={() => setPhase('select')}>
+        <div style={{ textAlign: 'center', maxWidth: 460 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
+            Follow the dot with your eyes
+          </h1>
+          <p style={{ fontSize: 16, color: 'var(--w70)', lineHeight: 1.55, marginBottom: '2rem', maxWidth: 380, margin: '0 auto 2rem' }}>
+            {level.desc}
+          </p>
+
+          {/* Animated preview dot */}
+          <div style={{
+            position: 'relative', width: 200, height: 80, margin: '0 auto 2.25rem',
+            background: 'var(--surface-1)',
+            border: '0.5px solid var(--surface-border-2)',
+            borderRadius: 14, overflow: 'hidden',
+          }}>
+            <div style={{
+              position: 'absolute', top: '50%', left: 0,
+              width: 20, height: 20, borderRadius: '50%',
+              background: 'var(--red)',
+              boxShadow: '0 0 24px rgba(255,48,64,0.5)',
+              transform: 'translateY(-50%)',
+              animation: `eyePreview ${level.holdMs * 2}ms cubic-bezier(0.4, 0, 0.2, 1) infinite`,
+            }} />
+          </div>
+
+          <div style={{ display: 'flex', gap: '2.5rem', marginBottom: '2.5rem', justifyContent: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', lineHeight: 1, letterSpacing: '-0.04em', color: 'var(--white)', marginBottom: 6 }}>
+                {level.totalDuration}<span style={{ fontSize: '0.5em', color: 'var(--w60)', marginLeft: 2 }}>s</span>
+              </p>
+              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>duration</p>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', lineHeight: 1, letterSpacing: '-0.04em', color: 'var(--white)', marginBottom: 6 }}>
+                {level.dotCount}
+              </p>
+              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{level.dotCount === 1 ? 'target' : 'targets'}</p>
+            </div>
+          </div>
+
+          <p style={{ fontSize: 13, color: 'var(--w60)', marginBottom: '2rem', letterSpacing: '0.02em' }}>
+            Sit still. Move only your eyes. Hold anywhere on screen to exit.
+          </p>
+
+          <button
+            className="btn-primary"
+            style={{ fontSize: 15, height: 50, padding: '0 44px' }}
+            onClick={() => setPhase('session')}
+          >
+            Start
+          </button>
+
+          <style>{`
+            @keyframes eyePreview {
+              0%, 100% { left: 10px; }
+              50% { left: 170px; }
+            }
+          `}</style>
+        </div>
+      </Shell>
+    );
+  }
+
+  // ── Session (canvas) ──────────────────────────────────────────────────────
   if (phase === 'session') {
     return (
       <div
-        style={{ width: '100vw', height: '100vh', background: BG, position: 'relative', overflow: 'hidden', userSelect: 'none', WebkitUserSelect: 'none' }}
+        style={{ width: '100vw', height: '100vh', background: 'var(--bg)', position: 'relative', overflow: 'hidden', userSelect: 'none', WebkitUserSelect: 'none' }}
         onPointerDown={onHoldStart}
         onPointerUp={onHoldEnd}
         onPointerCancel={onHoldEnd}
@@ -321,76 +414,54 @@ export default function DrillEyeTrack() {
       >
         <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
 
-        {/* Top overlay */}
         <div style={{ position: 'absolute', top: 20, left: 24, right: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', pointerEvents: 'none' }}>
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(235,228,210,0.2)' }}>
+          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--w60)' }}>
             {level.name}
           </span>
-          <span style={{ fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums', color: timeLeft <= 10 ? RED : 'rgba(235,228,210,0.25)' }}>
+          <span style={{ fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums', color: timeLeft <= 10 ? 'var(--red)' : 'var(--w60)' }}>
             {fmt(timeLeft)}
           </span>
         </div>
 
         <div style={{ position: 'absolute', bottom: 24, left: 0, right: 0, textAlign: 'center', pointerEvents: 'none' }}>
-          <p style={{ fontSize: 11, color: 'rgba(235,228,210,0.12)', letterSpacing: '0.06em' }}>Hold to exit</p>
+          <p style={{ fontSize: 11, color: 'var(--w50)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600 }}>Hold to exit</p>
         </div>
       </div>
     );
   }
 
-  // ── Done screen ───────────────────────────────────────────────────────────
+  // ── Done ──────────────────────────────────────────────────────────────────
+  const nextN = activeN + 1;
+  const rem = nextN <= 5 ? needed(nextN) : 0;
   return (
-    <div style={{
-      position: 'fixed', inset: 0, background: BG,
-      display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'var(--font-body)', color: BONE,
-      textAlign: 'center', padding: '2rem',
-    }}>
-      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(235,228,210,0.3)', marginBottom: '1.5rem' }}>
-        Level {activeN} complete
-      </p>
-      <p style={{
-        fontFamily: 'var(--font-display)',
-        fontSize: 'clamp(4rem, 14vw, 7rem)',
-        lineHeight: 0.9, letterSpacing: '-0.04em',
-        color: BONE, marginBottom: '0.5rem',
-      }}>
-        {LEVELS[activeN - 1].totalDuration}s
-      </p>
-      <p style={{ fontSize: 14, color: 'rgba(235,228,210,0.4)', marginBottom: '3rem' }}>
-        {LEVELS[activeN - 1].name}
-      </p>
+    <Shell title="Eye training" showBack={false}>
+      <div style={{ textAlign: 'center', maxWidth: 460 }}>
+        <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '0.75rem' }}>
+          Level {activeN} complete
+        </p>
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(4.5rem, 14vw, 8rem)', lineHeight: 1, letterSpacing: '-0.045em', color: 'var(--white)', marginBottom: '0.25rem' }}>
+          {LEVELS[activeN - 1].totalDuration}
+          <span style={{ fontSize: '0.28em', color: 'var(--w60)', marginLeft: 10, letterSpacing: '0.02em' }}>s</span>
+        </p>
+        <p style={{ fontSize: 14, color: 'var(--w70)', marginBottom: '2rem' }}>{LEVELS[activeN - 1].name}</p>
 
-      {activeN < 5 && (() => {
-        const rem = needed(activeN + 1);
-        return rem > 0
-          ? <p style={{ fontSize: 14, color: 'rgba(235,228,210,0.35)', marginBottom: '3rem' }}>{rem} more run{rem !== 1 ? 's' : ''} to unlock level {activeN + 1}.</p>
-          : <p style={{ fontSize: 14, color: 'rgba(235,228,210,0.5)', marginBottom: '3rem' }}>Level {activeN + 1} unlocked.</p>;
-      })()}
+        {nextN <= 5 && (
+          <p style={{ fontSize: 13, color: 'var(--w60)', marginBottom: '2rem' }}>
+            {rem > 0 ? `${rem} more run${rem !== 1 ? 's' : ''} to unlock level ${nextN}.` : `Level ${nextN} unlocked.`}
+          </p>
+        )}
 
-      <div style={{ display: 'flex', gap: '0.75rem' }}>
-        <button
-          onClick={() => setPhase('session')}
-          style={{
-            background: BONE, color: BG,
-            fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700,
-            padding: '14px 36px', borderRadius: 50, border: 'none', cursor: 'pointer',
-          }}
-        >
-          Run again
-        </button>
-        <button
-          onClick={() => setPhase('select')}
-          style={{
-            background: 'none', border: '0.5px solid rgba(235,228,210,0.2)',
-            color: 'rgba(235,228,210,0.5)', fontFamily: 'var(--font-body)',
-            fontSize: 14, padding: '14px 28px', borderRadius: 50, cursor: 'pointer',
-          }}
-        >
-          Levels
-        </button>
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button className="btn-secondary" onClick={() => setPhase('select')}>All levels</button>
+          <button className="btn-primary" onClick={() => setPhase('brief')}>Run again</button>
+        </div>
       </div>
-    </div>
+    </Shell>
   );
+}
+
+function hexToRgb(hex: string): string {
+  const h = hex.replace('#', '');
+  const bigint = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
+  return `${(bigint >> 16) & 255},${(bigint >> 8) & 255},${bigint & 255}`;
 }

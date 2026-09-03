@@ -6,43 +6,9 @@ import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 import ThemeToggle from '../components/ThemeToggle';
+import LanguagePicker from '../components/LanguagePicker';
 
-const LANGUAGES = Object.keys(LANGUAGE_CODES);
 const REDIRECT_URL = `${window.location.origin}/auth/callback`;
-
-function LanguagePicker() {
-  const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState(() => {
-    const code = localStorage.getItem('i18nextLng') ?? 'en';
-    return LANGUAGES.find(l => LANGUAGE_CODES[l] === code) ?? 'English';
-  });
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    function onDown(e: MouseEvent) { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); }
-    document.addEventListener('mousedown', onDown);
-    return () => document.removeEventListener('mousedown', onDown);
-  }, []);
-  function select(lang: string) { setCurrent(lang); setLanguageFromPreference(lang); setOpen(false); }
-  const code = LANGUAGE_CODES[current]?.toUpperCase() ?? 'EN';
-  return (
-    <div ref={ref} style={{ position: 'relative' }}>
-      <button onClick={() => setOpen(o => !o)} aria-label="Change language" style={{ height: 34, padding: '0 12px', borderRadius: 20, background: 'var(--toggle-bg)', border: '0.5px solid var(--line-2)', display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', color: 'var(--w60)', fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500, letterSpacing: '0.03em' }}>
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><circle cx="10" cy="10" r="8"/><path d="M2 10h16"/><path d="M10 2a11 11 0 0 1 3 8 11 11 0 0 1-3 8 11 11 0 0 1-3-8 11 11 0 0 1 3-8z"/></svg>
-        {code}
-      </button>
-      {open && (
-        <div style={{ position: 'absolute', top: 42, right: 0, zIndex: 200, background: 'var(--bg-2)', border: '0.5px solid var(--line-2)', borderRadius: 14, padding: '6px 0', minWidth: 160, boxShadow: '0 8px 32px rgba(0,0,0,0.22)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', maxHeight: 280, overflowY: 'auto' }}>
-          {LANGUAGES.map(lang => (
-            <button key={lang} onClick={() => select(lang)} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 16px', background: 'none', border: 'none', fontSize: 14, fontFamily: 'var(--font-body)', cursor: 'pointer', color: lang === current ? 'var(--white)' : 'var(--w60)', fontWeight: lang === current ? 600 : 400 }}>
-              {lang}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 
 function SocialButton({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
   return (
@@ -73,6 +39,7 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<'google' | 'apple' | null>(null);
+  const [showEmail, setShowEmail] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -131,57 +98,73 @@ export default function Signup() {
     <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
       {/* Top bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 2rem', flexShrink: 0 }}>
-        <Link to="/" style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em', textDecoration: 'none' }}>
+        <Link
+          to="/"
+          style={{
+            display: 'inline-flex', alignItems: 'center', height: 32,
+            fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 20,
+            letterSpacing: '-0.02em', lineHeight: 1, textDecoration: 'none',
+          }}
+        >
           <span style={{ color: 'var(--white)' }}>DRENO</span><span style={{ color: 'var(--red)' }}>/</span>
         </Link>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <LanguagePicker /><ThemeToggle />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: 32 }}>
+          <LanguagePicker />
+          <ThemeToggle />
         </div>
       </div>
 
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem 1.5rem 3rem' }}>
-        <div style={{ width: '100%', maxWidth: 420 }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 44, lineHeight: 0.98, letterSpacing: '-0.035em', marginBottom: '0.5rem', color: 'var(--white)' }}>
-            Start here.
+        <div style={{ width: '100%', maxWidth: 440 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 48, lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem', color: 'var(--white)' }}>
+            Sign up
           </h1>
-          <p style={{ fontSize: 15, color: 'var(--w70)', marginBottom: '1.5rem', lineHeight: 1.5 }}>Pick your role to continue.</p>
 
-          {/* Role cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1.5rem' }}>
+          {/* Role tiles */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: '1.25rem' }}>
             {([
-              { key: 'athlete', label: t('signup.iAmAthlete'), sub: 'Track your mental performance' },
-              { key: 'coach', label: t('signup.iAmCoach'), sub: 'Support and monitor your athletes' },
-              { key: 'administrator', label: "I'm an administrator", sub: 'Schools, clubs, sports programs' },
+              { key: 'athlete', label: 'Athlete', icon: (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="4.5" r="2.2"/>
+                  <path d="M8 22l1.5-7 3-2 3 3 3 1"/>
+                  <path d="M6 12l3-3 2 1 3-1"/>
+                </svg>
+              )},
+              { key: 'coach', label: 'Coach', icon: (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3l9 4-9 4-9-4 9-4z"/>
+                  <path d="M7 9v4c0 1.7 2.2 3 5 3s5-1.3 5-3V9"/>
+                  <path d="M21 7v5"/>
+                </svg>
+              )},
+              { key: 'administrator', label: 'Admin', icon: (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 21V10l8-5 8 5v11"/>
+                  <path d="M9 21V13h6v8"/>
+                </svg>
+              )},
             ] as const).map(r => {
               const on = role === r.key;
               return (
                 <button key={r.key} type="button" onClick={() => setRole(r.key)} style={{
-                  width: '100%', padding: '14px 16px', borderRadius: 12, textAlign: 'left',
-                  fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'all 0.15s',
-                  background: on ? 'rgba(255,48,64,0.10)' : 'var(--surface-1)',
-                  border: on ? '0.5px solid rgba(255,48,64,0.5)' : '0.5px solid var(--surface-border-2)',
-                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '20px 8px', borderRadius: 14,
+                  fontFamily: 'var(--font-body)', cursor: 'pointer',
+                  transition: 'background 0.15s, border-color 0.15s, color 0.15s',
+                  background: on ? 'var(--red)' : 'var(--surface-1)',
+                  border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
+                  color: on ? '#fff' : 'var(--w80)',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
                 }}>
-                  <span style={{
-                    width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
-                    background: on ? 'var(--red)' : 'transparent',
-                    border: on ? 'none' : '1.5px solid var(--w40)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    {on && <svg width="11" height="11" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.2 2.2L8 2.6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                  </span>
-                  <span style={{ flex: 1 }}>
-                    <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--white)', marginBottom: 2 }}>{r.label}</p>
-                    <p style={{ fontSize: 12.5, color: 'var(--w60)' }}>{r.sub}</p>
-                  </span>
+                  {r.icon}
+                  <span style={{ fontSize: 14, fontWeight: 600, color: on ? '#fff' : 'var(--white)' }}>{r.label}</span>
                 </button>
               );
             })}
           </div>
 
-          {/* Social buttons */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1.25rem' }}>
-            <SocialButton onClick={signUpWithGoogle} disabled={anyLoading}>
+          {/* Auth buttons — only clickable once role selected */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1rem' }}>
+            <SocialButton onClick={signUpWithGoogle} disabled={anyLoading || !role}>
               {oauthLoading === 'google' ? <Spinner size={16} /> : (
                 <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
                   <path d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z" fill="#FFC107"/>
@@ -193,45 +176,46 @@ export default function Signup() {
               Continue with Google
             </SocialButton>
 
-            <SocialButton onClick={signUpWithApple} disabled={anyLoading}>
+            <SocialButton onClick={signUpWithApple} disabled={anyLoading || !role}>
               {oauthLoading === 'apple' ? <Spinner size={16} /> : (
-                <svg width="17" height="17" viewBox="0 0 814 1000" fill="currentColor">
-                  <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 457.8 37.4 327 37.4 261.7c0-25.5 2.5-51 12.6-74.9C67.7 148 112.8 108 162.6 91.5c35.7-11.9 71.9-17.9 108.2-17.9 138.6 0 180.1 91.5 259.1 91.5 77.5 0 128.5-91.5 261.9-91.5 36.3 0 107.8 6.4 161.3 70.5zm-126.4-177.2c0 50.6-17.9 101.2-50.2 135.4-36.3 38.1-80.4 60.6-127.5 60.6-8.3 0-16.7-.6-22.2-1.9 2.5-51.2 21.4-100.6 51.2-134.8 30.5-35.7 80.4-62.8 128.5-67.3 1.9 2.5 20.2 7.7 20.2 7.7z"/>
+                <svg width="18" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                 </svg>
               )}
               Continue with Apple
             </SocialButton>
           </div>
 
-          {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', marginBottom: '1.25rem' }}>
-            <div style={{ flex: 1, height: '0.5px', background: 'var(--line-2)' }} />
-            <span style={{ fontSize: 11, color: 'var(--w60)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>or</span>
-            <div style={{ flex: 1, height: '0.5px', background: 'var(--line-2)' }} />
-          </div>
-
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
-            <input
-              className="input" type="email" value={email} onChange={e => setEmail(e.target.value)}
-              required placeholder="Email" autoComplete="email"
-              style={{ height: 46, fontSize: 15 }}
-            />
-            <input
-              className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
-              required placeholder="Password (8+ characters)" autoComplete="new-password" minLength={8}
-              style={{ height: 46, fontSize: 15 }}
-            />
-
-            <p style={{ fontSize: 12, color: 'var(--w60)', lineHeight: 1.5, marginTop: 4 }}>{t('signup.disclaimer')}</p>
-
-            <button type="submit" className="btn-primary" style={{ fontSize: 15, height: 48, padding: 0, marginTop: '0.25rem' }} disabled={anyLoading || !role}>
-              {loading ? <Spinner size={18} /> : t('signup.createAccountBtn')}
+          {/* Collapsible email option */}
+          {!showEmail ? (
+            <button type="button" onClick={() => setShowEmail(true)} disabled={!role} style={{
+              width: '100%', padding: '10px', background: 'none', border: 'none',
+              fontSize: 13, color: 'var(--w60)', fontFamily: 'var(--font-body)',
+              cursor: role ? 'pointer' : 'not-allowed',
+            }}>
+              Use email instead
             </button>
-          </form>
+          ) : (
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
+              <input
+                className="input" type="email" value={email} onChange={e => setEmail(e.target.value)}
+                required placeholder="Email" autoComplete="email"
+                style={{ height: 46, fontSize: 15 }} autoFocus
+              />
+              <input
+                className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
+                required placeholder="Password" autoComplete="new-password" minLength={8}
+                style={{ height: 46, fontSize: 15 }}
+              />
+              <button type="submit" className="btn-primary" style={{ fontSize: 15, height: 48, padding: 0, marginTop: 2 }} disabled={anyLoading || !role}>
+                {loading ? <Spinner size={18} /> : 'Create account'}
+              </button>
+            </form>
+          )}
 
-          <p style={{ textAlign: 'center', fontSize: 14, color: 'var(--w70)', marginTop: '1.5rem' }}>
-            {t('signup.alreadyHaveAccount')}{' '}
-            <Link to="/login" style={{ color: 'var(--red)', fontWeight: 600, textDecoration: 'none' }}>{t('signup.signIn')}</Link>
+          <p style={{ textAlign: 'center', fontSize: 14, color: 'var(--w70)', marginTop: '2rem' }}>
+            Already have an account?{' '}
+            <Link to="/login" style={{ color: 'var(--red)', fontWeight: 600, textDecoration: 'none' }}>Sign in</Link>
           </p>
         </div>
       </div>

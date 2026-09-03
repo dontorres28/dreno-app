@@ -49,10 +49,10 @@ export default function AdminFlags() {
     return (
       <Layout>
         <div style={{ maxWidth: 400, margin: '8rem auto', padding: '0 1.5rem', textAlign: 'center' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: '1.5rem' }}>
+          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)', marginBottom: '1.5rem' }}>
             Admin
           </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '2rem' }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
             Flags queue
           </h1>
           <input
@@ -78,10 +78,10 @@ export default function AdminFlags() {
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '4rem 1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3rem' }}>
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: 8 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)', marginBottom: 8 }}>
               Admin
             </p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em' }}>
               Flags queue
             </h1>
           </div>
@@ -98,9 +98,9 @@ export default function AdminFlags() {
         {flags.length === 0 ? (
           <div style={{
             padding: '3rem', textAlign: 'center',
-            background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 16,
+            background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', borderRadius: 16,
           }}>
-            <p style={{ fontSize: 15, color: 'var(--w40)' }}>No flags in the last 90 days.</p>
+            <p style={{ fontSize: 15, color: 'var(--w60)' }}>No flags in the last 90 days.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -108,7 +108,7 @@ export default function AdminFlags() {
               <div
                 key={f.coach_id}
                 style={{
-                  background: 'var(--surface-1)', border: `0.5px solid ${f.count >= 3 ? 'rgba(255,48,64,0.35)' : 'var(--surface-border)'}`,
+                  background: 'var(--surface-1)', border: `0.5px solid ${f.count >= 3 ? 'rgba(255,48,64,0.35)' : 'var(--surface-border-2)'}`,
                   borderRadius: 16, overflow: 'hidden',
                 }}
               >
@@ -127,23 +127,23 @@ export default function AdminFlags() {
                     </div>
                     <div>
                       <p style={{ fontSize: 15, fontWeight: 600 }}>{f.name ?? f.coach_id}</p>
-                      <p style={{ fontSize: 12, color: 'var(--w40)', marginTop: 2 }}>
+                      <p style={{ fontSize: 12, color: 'var(--w60)', marginTop: 2 }}>
                         {f.count} flag{f.count !== 1 ? 's' : ''} in 90 days
                         {f.count >= 3 && <span style={{ color: 'var(--red)', marginLeft: 8, fontWeight: 700 }}>Review required</span>}
                       </p>
                     </div>
                   </div>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ transform: expanded === f.coach_id ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', color: 'var(--w40)' }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ transform: expanded === f.coach_id ? 'rotate(180deg)' : 'none', transition: 'transform 220ms cubic-bezier(0.32, 0.72, 0, 1)', color: 'var(--w60)' }}>
                     <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
 
                 {expanded === f.coach_id && (
-                  <div style={{ borderTop: '0.5px solid var(--surface-border)', padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div style={{ borderTop: '0.5px solid var(--surface-border-2)', padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     {f.notes.map((n, i) => (
                       <div key={i} style={{ padding: '0.875rem 1rem', background: 'var(--surface-2)', borderRadius: 10 }}>
                         <p style={{ fontSize: 14, lineHeight: 1.6, marginBottom: 4 }}>{n.note}</p>
-                        <p style={{ fontSize: 11, color: 'var(--w40)' }}>
+                        <p style={{ fontSize: 11, color: 'var(--w60)' }}>
                           {new Date(n.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </p>
                       </div>

@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import Landing from './pages/Landing';
+import PreviewDashboard from './pages/PreviewDashboard';
 import AuthCallback from './pages/AuthCallback';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -66,11 +67,12 @@ export default function App() {
         />
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/preview/dashboard" element={<PreviewDashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
-          <Route path="/coaches" element={<Coaches />} />
-          <Route path="/coach/:id" element={<CoachProfile />} />
+          <Route path="/coaches" element={<ProtectedRoute><Coaches /></ProtectedRoute>} />
+          <Route path="/coach/:id" element={<ProtectedRoute><CoachProfile /></ProtectedRoute>} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/payment/success" element={<PaymentSuccess />} />
 

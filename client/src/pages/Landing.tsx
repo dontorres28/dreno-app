@@ -1,13 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion, Variants } from 'framer-motion';
 import Layout from '../components/Layout';
-import CoachCard from '../components/CoachCard';
-import { supabase } from '../lib/supabase';
+import { AnimatedGroup } from '../components/AnimatedGroup';
+import { Iphone15Pro } from '../components/Iphone15Pro';
+
+// Dreno app screenshots served from /public
+const DESKTOP_SHOT = '/dashboard-desktop.png';
+const MOBILE_SHOT  = '/signup-mobile.png';
 
 export default function Landing() {
   const { t } = useTranslation();
-  const [coaches, setCoaches] = useState<any[]>([]);
+  const stepsRef = useRef<HTMLDivElement>(null);
+  const [stepsVisible, setStepsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = stepsRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      entries => {
+        if (entries.some(e => e.isIntersecting)) {
+          setStepsVisible(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -80px 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const STEPS = [
     { n: '01', title: t('landing.step1Title'), body: t('landing.step1Body') },
@@ -16,157 +38,314 @@ export default function Landing() {
     { n: '04', title: t('landing.step4Title'), body: t('landing.step4Body') },
   ];
 
-  useEffect(() => {
-    supabase
-      .from('coaches')
-      .select('*, profiles(name)')
-      .eq('verified_status', 'verified')
-      .limit(3)
-      .then(({ data }) => setCoaches(data ?? []));
-  }, []);
+  const heroItem: Variants = {
+    hidden: { opacity: 0, filter: 'blur(10px)', y: 20 },
+    visible: {
+      opacity: 1, filter: 'blur(0px)', y: 0,
+      transition: { type: 'spring', bounce: 0.2, duration: 1 },
+    },
+  };
 
   return (
     <Layout>
 
-      {/* ── Hero ─────────────────────────────────────────── */}
+      <style>{`
+        /* iPhone frame theme tokens — auto-adapt to dark/light */
+        :root {
+          --iphone-frame: #404040;
+          --iphone-body: #262626;
+          --iphone-screen-bg: #111;
+          --iphone-notch: #0a0a0a;
+          --iphone-camera: #1a1a1a;
+        }
+        :root[data-theme="light"] {
+          --iphone-frame: #DADADA;
+          --iphone-body: #000;
+          --iphone-screen-bg: #F5F5F5;
+          --iphone-notch: #F0F0F0;
+          --iphone-camera: #D1D1D1;
+        }
+
+        /* Step rows — editorial list, staggered enter */
+        .step-row {
+          opacity: 0;
+          transform: translateY(14px);
+          transition:
+            opacity 600ms cubic-bezier(0.23, 1, 0.32, 1),
+            transform 600ms cubic-bezier(0.23, 1, 0.32, 1);
+          will-change: transform, opacity;
+        }
+        .step-row[data-visible="true"] { opacity: 1; transform: translateY(0); }
+        .step-row:nth-child(1)[data-visible="true"] { transition-delay: 0ms; }
+        .step-row:nth-child(2)[data-visible="true"] { transition-delay: 80ms; }
+        .step-row:nth-child(3)[data-visible="true"] { transition-delay: 160ms; }
+        .step-row:nth-child(4)[data-visible="true"] { transition-delay: 240ms; }
+        .step-num {
+          font-family: var(--font-display);
+          font-weight: 700;
+          letter-spacing: -0.04em;
+          line-height: 1;
+          color: var(--red);
+          font-size: clamp(3rem, 6vw, 4.5rem);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .step-row { transition: opacity 200ms ease; transform: none !important; }
+          .step-row[data-visible="true"] { transform: none !important; }
+        }
+      `}</style>
+
+      {/* ── Hero — full-viewport radial + phone mockup ── */}
       <section
         style={{
-          minHeight: 'calc(100vh - 60px)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          padding: '0 6vw 10vh',
+          position: 'relative', width: '100%',
+          overflow: 'hidden',
         }}
       >
-        <h1
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(4.5rem, 13vw, 12rem)',
-            lineHeight: 0.92,
-            letterSpacing: '-0.03em',
-            marginBottom: '2.5rem',
-          }}
-        >
-          {t('landing.heroLine1')}<br />
-          <span style={{ color: 'var(--red)' }}>{t('landing.heroLine2')}</span>
-        </h1>
-
-        <div style={{ maxWidth: 480, marginBottom: '3rem' }}>
-          <p style={{ fontSize: 18, lineHeight: 1.6, color: 'var(--w60)', fontWeight: 400 }}>
-            {t('landing.heroSub')}
-          </p>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: '4rem' }}>
-          <Link to="/coaches" className="btn-primary">{t('landing.findCoach')}</Link>
-          <Link to="/signup" className="btn-ghost">{t('landing.signUpFree')}</Link>
-        </div>
-
+        {/* Full-viewport radial background */}
         <div
+          aria-hidden
           style={{
-            display: 'flex',
-            gap: '2.5rem',
-            flexWrap: 'wrap',
-            paddingTop: '2rem',
-            borderTop: '0.5px solid var(--line)',
+            position: 'absolute', inset: 0,
+            background: 'radial-gradient(125% 125% at 50% 10%, var(--bg) 40%, rgba(255,48,64,0.55) 100%)',
+            zIndex: 0,
           }}
-        >
-          {[
-            { v: '40+', l: t('landing.verifiedCoaches') },
-            { v: '12', l: t('landing.sports') },
-            { v: '4.9', l: t('landing.avgRating') },
-          ].map(s => (
-            <div key={s.l}>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: 28, letterSpacing: '-0.02em', lineHeight: 1 }}>{s.v}</p>
-              <p style={{ fontSize: 13, color: 'var(--w40)', marginTop: 4, fontWeight: 500 }}>{s.l}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        />
 
-      {/* ── How it works ─────────────────────────────────── */}
-      <section style={{ padding: '10rem 6vw' }}>
-        <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: '1.25rem' }}>
-          {t('landing.howItWorks')}
-        </p>
-        <h2
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-            letterSpacing: '-0.03em',
-            lineHeight: 0.95,
-            marginBottom: '5rem',
-          }}
-        >
-          {t('landing.fourSteps')}<br />{t('landing.noNoise')}
-        </h2>
+        {/* Hero copy */}
+        <div style={{
+          position: 'relative', zIndex: 10,
+          maxWidth: 1120, margin: '0 auto',
+          padding: 'clamp(3rem, 8vh, 5rem) 1.5rem 0',
+          textAlign: 'center',
+        }}>
+          <AnimatedGroup
+            className="max-w-4xl mx-auto text-center flex flex-col items-center"
+            variants={{
+              container: { visible: { transition: { staggerChildren: 0.1 } } },
+              item: heroItem,
+            }}
+          >
+            <h1 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(3rem, 9vw, 6.5rem)',
+              lineHeight: 0.92,
+              letterSpacing: '-0.04em',
+              marginBottom: '1.5rem',
+              maxWidth: 900,
+            }}>
+              {t('landing.heroLine1')}<br />
+              <span style={{ color: 'var(--red)' }}>{t('landing.heroLine2')}</span>
+            </h1>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '0.5px',
-            background: 'var(--line)',
-            borderRadius: 20,
-            overflow: 'hidden',
-          }}
-        >
-          {STEPS.map((s, i) => (
-            <div
-              key={s.n}
-              style={{
-                background: 'var(--bg-1)',
-                padding: '2.5rem 2rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1rem',
-              }}
-            >
-              <span
+            <p style={{
+              fontSize: 'clamp(15px, 1.6vw, 18px)',
+              lineHeight: 1.55, letterSpacing: '-0.005em',
+              color: 'var(--w70)',
+              maxWidth: 560, margin: '0 auto 2.25rem',
+            }}>
+              {t('landing.heroSub')}
+            </p>
+
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
+              justifyContent: 'center', marginBottom: '3rem',
+            }}>
+              <Link
+                to="/signup"
                 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 48,
-                  lineHeight: 1,
-                  letterSpacing: '-0.03em',
-                  color: 'var(--red)',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  height: 44, padding: '0 22px', borderRadius: 50,
+                  fontSize: 14, fontWeight: 700, letterSpacing: '-0.005em',
+                  fontFamily: 'var(--font-body)',
+                  background: 'var(--red)', color: '#fff',
+                  border: '0.5px solid var(--red)', textDecoration: 'none',
+                  boxShadow: '0 10px 32px rgba(255,48,64,0.28)',
+                  transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)',
                 }}
               >
-                {s.n}
-              </span>
-              <p style={{ fontSize: 16, fontWeight: 600, lineHeight: 1.3 }}>{s.title}</p>
-              <p style={{ fontSize: 14, color: 'var(--w60)', lineHeight: 1.6 }}>{s.body}</p>
+                {t('landing.signUpFree')}
+              </Link>
+              <Link
+                to="/login"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                  height: 44, padding: '0 18px', borderRadius: 50,
+                  fontSize: 14, fontWeight: 600, letterSpacing: '-0.005em',
+                  fontFamily: 'var(--font-body)',
+                  background: 'transparent', color: 'var(--w80)',
+                  border: '0.5px solid var(--surface-border-2)', textDecoration: 'none',
+                  transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), color 200ms',
+                }}
+              >
+                Sign in
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M3 2l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Link>
             </div>
-          ))}
+          </AnimatedGroup>
+
+          {/* Product mockup — desktop screenshot with iPhone overlaid */}
+          <div style={{ position: 'relative', width: '100%', maxWidth: 1000, margin: '0 auto', zIndex: 20 }}>
+            <div style={{ position: 'relative' }}>
+              {/* Desktop screenshot */}
+              <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                style={{
+                  position: 'relative', width: '100%',
+                  borderRadius: 12, overflow: 'hidden',
+                  border: '0.5px solid var(--surface-border-2)',
+                  boxShadow: '0 40px 120px rgba(0,0,0,0.5), 0 12px 40px rgba(0,0,0,0.35)',
+                  background: 'var(--surface-1)',
+                }}
+              >
+                <img
+                  src={DESKTOP_SHOT}
+                  alt="Dreno on desktop"
+                  loading="lazy"
+                  style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'cover', objectPosition: 'left' }}
+                />
+              </motion.div>
+
+              {/* iPhone overlay */}
+              <div
+                className="iphone-wrap"
+                style={{
+                  position: 'absolute',
+                  top: '62%', left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 'clamp(200px, 30vw, 420px)',
+                }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.7, ease: [0.23, 1, 0.32, 1] }}
+                >
+                  <Iphone15Pro src={MOBILE_SHOT} />
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Bottom fade — dissolves the mockup into the page */}
+            <motion.div
+              aria-hidden
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
+              style={{
+                position: 'absolute',
+                left: 0, right: 0, bottom: -2,
+                height: 'clamp(160px, 30vh, 320px)',
+                background: 'linear-gradient(to top, var(--bg) 20%, transparent 100%)',
+                pointerEvents: 'none', zIndex: 30, borderRadius: 12,
+              }}
+            />
+          </div>
         </div>
       </section>
 
+      {/* ── How it works — editorial rows, no boxes ── */}
+      <section style={{ padding: 'clamp(3rem, 8vh, 6rem) 1.5rem clamp(4rem, 10vh, 8rem)' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto' }}>
+          <div style={{ marginBottom: 'clamp(2.5rem, 6vh, 4rem)' }}>
+            <p className="label" style={{ margin: 0, marginBottom: 12 }}>How it works</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(2rem, 5vw, 3.25rem)',
+              lineHeight: 1, letterSpacing: '-0.04em', fontWeight: 700,
+              maxWidth: 620,
+            }}>
+              Four moves. <span style={{ color: 'var(--w60)' }}>That's it.</span>
+            </h2>
+          </div>
 
-      {/* ── CTA ──────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: '10rem 6vw 12rem',
-          textAlign: 'center',
-          borderTop: '0.5px solid var(--line)',
-        }}
-      >
-        <h2
+          <div ref={stepsRef} style={{ display: 'flex', flexDirection: 'column' }}>
+            {STEPS.map((s, i) => (
+              <div
+                key={s.n}
+                className="step-row"
+                data-visible={stepsVisible}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'clamp(72px, 12%, 108px) 1fr',
+                  gap: 'clamp(1rem, 3vw, 2rem)',
+                  alignItems: 'baseline',
+                  padding: 'clamp(1.5rem, 3vh, 2rem) 0',
+                  borderTop: i === 0 ? 'none' : '0.5px solid var(--surface-border-2)',
+                }}
+              >
+                <span className="step-num">{s.n}</span>
+                <div style={{ minWidth: 0, paddingTop: 4 }}>
+                  <p style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(1.25rem, 2.4vw, 1.75rem)',
+                    fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15,
+                    marginBottom: '0.625rem',
+                  }}>
+                    {s.title}
+                  </p>
+                  <p style={{
+                    fontSize: 'clamp(14px, 1.4vw, 16px)',
+                    color: 'var(--w70)', letterSpacing: '-0.005em', lineHeight: 1.6,
+                    maxWidth: 520,
+                  }}>
+                    {s.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Closing CTA ── */}
+      <section style={{ padding: '2rem 1.5rem 7rem', position: 'relative', overflow: 'hidden' }}>
+        <div
+          aria-hidden
           style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(3rem, 9vw, 8rem)',
-            letterSpacing: '-0.03em',
-            lineHeight: 0.92,
-            marginBottom: '2.5rem',
+            position: 'absolute', top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 'min(700px, 90%)', height: 400,
+            background: 'radial-gradient(50% 50% at 50% 50%, rgba(255,48,64,0.14) 0%, transparent 70%)',
+            filter: 'blur(50px)',
+            pointerEvents: 'none',
           }}
-        >
-          {t('landing.ctaLine1')}<br />
-          <span style={{ color: 'var(--red)' }}>{t('landing.ctaLine2')}</span>
-        </h2>
-        <p style={{ fontSize: 18, color: 'var(--w60)', marginBottom: '2.5rem' }}>
-          {t('landing.ctaSub')}
-        </p>
-        <Link to="/signup" className="btn-primary" style={{ fontSize: 16, padding: '16px 40px' }}>
-          {t('landing.getStarted')}
-        </Link>
+        />
+        <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(2rem, 6vw, 4rem)',
+            lineHeight: 0.95, letterSpacing: '-0.04em', fontWeight: 700,
+            marginBottom: '1rem',
+          }}>
+            {t('landing.ctaLine1')}{' '}
+            <span style={{ color: 'var(--red)' }}>{t('landing.ctaLine2')}</span>
+          </h2>
+          <p style={{
+            fontSize: 15, color: 'var(--w70)', letterSpacing: '-0.005em',
+            marginBottom: '2rem',
+          }}>
+            {t('landing.ctaSub')}
+          </p>
+          <Link
+            to="/signup"
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              height: 46, padding: '0 26px', borderRadius: 50,
+              fontSize: 14, fontWeight: 700, letterSpacing: '-0.005em',
+              fontFamily: 'var(--font-body)',
+              background: 'var(--red)', color: '#fff',
+              border: '0.5px solid var(--red)', textDecoration: 'none',
+              transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)',
+            }}
+          >
+            {t('landing.getStarted')}
+          </Link>
+        </div>
       </section>
 
     </Layout>

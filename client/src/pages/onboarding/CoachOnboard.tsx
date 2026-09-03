@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../../components/Spinner';
+import Stepper from '../../components/Stepper';
+import ThemeToggle from '../../components/ThemeToggle';
+import ImageCropper from '../../components/ImageCropper';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -76,6 +79,7 @@ export default function CoachOnboard() {
   const [approach, setApproach] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState('');
+  const [cropSource, setCropSource] = useState<File | null>(null);
   const [birthDate, setBirthDate] = useState('');
   const [country, setCountry] = useState('');
   const photoInputRef = useRef<HTMLInputElement>(null);
@@ -121,8 +125,8 @@ export default function CoachOnboard() {
   function onPhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setPhotoFile(file);
-    setPhotoPreview(URL.createObjectURL(file));
+    setCropSource(file);
+    e.target.value = '';
   }
 
   function onCertAdd(e: React.ChangeEvent<HTMLInputElement>) {
@@ -237,11 +241,12 @@ export default function CoachOnboard() {
       key={label}
       onClick={onClick}
       style={{
-        padding: '11px 18px', borderRadius: 50, fontSize: 14, fontWeight: 500,
-        cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'var(--font-body)',
-        background: active ? 'rgba(255,48,64,0.12)' : 'var(--surface-1)',
-        border: active ? '0.5px solid rgba(255,48,64,0.4)' : '0.5px solid var(--surface-border)',
-        color: active ? 'var(--white)' : 'var(--w60)',
+        padding: '11px 18px', borderRadius: 50, fontSize: 14, fontWeight: 600,
+        cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s',
+        fontFamily: 'var(--font-body)',
+        background: active ? 'var(--red)' : 'var(--surface-1)',
+        border: active ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
+        color: active ? '#fff' : 'var(--w80)',
       }}
     >
       {label}
@@ -254,38 +259,35 @@ export default function CoachOnboard() {
       fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased',
     }}>
       {/* Top bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 28px', flexShrink: 0 }}>
-        {step > 0 && step < TOTAL_STEPS - 1 ? (
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
+        {step > 0 && step < TOTAL_STEPS - 1 && (
           <button
             onClick={() => setStep(s => s - 1)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w60)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
+            style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             Back
           </button>
-        ) : <span />}
-
-        {step < TOTAL_STEPS - 1 && (
-          <div style={{ display: 'flex', gap: 6 }}>
-            {Array.from({ length: TOTAL_STEPS - 1 }).map((_, i) => (
-              <div key={i} style={{ width: i === step ? 20 : 6, height: 6, borderRadius: 3, background: i <= step ? 'var(--red)' : 'var(--surface-border)', transition: 'width 0.3s ease, background 0.3s ease' }} />
-            ))}
-          </div>
         )}
+        {step < TOTAL_STEPS - 1 && (
+          <Stepper step={step} total={TOTAL_STEPS - 1} />
+        )}
+        <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
+          <ThemeToggle />
+        </div>
       </div>
 
-      <div ref={scrollRef} style={{ flex: 1, padding: '1.5rem 6vw 0', overflowY: 'auto' }}>
+      <div ref={scrollRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2.5rem 6vw 0', overflowY: 'auto' }}>
 
         {/* ── Step 0: Profile ── */}
         {step === 0 && (
           <div style={{ maxWidth: 580 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '1.25rem' }}>Step 1 of 5</p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '1rem' }}>
-              Your coach<br />profile.
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
+              Your coach profile
             </h1>
-            <p style={{ fontSize: 16, color: 'var(--w60)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: 16, color: "var(--w70)", lineHeight: 1.6, marginBottom: "2.5rem" }}>
               This is the first thing athletes see.
             </p>
 
@@ -296,7 +298,7 @@ export default function CoachOnboard() {
                 style={{
                   width: 80, height: 80, borderRadius: '50%', flexShrink: 0,
                   background: photoPreview ? 'transparent' : 'var(--surface-1)',
-                  border: photoPreview ? 'none' : '0.5px dashed var(--w20)',
+                  border: photoPreview ? 'none' : '0.5px dashed var(--surface-border-2)',
                   cursor: 'pointer', overflow: 'hidden', padding: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
@@ -308,7 +310,7 @@ export default function CoachOnboard() {
               </button>
               <div>
                 <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 4 }}>Profile photo</p>
-                <p style={{ fontSize: 12, color: 'var(--w40)' }}>Tap to upload. JPG or PNG.</p>
+                <p style={{ fontSize: 12, color: 'var(--w60)' }}>Tap to upload. JPG or PNG.</p>
               </div>
             </div>
             <input ref={photoInputRef} type="file" accept="image/*" onChange={onPhotoChange} style={{ display: 'none' }} />
@@ -343,13 +345,13 @@ export default function CoachOnboard() {
                     style={{
                       display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
                       padding: '14px 18px', borderRadius: 14, cursor: 'pointer',
-                      background: approach === a.key ? 'rgba(255,48,64,0.08)' : 'var(--surface-1)',
-                      border: approach === a.key ? '0.5px solid rgba(255,48,64,0.35)' : '0.5px solid var(--surface-border)',
-                      transition: 'all 0.15s', fontFamily: 'var(--font-body)', textAlign: 'left',
+                      background: approach === a.key ? 'var(--red)' : 'var(--surface-1)',
+                      border: approach === a.key ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
+                      transition: 'background 0.15s, border-color 0.15s, color 0.15s', fontFamily: 'var(--font-body)', textAlign: 'left',
                     }}
                   >
-                    <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--white)', marginBottom: 3 }}>{a.label}</p>
-                    <p style={{ fontSize: 12, color: 'var(--w40)' }}>{a.desc}</p>
+                    <p style={{ fontSize: 14, fontWeight: 600, color: approach === a.key ? '#fff' : 'var(--white)', marginBottom: 3 }}>{a.label}</p>
+                    <p style={{ fontSize: 12, color: approach === a.key ? 'rgba(255,255,255,0.85)' : 'var(--w60)' }}>{a.desc}</p>
                   </button>
                 ))}
               </div>
@@ -360,17 +362,16 @@ export default function CoachOnboard() {
         {/* ── Step 1: Credentials ── */}
         {step === 1 && (
           <div style={{ maxWidth: 580 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '1.25rem' }}>Step 2 of 5</p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '1rem' }}>
-              Back it up.
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
+              Back it up
             </h1>
-            <p style={{ fontSize: 16, color: 'var(--w60)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: 16, color: "var(--w70)", lineHeight: 1.6, marginBottom: "2.5rem" }}>
               Certificates are required. Athletes need to trust who they're working with.
             </p>
 
             <div style={{ marginBottom: '2rem' }}>
               <label className="label" style={{ marginBottom: '0.875rem' }}>Your qualifications</label>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
                 {CRED_TYPES.map(c => pill(c, credTypes.includes(c), () => toggleCred(c)))}
               </div>
             </div>
@@ -382,7 +383,7 @@ export default function CoachOnboard() {
                   onClick={() => certInputRef.current?.click()}
                   style={{
                     fontSize: 13, fontWeight: 500, padding: '7px 16px', borderRadius: 50,
-                    background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)',
+                    background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
                     color: 'var(--w60)', cursor: 'pointer', fontFamily: 'var(--font-body)',
                     display: 'flex', alignItems: 'center', gap: 6,
                   }}
@@ -401,7 +402,7 @@ export default function CoachOnboard() {
                     <div key={i} style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       padding: '10px 14px', borderRadius: 10,
-                      background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)',
+                      background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
@@ -431,13 +432,13 @@ export default function CoachOnboard() {
               <label className="label" style={{ marginBottom: '0.875rem' }}>
                 Languages you coach in <span style={{ color: 'var(--red)', fontSize: 10 }}>*</span>
               </label>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
                 {LANGUAGES.map(l => pill(l, languages.includes(l), () => toggleLang(l)))}
               </div>
             </div>
 
             <div>
-              <label className="label">LinkedIn <span style={{ color: 'var(--w40)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span></label>
+              <label className="label">LinkedIn <span style={{ color: 'var(--w60)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span></label>
               <input className="input" value={linkedin} onChange={e => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." style={{ fontSize: 15 }} />
             </div>
           </div>
@@ -446,26 +447,25 @@ export default function CoachOnboard() {
         {/* ── Step 2: Sports + specialisms ── */}
         {step === 2 && (
           <div style={{ maxWidth: 620 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '1.25rem' }}>Step 3 of 5</p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '1rem' }}>
-              Your<br />specialisms.
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
+              Your specialisms
             </h1>
-            <p style={{ fontSize: 16, color: 'var(--w60)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: 16, color: "var(--w70)", lineHeight: 1.6, marginBottom: "2.5rem" }}>
               Athletes filter by sport and challenge. Pick everything that fits.
             </p>
 
             <div style={{ marginBottom: '2.5rem' }}>
               <label className="label" style={{ marginBottom: '0.875rem' }}>Sports you work with</label>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
                 {SPORT_OPTIONS.map(s => pill(s, sports.includes(s), () => toggleSport(s)))}
               </div>
             </div>
 
             <div style={{ marginBottom: '2rem' }}>
               <label className="label" style={{ marginBottom: '0.875rem' }}>
-                Areas of focus <span style={{ color: 'var(--w40)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span>
+                Areas of focus <span style={{ color: 'var(--w60)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span>
               </label>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
                 {TAG_OPTIONS.map(t => pill(t, tags.includes(t), () => toggleTag(t)))}
               </div>
             </div>
@@ -475,11 +475,10 @@ export default function CoachOnboard() {
         {/* ── Step 3: Coach Framework ── */}
         {step === 3 && (
           <div style={{ maxWidth: 580 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '1.25rem' }}>Step 4 of 5</p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 6vw, 3.75rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '0.75rem' }}>
-              How do you actually<br />work with athletes?
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(2rem, 6vw, 3.75rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '0.75rem' }}>
+              How do you work with athletes?
             </h1>
-            <p style={{ fontSize: 16, color: 'var(--w60)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: 16, color: "var(--w70)", lineHeight: 1.6, marginBottom: "2.5rem" }}>
               One minute. In your own words.
             </p>
 
@@ -507,7 +506,7 @@ export default function CoachOnboard() {
                 color: frameworkText.trim() && frameworkGenerateCount < 3 ? 'var(--white)' : 'var(--w40)',
                 cursor: frameworkText.trim() && !frameworkGenerating && frameworkGenerateCount < 3 ? 'pointer' : 'not-allowed',
                 fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 8,
-                transition: 'all 0.15s', marginBottom: '1.75rem',
+                transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms', marginBottom: '1.75rem',
               }}
             >
               {frameworkGenerating ? (
@@ -527,7 +526,7 @@ export default function CoachOnboard() {
                 <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--w50)', marginBottom: '0.875rem' }}>Your coaching approach</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '1.5rem' }}>
                   {frameworkBullets.map((bullet, i) => (
-                    <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 12, padding: '12px 14px' }}>
+                    <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', borderRadius: 12, padding: '12px 14px' }}>
                       <span style={{ color: 'var(--red)', fontWeight: 700, fontSize: 14, marginTop: 1, flexShrink: 0 }}>—</span>
                       <textarea
                         value={bullet}
@@ -548,7 +547,7 @@ export default function CoachOnboard() {
                     style={{
                       fontSize: 15, fontWeight: 600, padding: '13px 32px', borderRadius: 50,
                       background: 'rgba(255,48,64,0.12)', border: '0.5px solid rgba(255,48,64,0.4)',
-                      color: 'var(--white)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s',
+                      color: 'var(--white)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
                     }}
                   >
                     Approve
@@ -573,11 +572,10 @@ export default function CoachOnboard() {
         {/* ── Step 4: Rate + availability ── */}
         {step === 4 && (
           <div style={{ maxWidth: 520 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '1.25rem' }}>Step 5 of 5</p>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '1rem' }}>
-              Rate and<br />availability.
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
+              Rate and availability
             </h1>
-            <p style={{ fontSize: 16, color: 'var(--w60)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: 16, color: "var(--w70)", lineHeight: 1.6, marginBottom: "2.5rem" }}>
               You can edit these anytime.
             </p>
 
@@ -595,7 +593,7 @@ export default function CoachOnboard() {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {[30, 45, 60].map(m => (
                         <button key={m} type="button" onClick={() => { setMinSession(m); if (maxSession < m) setMaxSession(m); }}
-                          style={{ padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 500, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'all 0.15s', border: minSession === m ? '1px solid var(--red)' : '0.5px solid var(--surface-border)', background: minSession === m ? 'rgba(255,48,64,0.10)' : 'var(--surface-1)', color: minSession === m ? 'var(--white)' : 'var(--w60)' }}>
+                          style={{ padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', border: minSession === m ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', background: minSession === m ? 'var(--red)' : 'var(--surface-1)', color: minSession === m ? '#fff' : 'var(--w80)' }}>
                           {m}m
                         </button>
                       ))}
@@ -606,7 +604,7 @@ export default function CoachOnboard() {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {[60, 90, 120].map(m => (
                         <button key={m} type="button" onClick={() => { setMaxSession(m); if (minSession > m) setMinSession(m); }}
-                          style={{ padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 500, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'all 0.15s', border: maxSession === m ? '1px solid var(--red)' : '0.5px solid var(--surface-border)', background: maxSession === m ? 'rgba(255,48,64,0.10)' : 'var(--surface-1)', color: maxSession === m ? 'var(--white)' : 'var(--w60)' }}>
+                          style={{ padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', border: maxSession === m ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', background: maxSession === m ? 'var(--red)' : 'var(--surface-1)', color: maxSession === m ? '#fff' : 'var(--w80)' }}>
                           {m}m
                         </button>
                       ))}
@@ -619,7 +617,7 @@ export default function CoachOnboard() {
                 <label className="label" style={{ marginBottom: '0.875rem' }}>Weekly availability</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {slots.map((slot, i) => (
-                    <div key={i} style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 14, padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <div key={i} style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', borderRadius: 14, padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
                       <select value={slot.day} onChange={e => updateSlot(i, 'day', e.target.value)} style={{ background: 'transparent', border: 'none', color: 'var(--white)', fontSize: 14, fontWeight: 500, fontFamily: 'var(--font-body)', cursor: 'pointer', flex: '1', minWidth: 100, outline: 'none' }}>
                         {DAYS.map(d => <option key={d} value={d} style={{ background: '#111' }}>{d}</option>)}
                       </select>
@@ -635,7 +633,7 @@ export default function CoachOnboard() {
                   ))}
                   <button
                     onClick={addSlot}
-                    style={{ background: 'none', border: '0.5px dashed var(--w20)', borderRadius: 14, padding: '14px', color: 'var(--w40)', fontSize: 14, fontFamily: 'var(--font-body)', cursor: 'pointer' }}
+                    style={{ background: 'none', border: '0.5px dashed var(--surface-border-2)', borderRadius: 14, padding: '14px', color: 'var(--w40)', fontSize: 14, fontFamily: 'var(--font-body)', cursor: 'pointer' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--w60)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--w40)'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--w40)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--w20)'; }}
                   >
@@ -655,8 +653,8 @@ export default function CoachOnboard() {
                 <path d="M8 18l7 7L28 11" stroke="var(--red)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 9vw, 5.5rem)', lineHeight: 0.92, letterSpacing: '-0.03em', marginBottom: '1.5rem' }}>
-              You're in.
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(3rem, 9vw, 5.5rem)', lineHeight: 0.92, letterSpacing: '-0.035em', marginBottom: '1.5rem' }}>
+              You're in
             </h1>
             <p style={{ fontSize: 17, color: 'var(--w60)', lineHeight: 1.7, maxWidth: 340, margin: '0 auto 3rem' }}>
               Your profile is under review. Once approved, athletes can find and book you.
@@ -670,10 +668,10 @@ export default function CoachOnboard() {
 
       {/* Bottom CTA */}
       {step < 4 && (
-        <div style={{ padding: '1.5rem 6vw 2.5rem', flexShrink: 0 }}>
+        <div style={{ padding: '1.5rem 6vw 2.5rem', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
           <button
             className="btn-primary"
-            style={{ fontSize: 16, padding: '16px 0', width: '100%', maxWidth: 520, opacity: canAdvance ? 1 : 0.35 }}
+            style={{ fontSize: 15, height: 50, padding: '0 32px', width: '100%', maxWidth: 520, opacity: canAdvance ? 1 : 0.35 }}
             disabled={!canAdvance}
             onClick={() => setStep(s => s + 1)}
           >
@@ -683,16 +681,28 @@ export default function CoachOnboard() {
       )}
 
       {step === 4 && (
-        <div style={{ padding: '1.5rem 6vw 2.5rem', flexShrink: 0 }}>
+        <div style={{ padding: '1.5rem 6vw 2.5rem', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
           <button
             className="btn-primary"
-            style={{ fontSize: 16, padding: '16px 0', width: '100%', maxWidth: 520, opacity: !rate || loading ? 0.35 : 1 }}
+            style={{ fontSize: 15, height: 50, padding: '0 32px', width: '100%', maxWidth: 520, opacity: !rate || loading ? 0.35 : 1 }}
             disabled={!rate || loading}
             onClick={save}
           >
             {loading ? <Spinner size={18} /> : 'Submit profile'}
           </button>
         </div>
+      )}
+
+      {cropSource && (
+        <ImageCropper
+          file={cropSource}
+          onCancel={() => setCropSource(null)}
+          onSave={(blob, preview) => {
+            setPhotoFile(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
+            setPhotoPreview(preview);
+            setCropSource(null);
+          }}
+        />
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import { apiGet, apiPost } from '../lib/api';
@@ -40,14 +41,12 @@ function CoachNoteCard({ note, isFirst }: { note: PlaybookNote; isFirst: boolean
   const markedRef = useRef(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Mark seen once animation starts
   useEffect(() => {
     if (!shouldAnimate || markedRef.current) return;
     markedRef.current = true;
     apiPost('/api/playbook/mark-seen', { note_id: note.id }).catch(() => {});
   }, [shouldAnimate, note.id]);
 
-  // Skip on tap or scroll
   useEffect(() => {
     if (isDone) return;
     const el = cardRef.current;
@@ -66,8 +65,8 @@ function CoachNoteCard({ note, isFirst }: { note: PlaybookNote; isFirst: boolean
       ref={cardRef}
       style={{
         background: 'var(--surface-1)',
-        border: '0.5px solid var(--surface-border)',
-        borderRadius: 16,
+        border: '0.5px solid var(--surface-border-2)',
+        borderRadius: 18,
         padding: '1.5rem',
         display: 'flex',
         flexDirection: 'column',
@@ -76,24 +75,31 @@ function CoachNoteCard({ note, isFirst }: { note: PlaybookNote; isFirst: boolean
       }}
     >
       {/* Coach avatar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         {note.coach_photo ? (
           <img
             src={note.coach_photo}
             alt={note.coach_name ?? ''}
-            style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+            style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
           />
         ) : (
           <div style={{
-            width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-            background: 'rgba(255,48,64,0.12)', border: '0.5px solid rgba(255,48,64,0.25)',
+            width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+            background: 'linear-gradient(135deg, rgba(255,48,64,0.20) 0%, rgba(255,48,64,0.08) 100%)',
+            border: '0.5px solid rgba(255,48,64,0.28)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 12, fontWeight: 600, color: 'var(--red)',
+            fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--red)',
+            letterSpacing: '-0.02em',
           }}>
             {(note.coach_name ?? 'C')[0].toUpperCase()}
           </div>
         )}
-        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--w70)' }}>{note.coach_name ?? 'Coach'}</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--white)' }}>{note.coach_name ?? 'Coach'}</span>
+          <span style={{ fontSize: 11.5, color: 'var(--w60)', letterSpacing: '0.02em' }}>
+            {new Date(note.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+          </span>
+        </div>
       </div>
 
       {/* Note body */}
@@ -114,21 +120,25 @@ function CoachNoteCard({ note, isFirst }: { note: PlaybookNote; isFirst: boolean
               background: 'var(--red)',
               marginLeft: 2,
               verticalAlign: 'text-bottom',
+              animation: 'caretBlink 0.9s steps(2) infinite',
             }}
           />
         )}
       </p>
 
-      {/* Timestamp — only after animation completes */}
+      {/* Footnote once done */}
       <p style={{
         fontSize: 12,
-        color: 'var(--w40)',
+        color: 'var(--w60)',
         opacity: isDone ? 1 : 0,
-        transition: 'opacity 0.4s ease',
+        transition: 'opacity 320ms cubic-bezier(0.23, 1, 0.32, 1)',
         marginTop: -4,
+        letterSpacing: '0.01em',
       }}>
         {formatDate(note.created_at, note.coach_name)}
       </p>
+
+      <style>{`@keyframes caretBlink { to { opacity: 0.2; } }`}</style>
     </div>
   );
 }
@@ -150,53 +160,74 @@ export default function Playbook() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 640, margin: '0 auto', padding: '3rem 1.5rem 6rem' }}>
+      <div style={{ maxWidth: 680, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
 
-        <div style={{ marginBottom: '2.5rem' }}>
+        <div style={{ marginBottom: '2rem' }}>
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.75rem, 8vw, 4.5rem)',
+            fontSize: 'clamp(2.5rem, 7vw, 4rem)',
             lineHeight: 0.95,
-            letterSpacing: '-0.03em',
-            marginBottom: '0.75rem',
+            letterSpacing: '-0.035em',
+            marginBottom: '0.5rem',
           }}>
             Playbook
           </h1>
-          <p style={{ fontSize: 15, color: 'var(--w50)', lineHeight: 1.6 }}>
-            Notes from your coaches. Yours to keep.
+          <p style={{ fontSize: 15, color: 'var(--w70)', lineHeight: 1.55 }}>
+            Notes from your coaches, yours to keep
           </p>
         </div>
 
-        {/* Section tabs */}
+        {/* Section tabs — sliding liquid pill */}
         <div style={{
-          display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: '2rem',
-          paddingBottom: '1.5rem', borderBottom: '0.5px solid var(--line)',
+          display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: '1.75rem',
+          paddingBottom: '1.25rem', borderBottom: '0.5px solid var(--line)',
         }}>
-          {SECTIONS.map(s => {
-            const hasNotes = sectionsWithNotes.includes(s);
-            const isActive = activeSection === s;
-            return (
-              <button
-                key={s}
-                onClick={() => setActiveSection(s)}
-                style={{
-                  padding: '7px 16px', borderRadius: 50, fontSize: 13, fontWeight: 500,
-                  cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'var(--font-body)',
-                  background: isActive ? 'rgba(255,48,64,0.12)' : 'var(--surface-1)',
-                  border: isActive ? '0.5px solid rgba(255,48,64,0.4)' : '0.5px solid var(--surface-border)',
-                  color: isActive ? 'var(--white)' : hasNotes ? 'var(--w60)' : 'var(--w30)',
-                }}
-              >
-                {SECTION_LABEL[s]}
-                {hasNotes && !isActive && (
-                  <span style={{
-                    display: 'inline-block', width: 5, height: 5, borderRadius: '50%',
-                    background: 'var(--red)', marginLeft: 7, verticalAlign: 'middle', opacity: 0.7,
-                  }} />
-                )}
-              </button>
-            );
-          })}
+          <LayoutGroup id="playbook-sections">
+            {SECTIONS.map(s => {
+              const hasNotes = sectionsWithNotes.includes(s);
+              const isActive = activeSection === s;
+              return (
+                <button
+                  key={s}
+                  onClick={() => setActiveSection(s)}
+                  style={{
+                    position: 'relative',
+                    padding: '7px 14px', borderRadius: 50,
+                    fontSize: 13, fontWeight: isActive ? 700 : 500,
+                    cursor: 'pointer',
+                    background: 'transparent', border: 'none',
+                    color: isActive ? '#fff' : hasNotes ? 'var(--w80)' : 'var(--w50)',
+                    fontFamily: 'var(--font-body)',
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
+                  }}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="playbook-active-pill"
+                      initial={false}
+                      transition={{ type: 'spring', stiffness: 520, damping: 38, mass: 0.6 }}
+                      style={{
+                        position: 'absolute', inset: 0,
+                        background: 'var(--red)',
+                        borderRadius: 50,
+                        zIndex: 0,
+                      }}
+                    />
+                  )}
+                  <span style={{ position: 'relative', zIndex: 1, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    {SECTION_LABEL[s]}
+                    {hasNotes && !isActive && (
+                      <span style={{
+                        display: 'inline-block', width: 5, height: 5, borderRadius: '50%',
+                        background: 'var(--red)',
+                      }} />
+                    )}
+                  </span>
+                </button>
+              );
+            })}
+          </LayoutGroup>
         </div>
 
         {loading && (
@@ -208,15 +239,16 @@ export default function Playbook() {
         {!loading && sectionNotes.length === 0 && (
           <div style={{
             padding: '3rem 1.5rem', borderRadius: 16, textAlign: 'center',
-            border: '0.5px dashed var(--surface-border)',
+            background: 'var(--surface-1)',
+            border: '0.5px dashed var(--surface-border-2)',
           }}>
-            <p style={{ fontSize: 14, color: 'var(--w40)', lineHeight: 1.7 }}>
-              No notes here yet. Your coach can add notes<br />to your Playbook after each session.
+            <p style={{ fontSize: 14, color: 'var(--w70)', lineHeight: 1.65, maxWidth: 320, margin: '0 auto' }}>
+              No notes here yet. Your coach can add notes to your Playbook after each session.
             </p>
           </div>
         )}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {sectionNotes.map((note, i) => (
             <CoachNoteCard key={note.id} note={note} isFirst={i === 0} />
           ))}

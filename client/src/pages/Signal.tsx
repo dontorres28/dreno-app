@@ -72,7 +72,7 @@ export default function Signal() {
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(3rem, 9vw, 5rem)',
             lineHeight: 0.95,
-            letterSpacing: '-0.03em',
+            letterSpacing: '-0.035em',
           }}>
             90 days.
           </h1>

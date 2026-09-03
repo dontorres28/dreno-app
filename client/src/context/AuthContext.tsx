@@ -19,7 +19,7 @@ interface AuthContextValue {
   refreshProfile: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextValue>({
+export const AuthContext = createContext<AuthContextValue>({
   user: null,
   session: null,
   profile: null,

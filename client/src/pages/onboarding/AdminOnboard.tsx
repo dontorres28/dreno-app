@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { motion, LayoutGroup } from 'framer-motion';
 import Spinner from '../../components/Spinner';
+import Stepper from '../../components/Stepper';
+import ThemeToggle from '../../components/ThemeToggle';
 
 const SPORT_OPTIONS = [
   'Ice hockey', 'Soccer', 'Basketball', 'Tennis', 'Swimming',
@@ -86,62 +89,99 @@ export default function AdminOnboard() {
     }
   }
 
-  const containerStyle: React.CSSProperties = {
-    position: 'fixed', inset: 0,
-    background: 'var(--bg)',
+  const shellStyle: React.CSSProperties = {
+    minHeight: '100dvh', background: 'var(--bg)',
     display: 'flex', flexDirection: 'column',
-    overflowY: 'auto',
+    fontFamily: 'var(--font-body)', color: 'var(--white)',
+    WebkitFontSmoothing: 'antialiased',
   };
+  const containerStyle: React.CSSProperties = shellStyle;
   const innerStyle: React.CSSProperties = {
-    maxWidth: 480, width: '100%',
+    maxWidth: 520, width: '100%',
     margin: '0 auto',
-    padding: '3.5rem 1.5rem 5rem',
+    padding: '2.5rem 1.5rem 2rem',
     flex: 1,
   };
 
-  const progressBar = (
-    <div style={{ display: 'flex', gap: 6, marginBottom: '3rem' }}>
-      {[0, 1, 2].map(i => (
-        <div key={i} style={{
-          height: 2, flex: 1, borderRadius: 2,
-          background: i <= step ? 'var(--red)' : 'var(--surface-border)',
-          transition: 'background 0.3s',
-        }} />
-      ))}
+  const topBar = (
+    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
+      {step > 0 && (
+        <button onClick={() => setStep(s => s - 1)} style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          Back
+        </button>
+      )}
+      <Stepper step={step} total={3} />
+      <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
+        <ThemeToggle />
+      </div>
     </div>
   );
+  const progressBar = null;
 
   const eyelet = (t: string) => (
-    <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: '1rem' }}>{t}</p>
+    <p className="label" style={{ margin: 0, marginBottom: '1rem' }}>{t}</p>
   );
 
   const fieldLabel = (t: string) => (
-    <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--w60)', marginBottom: 6 }}>{t}</p>
+    <p className="label" style={{ margin: 0, marginBottom: 8 }}>{t}</p>
   );
 
   const inputStyle: React.CSSProperties = {
     width: '100%', padding: '13px 14px',
-    background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)',
-    borderRadius: 12, fontSize: 15, fontFamily: 'var(--font-body)',
+    background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
+    borderRadius: 12, fontSize: 16, fontFamily: 'var(--font-body)',
+    letterSpacing: '-0.005em', lineHeight: 1.4,
     color: 'var(--white)', outline: 'none', boxSizing: 'border-box',
   };
 
   const backBtn = (toStep: number) => (
     <button onClick={() => setStep(toStep)} style={{
       padding: '15px 24px', borderRadius: 50, background: 'none',
-      border: '0.5px solid var(--surface-border)', fontSize: 15,
-      color: 'var(--w50)', cursor: 'pointer', fontFamily: 'var(--font-body)',
+      border: '0.5px solid var(--surface-border-2)', fontSize: 15, fontWeight: 700,
+      color: 'var(--w70)', cursor: 'pointer', fontFamily: 'var(--font-body)',
+      letterSpacing: '-0.005em',
     }}>Back</button>
+  );
+
+  const Pill = ({ label, on, onClick, groupId, layoutId }: { label: string; on: boolean; onClick: () => void; groupId: string; layoutId: string }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        position: 'relative',
+        padding: '9px 16px', borderRadius: 50, fontSize: 13,
+        fontWeight: on ? 700 : 500,
+        border: on ? 'none' : '0.5px solid var(--surface-border-2)',
+        background: 'transparent', cursor: 'pointer',
+        color: on ? '#fff' : 'var(--w70)',
+        fontFamily: 'var(--font-body)',
+        letterSpacing: '-0.005em',
+        transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
+      }}
+      data-group={groupId}
+    >
+      {on && (
+        <motion.span
+          layoutId={layoutId}
+          initial={false}
+          transition={{ type: 'spring', stiffness: 520, damping: 38, mass: 0.6 }}
+          style={{ position: 'absolute', inset: 0, background: 'var(--red)', borderRadius: 50, zIndex: 0 }}
+        />
+      )}
+      <span style={{ position: 'relative', zIndex: 1 }}>{label}</span>
+    </button>
   );
 
   // ── Step 0: Who you are ──────────────────────────────────────────
   if (step === 0) return (
     <div style={containerStyle} ref={scrollRef}>
+
       <div style={innerStyle}>
         {progressBar}
         {eyelet('Getting started')}
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '2.5rem' }}>
-          Tell us about<br />your organization.
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2.5rem' }}>
+          Tell us about<br />your organization
         </h1>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -155,16 +195,19 @@ export default function AdminOnboard() {
           </div>
           <div>
             {fieldLabel('Organization type')}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
-              {ORG_TYPES.map(t => (
-                <button key={t} type="button" onClick={() => setOrgType(t)} style={{
-                  padding: '9px 16px', borderRadius: 50, fontSize: 13, fontWeight: 500,
-                  fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'all 0.15s',
-                  background: orgType === t ? 'rgba(255,48,64,0.10)' : 'var(--surface-1)',
-                  border: orgType === t ? '0.5px solid rgba(255,48,64,0.45)' : '0.5px solid var(--surface-border)',
-                  color: orgType === t ? 'var(--white)' : 'var(--w50)',
-                }}>{t}</button>
-              ))}
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 6, marginTop: 4 }}>
+              <LayoutGroup id="admin-org-types">
+                {ORG_TYPES.map(t => (
+                  <Pill
+                    key={t}
+                    label={t}
+                    on={orgType === t}
+                    onClick={() => setOrgType(t)}
+                    groupId="admin-org-types"
+                    layoutId="admin-org-type-pill"
+                  />
+                ))}
+              </LayoutGroup>
             </div>
           </div>
         </div>
@@ -181,27 +224,41 @@ export default function AdminOnboard() {
   // ── Step 1: Program + pricing ────────────────────────────────────
   if (step === 1) return (
     <div style={containerStyle} ref={scrollRef}>
+
       <div style={innerStyle}>
         {progressBar}
         {eyelet('Your program')}
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '2.5rem' }}>
-          Choose your plan.
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2.5rem' }}>
+          Choose your plan
         </h1>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div>
             {fieldLabel('Sport or activity')}
-            <p style={{ fontSize: 12, color: 'var(--w40)', marginBottom: 10 }}>Select all that apply.</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {SPORT_OPTIONS.map(s => (
-                <button key={s} type="button" onClick={() => toggleSport(s)} style={{
-                  padding: '9px 16px', borderRadius: 50, fontSize: 13, fontWeight: 500,
-                  fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'all 0.15s',
-                  background: sports.includes(s) ? 'rgba(255,48,64,0.10)' : 'var(--surface-1)',
-                  border: sports.includes(s) ? '0.5px solid rgba(255,48,64,0.45)' : '0.5px solid var(--surface-border)',
-                  color: sports.includes(s) ? 'var(--white)' : 'var(--w50)',
-                }}>{s}</button>
-              ))}
+            <p style={{ fontSize: 12, color: 'var(--w60)', marginBottom: 10 }}>Select all that apply.</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
+              {SPORT_OPTIONS.map(s => {
+                const on = sports.includes(s);
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => toggleSport(s)}
+                    style={{
+                      padding: '9px 16px', borderRadius: 50, fontSize: 13,
+                      fontWeight: on ? 700 : 500,
+                      fontFamily: 'var(--font-body)', cursor: 'pointer',
+                      letterSpacing: '-0.005em',
+                      background: on ? 'var(--red)' : 'transparent',
+                      border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
+                      color: on ? '#fff' : 'var(--w70)',
+                      transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
+                    }}
+                  >
+                    {s}
+                  </button>
+                );
+              })}
             </div>
             {sports.includes('Other') && (
               <input
@@ -216,31 +273,34 @@ export default function AdminOnboard() {
 
           {/* Billing toggle */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-            <span style={{ fontSize: 13, color: !annual ? 'var(--white)' : 'var(--w40)', fontWeight: !annual ? 600 : 400, transition: 'color 0.2s' }}>
+            <span style={{ fontSize: 13, color: !annual ? 'var(--white)' : 'var(--w60)', fontWeight: !annual ? 600 : 400, transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)' }}>
               Monthly
             </span>
             <button
               type="button"
               onClick={() => setAnnual(a => !a)}
+              aria-pressed={annual}
               style={{
                 width: 44, height: 24, borderRadius: 50, cursor: 'pointer', border: 'none',
-                background: annual ? 'var(--red)' : 'var(--surface-border)',
-                position: 'relative', transition: 'background 0.2s', flexShrink: 0,
+                background: annual ? 'var(--red)' : 'var(--surface-2)',
+                position: 'relative', transition: 'background 260ms cubic-bezier(0.4, 0, 0.2, 1)', flexShrink: 0,
               }}
             >
               <div style={{
                 position: 'absolute', top: 3, left: annual ? 23 : 3,
-                width: 18, height: 18, borderRadius: '50%', background: 'var(--white)',
-                transition: 'left 0.2s',
+                width: 18, height: 18, borderRadius: '50%', background: '#fff',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+                transition: 'left 260ms cubic-bezier(0.4, 0, 0.2, 1)',
               }} />
             </button>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 13, color: annual ? 'var(--white)' : 'var(--w40)', fontWeight: annual ? 600 : 400, transition: 'color 0.2s' }}>
+              <span style={{ fontSize: 13, color: annual ? 'var(--white)' : 'var(--w60)', fontWeight: annual ? 600 : 400, transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)' }}>
                 Annual
               </span>
               <span style={{
                 fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 50,
-                background: 'rgba(52,211,153,0.12)', color: 'rgba(52,211,153,0.9)',
+                background: 'rgba(255,48,64,0.12)', color: 'var(--red)',
+                border: '0.5px solid rgba(255,48,64,0.25)',
                 letterSpacing: '0.04em',
               }}>
                 -15%
@@ -257,40 +317,44 @@ export default function AdminOnboard() {
               return (
                 <div key={t.key} onClick={() => setTierIdx(i)} style={{
                   padding: '1.25rem 1.5rem', borderRadius: 18, cursor: 'pointer',
-                  background: active ? 'rgba(255,48,64,0.07)' : 'var(--surface-1)',
-                  border: active ? '0.5px solid rgba(255,48,64,0.45)' : '0.5px solid var(--surface-border)',
-                  transition: 'all 0.15s',
+                  background: active ? 'var(--red)' : 'var(--surface-1)',
+                  border: active ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
+                  transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     {/* Radio */}
                     <div style={{
                       width: 18, height: 18, borderRadius: '50%', flexShrink: 0,
-                      border: active ? '5px solid var(--red)' : '1.5px solid var(--surface-border)',
-                      transition: 'all 0.15s',
-                    }} />
+                      background: active ? '#fff' : 'transparent',
+                      border: active ? 'none' : '1.5px solid var(--surface-border-2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms',
+                    }}>
+                      {active && <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--red)' }} />}
+                    </div>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                        <p style={{ fontSize: 15, fontWeight: 700, color: active ? 'var(--white)' : 'var(--w70)' }}>{t.label}</p>
-                        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--w30)' }}>
+                        <p style={{ fontSize: 15, fontWeight: 700, color: active ? '#fff' : 'var(--white)' }}>{t.label}</p>
+                        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: active ? 'rgba(255,255,255,0.7)' : 'var(--w50)' }}>
                           {t.desc}
                         </span>
                       </div>
                       {ppa && (
-                        <p style={{ fontSize: 12, color: 'var(--w40)' }}>
+                        <p style={{ fontSize: 12, color: active ? 'rgba(255,255,255,0.75)' : 'var(--w60)' }}>
                           ${ppa}/athlete/mo
                         </p>
                       )}
                       {!ppa && (
-                        <p style={{ fontSize: 12, color: 'var(--w40)' }}>Custom pricing above 100</p>
+                        <p style={{ fontSize: 12, color: active ? 'rgba(255,255,255,0.75)' : 'var(--w60)' }}>Custom pricing above 100</p>
                       )}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 22, lineHeight: 1, letterSpacing: '-0.03em', color: active ? 'var(--white)' : 'var(--w60)' }}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 22, lineHeight: 1, letterSpacing: '-0.035em', color: active ? '#fff' : 'var(--white)' }}>
                       ${mPrice.toLocaleString()}
                     </p>
-                    <p style={{ fontSize: 11, color: 'var(--w40)', marginTop: 2 }}>/mo</p>
+                    <p style={{ fontSize: 11, color: active ? 'rgba(255,255,255,0.7)' : 'var(--w60)', marginTop: 2 }}>/mo</p>
                   </div>
                 </div>
               );
@@ -300,19 +364,19 @@ export default function AdminOnboard() {
           {annual && (
             <div style={{
               padding: '0.875rem 1.25rem', borderRadius: 12,
-              background: 'rgba(52,211,153,0.07)', border: '0.5px solid rgba(52,211,153,0.2)',
+              background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             }}>
-              <p style={{ fontSize: 13, color: 'rgba(52,211,153,0.9)', fontWeight: 500 }}>
+              <p style={{ fontSize: 13, color: 'var(--w70)', fontWeight: 500 }}>
                 Annual total (billed once)
               </p>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, letterSpacing: '-0.03em', color: 'rgba(52,211,153,0.9)' }}>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, letterSpacing: '-0.035em', color: 'var(--white)' }}>
                 ${annualTotal.toLocaleString()}
               </p>
             </div>
           )}
 
-          <p style={{ fontSize: 11, color: 'var(--w30)', textAlign: 'center' }}>
+          <p style={{ fontSize: 11, color: 'var(--w60)', textAlign: 'center' }}>
             Annual contracts available at 15% discount. All plans include unlimited coach access.
           </p>
         </div>
@@ -330,13 +394,14 @@ export default function AdminOnboard() {
   // ── Step 2: Contact + summary ────────────────────────────────────
   return (
     <div style={containerStyle} ref={scrollRef}>
+
       <div style={innerStyle}>
         {progressBar}
         {eyelet('Almost done')}
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '0.5rem' }}>
-          One last thing.
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '0.5rem' }}>
+          One last thing
         </h1>
-        <p style={{ fontSize: 15, color: 'var(--w40)', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: 15, color: 'var(--w60)', marginBottom: '2.5rem' }}>
           Our team will reach out to confirm your plan and get you set up.
         </p>
 
@@ -351,8 +416,8 @@ export default function AdminOnboard() {
           </div>
 
           {/* Summary */}
-          <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 16, padding: '1.25rem' }}>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: '1rem' }}>
+          <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', borderRadius: 16, padding: '1.25rem' }}>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--w60)', marginBottom: '1rem' }}>
               Plan summary
             </p>
             {[
@@ -364,8 +429,8 @@ export default function AdminOnboard() {
               { label: 'Monthly', value: `$${monthlyPrice.toLocaleString()}` },
               ...(annual ? [{ label: 'Annual total', value: `$${annualTotal.toLocaleString()}` }] : []),
             ].map(row => (
-              <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderBottom: '0.5px solid var(--surface-border)' }}>
-                <span style={{ fontSize: 13, color: 'var(--w40)' }}>{row.label}</span>
+              <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '0.5px solid var(--surface-border-2)' }}>
+                <span style={{ fontSize: 13, color: 'var(--w60)' }}>{row.label}</span>
                 <span style={{ fontSize: 13, fontWeight: 600 }}>{row.value}</span>
               </div>
             ))}

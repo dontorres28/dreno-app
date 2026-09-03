@@ -1,85 +1,13 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion, LayoutGroup } from 'framer-motion';
 import Logo from './Logo';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
-import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
+import Tooltip from './Tooltip';
+import LanguagePicker from './LanguagePicker';
 
-const LANGUAGES = Object.keys(LANGUAGE_CODES);
-
-function LanguagePicker() {
-  const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState(() => {
-    const code = localStorage.getItem('i18nextLng') ?? 'en';
-    return LANGUAGES.find(l => LANGUAGE_CODES[l] === code) ?? 'English';
-  });
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
-
-  function select(lang: string) {
-    setCurrent(lang);
-    setLanguageFromPreference(lang);
-    setOpen(false);
-  }
-
-  const code = LANGUAGE_CODES[current]?.toUpperCase() ?? 'EN';
-
-  return (
-    <div ref={ref} style={{ position: 'relative' }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        aria-label="Change language"
-        style={{
-          height: 34, padding: '0 12px', borderRadius: 20,
-          background: 'var(--toggle-bg)', border: '0.5px solid var(--line-2)',
-          display: 'flex', alignItems: 'center', gap: 6,
-          cursor: 'pointer', color: 'var(--w60)', flexShrink: 0,
-          fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500,
-          letterSpacing: '0.03em', transition: 'border-color 0.2s',
-        }}
-        onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--w40)')}
-        onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--line-2)')}
-      >
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-          <circle cx="10" cy="10" r="8"/>
-          <path d="M2 10h16"/>
-          <path d="M10 2a11 11 0 0 1 3 8 11 11 0 0 1-3 8 11 11 0 0 1-3-8 11 11 0 0 1 3-8z"/>
-        </svg>
-        {code}
-      </button>
-      {open && (
-        <div style={{
-          position: 'absolute', top: 42, right: 0, zIndex: 200,
-          background: 'var(--bg-2)', border: '0.5px solid var(--line-2)',
-          borderRadius: 14, padding: '6px 0', minWidth: 160,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.22)',
-          backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-          maxHeight: 280, overflowY: 'auto',
-        }}>
-          {LANGUAGES.map(lang => (
-            <button key={lang} onClick={() => select(lang)} style={{
-              display: 'block', width: '100%', textAlign: 'left',
-              padding: '8px 16px', background: 'none', border: 'none',
-              fontSize: 14, fontFamily: 'var(--font-body)', cursor: 'pointer',
-              color: lang === current ? 'var(--white)' : 'var(--w60)',
-              fontWeight: lang === current ? 600 : 400,
-            }}>
-              {lang}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -108,6 +36,7 @@ export default function Navbar() {
 
   const coachLinks = [
     { label: t('nav.dashboard'), to: '/coach-dashboard' },
+    { label: 'Roster', to: '/coach/athletes' },
     { label: t('nav.messages'), to: '/messages' },
     { label: t('nav.profile'), to: '/coach/profile/edit' },
   ];
@@ -145,58 +74,90 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-1">
           {user ? (
             <>
-              {links.map(l => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    padding: '6px 14px',
-                    borderRadius: 50,
-                    color: isActive(l.to) ? 'var(--white)' : 'var(--w60)',
-                    background: isActive(l.to) ? 'var(--surface-1)' : 'transparent',
-                    transition: 'color 0.15s, background 0.15s',
-                  }}
-                >
-                  {l.label}
-                </Link>
-              ))}
+              <LayoutGroup id="nav">
+                {links.map(l => {
+                  const active = isActive(l.to);
+                  return (
+                    <Link
+                      key={l.to}
+                      to={l.to}
+                      style={{
+                        position: 'relative',
+                        fontSize: 14,
+                        fontWeight: active ? 700 : 500,
+                        padding: '7px 14px',
+                        borderRadius: 50,
+                        color: active ? 'var(--nav-active-color)' : 'var(--w70)',
+                        transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      {active && (
+                        <motion.span
+                          layoutId="nav-active-pill"
+                          initial={false}
+                          transition={{ type: 'spring', stiffness: 520, damping: 38, mass: 0.6 }}
+                          style={{
+                            position: 'absolute', inset: 0,
+                            background: 'var(--nav-active-bg)',
+                            borderRadius: 50,
+                            zIndex: 0,
+                          }}
+                        />
+                      )}
+                      <span style={{ position: 'relative', zIndex: 1 }}>{l.label}</span>
+                    </Link>
+                  );
+                })}
+              </LayoutGroup>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8 }}>
               <ThemeToggle />
-              <Link
+              <Tooltip label="Settings"><Link
                 to={isAdmin ? '/admin/settings' : '/settings'}
-                className={`settings-link${isActive(isAdmin ? '/admin/settings' : '/settings') ? ' rotated' : ''}`}
+                className="settings-link"
                 style={{
-                  width: 34, height: 34, borderRadius: '50%', display: 'flex',
+                  width: 32, height: 32, borderRadius: '50%', display: 'flex',
                   alignItems: 'center', justifyContent: 'center',
-                  color: isActive('/settings') ? 'var(--white)' : 'var(--w60)',
-                  background: 'var(--toggle-bg)',
-                  border: '0.5px solid var(--line-2)',
+                  color: 'var(--nav-active-color)',
+                  background: 'var(--nav-active-bg)',
+                  border: 'none',
                   flexShrink: 0,
-                  transition: 'color 0.15s, background 0.2s',
+                  transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)',
                 }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="3"/>
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
                 </svg>
-              </Link>
+              </Link></Tooltip>
               </div>
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                style={{ fontSize: 14, fontWeight: 500, padding: '6px 14px', color: 'var(--w60)', borderRadius: 50 }}
-              >
-                {t('nav.signIn')}
-              </Link>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <LanguagePicker />
                 <ThemeToggle />
               </div>
-              <Link to="/signup" className="btn-primary" style={{ padding: '8px 20px', fontSize: 14, marginLeft: 8 }}>
+              <Link
+                to="/login"
+                style={{
+                  fontSize: 14, fontWeight: 500, padding: '7px 14px',
+                  color: 'var(--w70)', borderRadius: 50,
+                  letterSpacing: '-0.005em', marginLeft: 8, textDecoration: 'none',
+                  transition: 'color 200ms cubic-bezier(0.23, 1, 0.32, 1)',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--white)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--w70)')}
+              >
+                {t('nav.signIn')}
+              </Link>
+              <Link
+                to="/signup"
+                className="btn-primary"
+                style={{ padding: '8px 20px', fontSize: 14, marginLeft: 4, letterSpacing: '-0.005em' }}
+              >
                 {t('nav.getStarted')}
               </Link>
             </>
@@ -255,7 +216,6 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/coaches" onClick={() => setOpen(false)} style={{ fontSize: 16, fontWeight: 500, padding: '12px 0', color: 'var(--w60)' }}>Find a coach</Link>
               <Link to="/login" onClick={() => setOpen(false)} style={{ fontSize: 16, fontWeight: 500, padding: '12px 0', color: 'var(--w60)' }}>Sign in</Link>
               <Link to="/signup" onClick={() => setOpen(false)} className="btn-primary" style={{ marginTop: 12, textAlign: 'center' }}>Get started</Link>
             </>

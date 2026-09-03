@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion, LayoutGroup } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
@@ -71,7 +72,7 @@ function Avatar({ name, size = 36 }: { name: string; size?: number }) {
     <div style={{
       width: size, height: size, borderRadius: '50%', flexShrink: 0,
       background: `hsl(${hue}, 30%, 28%)`,
-      border: '0.5px solid var(--surface-border)',
+      border: '0.5px solid var(--surface-border-2)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontSize: Math.round(size * 0.36), fontWeight: 600, color: `hsl(${hue}, 60%, 80%)`,
       letterSpacing: '-0.01em',
@@ -86,10 +87,11 @@ function StatusPill({ status }: { status: string }) {
   const isActive = status === 'confirmed';
   return (
     <span style={{
-      fontSize: 11, fontWeight: 600, letterSpacing: '0.04em',
-      padding: '2px 8px', borderRadius: 50,
-      background: isActive ? 'rgba(255,48,64,0.10)' : 'var(--surface-border)',
-      color: isActive ? 'var(--red)' : 'var(--w40)',
+      fontSize: 11, fontWeight: 700, letterSpacing: '0.04em',
+      padding: '3px 10px', borderRadius: 50,
+      background: isActive ? 'var(--red)' : 'transparent',
+      border: isActive ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
+      color: isActive ? '#fff' : 'var(--w60)',
     }}>
       {isActive ? t('messages.active') : t('messages.past')}
     </span>
@@ -238,7 +240,7 @@ export default function Messages() {
           className={mobileShowThread ? 'hidden md:flex' : 'flex w-full md:w-[296px]'}
           style={{
             flexShrink: 0, flexDirection: 'column',
-            borderRight: '0.5px solid var(--surface-border)',
+            borderRight: '0.5px solid var(--surface-border-2)',
             background: 'var(--surface-1)',
           }}
         >
@@ -246,30 +248,47 @@ export default function Messages() {
             <p style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '1rem', paddingLeft: 4 }}>
               {t('messages.title')}
             </p>
-            <div style={{ display: 'flex', gap: 3, background: 'var(--bg-2)', borderRadius: 10, padding: 3 }}>
-              {TABS.map(t => (
-                <button
-                  key={t.key}
-                  onClick={() => setTab(t.key)}
-                  style={{
-                    flex: 1, padding: '6px 0', borderRadius: 7, fontSize: 13, fontWeight: 500,
-                    background: tab === t.key ? 'var(--surface-border)' : 'transparent',
-                    border: 'none', cursor: 'pointer', color: tab === t.key ? 'var(--white)' : 'var(--w40)',
-                    fontFamily: 'var(--font-body)', transition: 'all 0.15s',
-                  }}
-                >
-                  {t.label}
-                </button>
-              ))}
+            <div style={{ display: 'flex', gap: 4 }}>
+              <LayoutGroup id="messages-tabs">
+                {TABS.map(item => {
+                  const isOn = tab === item.key;
+                  return (
+                    <button
+                      key={item.key}
+                      onClick={() => setTab(item.key)}
+                      style={{
+                        position: 'relative',
+                        flex: 1, padding: '8px 0', borderRadius: 50, fontSize: 13,
+                        fontWeight: isOn ? 700 : 500,
+                        background: 'transparent',
+                        border: 'none', cursor: 'pointer',
+                        color: isOn ? '#fff' : 'var(--w70)',
+                        fontFamily: 'var(--font-body)',
+                        transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
+                      }}
+                    >
+                      {isOn && (
+                        <motion.span
+                          layoutId="messages-tab-pill"
+                          initial={false}
+                          transition={{ type: 'spring', stiffness: 520, damping: 38, mass: 0.6 }}
+                          style={{ position: 'absolute', inset: 0, background: 'var(--red)', borderRadius: 50, zIndex: 0 }}
+                        />
+                      )}
+                      <span style={{ position: 'relative', zIndex: 1 }}>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </LayoutGroup>
             </div>
           </div>
 
           <div style={{ flex: 1, overflowY: 'auto', padding: '0.25rem 0.5rem 0.75rem' }}>
             {loading ? (
-              <p style={{ fontSize: 13, color: 'var(--w40)', padding: '1rem' }}>Loading…</p>
+              <p style={{ fontSize: 13, color: 'var(--w60)', padding: '1rem' }}>Loading…</p>
             ) : filtered.length === 0 ? (
               <div style={{ padding: '2rem 1rem', textAlign: 'center' }}>
-                <p style={{ fontSize: 14, color: 'var(--w40)', marginBottom: '0.75rem', lineHeight: 1.5 }}>
+                <p style={{ fontSize: 14, color: 'var(--w60)', marginBottom: '0.75rem', lineHeight: 1.5 }}>
                   {tab === 'past'
                     ? 'No past sessions yet.'
                     : isCoach
@@ -293,7 +312,7 @@ export default function Messages() {
                     background: isActive ? 'var(--surface-hover)' : 'transparent',
                     border: isActive ? '0.5px solid var(--surface-border)' : '0.5px solid transparent',
                     cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10,
-                    transition: 'background 0.1s', marginBottom: 2,
+                    transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1)', marginBottom: 2,
                   }}
                   onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'var(--surface-1)'; }}
                   onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
@@ -308,7 +327,7 @@ export default function Messages() {
                         {timeAgo(t.starts_at)}
                       </p>
                     </div>
-                    <p style={{ fontSize: 12, color: 'var(--w40)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <p style={{ fontSize: 12, color: 'var(--w60)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {new Date(t.starts_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                       {t.duration_min ? ` · ${t.duration_min}min` : ''}
                       {' · '}
@@ -324,20 +343,20 @@ export default function Messages() {
         {/* ── Message area ── */}
         {!active ? (
           <div className={mobileShowThread ? 'flex flex-1' : 'hidden md:flex md:flex-1'} style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
-            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M17 10.5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="var(--w40)" strokeWidth="1.2"/>
-                <path d="M10 7v3.5l2.5 1.5" stroke="var(--w40)" strokeWidth="1.2" strokeLinecap="round"/>
+                <path d="M17 10.5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="var(--w60)" strokeWidth="1.4"/>
+                <path d="M10 7v3.5l2.5 1.5" stroke="var(--w60)" strokeWidth="1.4" strokeLinecap="round"/>
               </svg>
             </div>
-            <p style={{ fontSize: 15, color: 'var(--w40)' }}>Select a conversation</p>
+            <p style={{ fontSize: 15, color: 'var(--w60)' }}>Select a conversation</p>
           </div>
         ) : (
           <div className={mobileShowThread ? 'flex flex-1' : 'hidden md:flex md:flex-1'} style={{ flexDirection: 'column', overflow: 'hidden' }}>
 
             {/* Header */}
             <div style={{
-              padding: '0.875rem 1rem', borderBottom: '0.5px solid var(--surface-border)',
+              padding: '0.875rem 1rem', borderBottom: '0.5px solid var(--surface-border-2)',
               flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10,
             }}>
               <button
@@ -360,7 +379,7 @@ export default function Messages() {
                   <p style={{ fontSize: 15, fontWeight: 600, letterSpacing: '-0.01em' }}>{active.other_name}</p>
                   <StatusPill status={active.status} />
                 </div>
-                <p style={{ fontSize: 12, color: 'var(--w40)' }}>
+                <p style={{ fontSize: 12, color: 'var(--w60)' }}>
                   {sessionLabel(active.starts_at)}
                   {active.duration_min ? ` · ${active.duration_min} ${t('messages.min')}` : ''}
                 </p>
@@ -372,7 +391,7 @@ export default function Messages() {
                     fontSize: 13, fontWeight: 600, color: '#fff',
                     textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6,
                     background: 'var(--red)', padding: '8px 16px', borderRadius: 50,
-                    transition: 'opacity 0.15s',
+                    transition: 'transform 160ms cubic-bezier(0.23, 1, 0.32, 1), opacity 200ms',
                   }}
                 >
                   <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -390,7 +409,7 @@ export default function Messages() {
                 margin: '1.25rem 1.5rem 0',
                 padding: '1.25rem',
                 background: 'var(--surface-1)',
-                border: '0.5px solid var(--surface-border)',
+                border: '0.5px solid var(--surface-border-2)',
                 borderRadius: 16,
                 display: 'flex', flexDirection: 'column', gap: '0.875rem',
               }}>
@@ -413,7 +432,7 @@ export default function Messages() {
                 {active.status === 'confirmed' && (
                   <a href={`/session/${active.id}`} className="btn-primary" style={{
                     fontSize: 13, padding: '8px 18px', textDecoration: 'none',
-                    borderTop: '0.5px solid var(--surface-border)', paddingTop: '0.875rem', marginTop: 2,
+                    borderTop: '0.5px solid var(--surface-border-2)', paddingTop: '0.875rem', marginTop: 2,
                     borderRadius: 50, display: 'inline-flex', alignItems: 'center', gap: 6,
                   }}>
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -430,7 +449,7 @@ export default function Messages() {
             <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem 1.5rem' }}>
               {messages.length === 0 ? (
                 <div style={{ textAlign: 'center', paddingTop: '2rem' }}>
-                  <p style={{ fontSize: 14, color: 'var(--w40)', lineHeight: 1.6 }}>
+                  <p style={{ fontSize: 14, color: 'var(--w60)', lineHeight: 1.6 }}>
                     {t('messages.noMessages')}<br />
                     <span style={{ color: 'var(--w50)', fontSize: 13 }}>
                       {t('messages.startConversation')}
@@ -478,7 +497,7 @@ export default function Messages() {
                   })}
                   {otherTyping && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingLeft: 4, opacity: 0.7 }}>
-                      <span style={{ fontSize: 13, color: 'var(--w40)', fontStyle: 'italic' }}>
+                      <span style={{ fontSize: 13, color: 'var(--w60)', fontStyle: 'italic' }}>
                         {active.other_name} is typing{typingDots}
                       </span>
                     </div>
@@ -493,7 +512,7 @@ export default function Messages() {
               onSubmit={send}
               style={{
                 padding: '0.875rem 1.25rem',
-                borderTop: '0.5px solid var(--surface-border)',
+                borderTop: '0.5px solid var(--surface-border-2)',
                 display: 'flex', gap: '0.625rem', alignItems: 'center',
                 background: 'var(--bg-2)',
               }}
@@ -505,8 +524,8 @@ export default function Messages() {
                 placeholder={t('messages.messagePlaceholder', { name: active.other_name })}
                 style={{
                   flex: 1, background: 'var(--input-bg)', border: '0.5px solid var(--input-border)',
-                  borderRadius: 22, padding: '10px 16px', fontSize: 14, color: 'var(--white)',
-                  outline: 'none', fontFamily: 'var(--font-body)', transition: 'border-color 0.15s',
+                  borderRadius: 22, padding: '11px 16px', fontSize: 15, color: 'var(--white)', letterSpacing: '-0.005em',
+                  outline: 'none', fontFamily: 'var(--font-body)', transition: 'border-color 200ms cubic-bezier(0.23, 1, 0.32, 1)',
                 }}
                 onFocus={e => (e.currentTarget.style.borderColor = 'var(--input-focus-bdr)')}
                 onBlur={e => (e.currentTarget.style.borderColor = 'var(--input-border)')}
@@ -518,7 +537,7 @@ export default function Messages() {
                   width: 36, height: 36, borderRadius: '50%', border: 'none', cursor: 'pointer',
                   background: body.trim() ? 'var(--red)' : 'var(--surface-hover)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  transition: 'background 0.15s', flexShrink: 0,
+                  transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1)', flexShrink: 0,
                 }}
               >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">

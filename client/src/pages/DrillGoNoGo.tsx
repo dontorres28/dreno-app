@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Layout from '../components/Layout';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from '../components/ThemeToggle';
 
 type Phase = 'intro' | 'running' | 'blank' | 'round_result' | 'done';
 
@@ -14,9 +14,7 @@ const TOTAL_ROUNDS = TOTAL / ROUND_SIZE;
 const SHOW_MS = 800;
 const BLANK_MS = 500;
 
-const BG   = '#0D1B2A';
-const BONE = '#EBE4D2';
-const RED  = '#FF3040';
+const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
 
 function buildSequence() {
   const seq = Array(GO_COUNT).fill('go').concat(Array(TOTAL - GO_COUNT).fill('nogo'));
@@ -33,7 +31,7 @@ export default function DrillGoNoGo() {
   const navigate = useNavigate();
   const [phase, setPhase] = useState<Phase>('intro');
   const [idx, setIdx] = useState(0);
-  const [seq] = useState<('go' | 'nogo')[]>(buildSequence);
+  const [seq, setSeq] = useState<('go' | 'nogo')[]>(buildSequence);
   const [results, setResults] = useState<{ type: 'go' | 'nogo'; tapped: boolean }[]>([]);
   const [saving, setSaving] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -70,7 +68,8 @@ export default function DrillGoNoGo() {
     });
   }
 
-  function start() { setIdx(0); setResults([]); nextStimulus(0, []); }
+  function start() { setSeq(buildSequence()); setIdx(0); setResults([]); nextStimulus(0, []); }
+  function reset() { setPhase('intro'); setIdx(0); setResults([]); setSeq(buildSequence()); }
   function continueRound() { nextStimulus(results.length, results); }
 
   async function saveAndFinish() {
@@ -100,58 +99,92 @@ export default function DrillGoNoGo() {
     return { hits: h, correctNogo: cn, commissions: fa, omissions: om, acc: Math.round((h + cn) / slice.length * 100) };
   }
 
-  // ── Full-screen active phase ───────────────────────────────────────────────
+  // ── Full-screen stimulus phase ─────────────────────────────────────────────
   if (phase === 'running' || phase === 'blank') {
     const isGo = current === 'go';
     return (
       <div
+        onClick={handleTap}
         style={{
-          position: 'fixed', inset: 0, background: BG,
+          position: 'fixed', inset: 0, background: 'var(--bg)',
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           userSelect: 'none', WebkitUserSelect: 'none',
-          fontFamily: 'var(--font-body)',
+          fontFamily: 'var(--font-body)', cursor: 'pointer',
         }}
-        onClick={handleTap}
       >
-        {/* Progress bar */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'rgba(235,228,210,0.08)' }}>
-          <div style={{ height: '100%', width: `${(results.length / TOTAL) * 100}%`, background: 'rgba(235,228,210,0.35)', transition: 'width 0.2s' }} />
+        {/* Progress bar (top) */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'var(--surface-border)' }}>
+          <div style={{
+            height: '100%', width: `${(results.length / TOTAL) * 100}%`,
+            background: 'var(--red)', transition: `width 240ms ${EASE_OUT}`,
+          }} />
         </div>
 
         {/* Round label */}
         <p style={{
-          position: 'absolute', top: 28, left: 0, right: 0, textAlign: 'center',
+          position: 'absolute', top: 24, left: 0, right: 0, textAlign: 'center',
           fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
-          color: 'rgba(235,228,210,0.2)',
+          color: 'var(--w60)',
         }}>
           Round {Math.floor(results.length / ROUND_SIZE) + 1} of {TOTAL_ROUNDS}
         </p>
 
-        {/* Stimulus circle */}
+        {/* Stimulus */}
         {phase === 'running' ? (
           <div style={{
-            width: 160, height: 160, borderRadius: '50%',
-            background: isGo ? BONE : RED,
+            width: 180, height: 180, borderRadius: '50%',
+            background: isGo ? 'var(--white)' : 'var(--red)',
             boxShadow: isGo
-              ? '0 0 80px rgba(235,228,210,0.25), 0 0 160px rgba(235,228,210,0.08)'
-              : '0 0 80px rgba(255,48,64,0.35), 0 0 160px rgba(255,48,64,0.12)',
-            transition: 'background 0.04s, box-shadow 0.04s',
+              ? '0 0 80px rgba(255,255,255,0.08), 0 0 30px rgba(255,255,255,0.15) inset'
+              : '0 0 80px rgba(255,48,64,0.4), 0 0 30px rgba(255,48,64,0.3) inset',
           }} />
         ) : (
           <div style={{
-            width: 160, height: 160, borderRadius: '50%',
-            border: '0.5px solid rgba(235,228,210,0.08)',
+            width: 180, height: 180, borderRadius: '50%',
+            border: '0.5px solid var(--surface-border-2)',
           }} />
         )}
 
         {/* Hint */}
-        <p style={{ position: 'absolute', bottom: 48, fontSize: 11, letterSpacing: '0.1em', color: 'rgba(235,228,210,0.15)' }}>
+        <p style={{ position: 'absolute', bottom: 40, fontSize: 11, letterSpacing: '0.14em', color: 'var(--w50)', textTransform: 'uppercase', fontWeight: 600 }}>
           tap anywhere
         </p>
       </div>
     );
   }
+
+  // ── Shared shell for intro / round result / done ──────────────────────────
+  const Shell = ({ children, showBack = true }: { children: React.ReactNode; showBack?: boolean }) => (
+    <div style={{
+      minHeight: '100dvh', background: 'var(--bg)', color: 'var(--white)',
+      fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column',
+      WebkitFontSmoothing: 'antialiased',
+    }}>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
+        {showBack && (
+          <button
+            onClick={() => navigate('/drills')}
+            style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Back
+          </button>
+        )}
+        <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>
+          Go / No-go
+        </p>
+        <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
+          <ThemeToggle />
+        </div>
+      </div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem 1.5rem 3rem' }}>
+        {children}
+      </div>
+    </div>
+  );
 
   // ── Round result ───────────────────────────────────────────────────────────
   if (phase === 'round_result') {
@@ -159,58 +192,46 @@ export default function DrillGoNoGo() {
     const roundSlice = results.slice(-ROUND_SIZE);
     const { hits, correctNogo, commissions, omissions, acc } = roundStats(roundSlice);
     const isLastRound = completedRound === TOTAL_ROUNDS;
-
     return (
-      <div style={{
-        position: 'fixed', inset: 0, background: BG,
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        padding: '2rem', fontFamily: 'var(--font-body)', color: BONE,
-      }}>
-        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(235,228,210,0.3)', marginBottom: '1.5rem' }}>
-          Round {completedRound} of {TOTAL_ROUNDS}
-        </p>
-        <p style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(5rem, 16vw, 8rem)',
-          lineHeight: 0.9, letterSpacing: '-0.04em',
-          color: BONE, marginBottom: '0.25rem',
-        }}>
-          {acc}%
-        </p>
-        <p style={{ fontSize: 14, color: 'rgba(235,228,210,0.4)', marginBottom: '3rem' }}>accuracy</p>
+      <Shell>
+        <div style={{ textAlign: 'center', maxWidth: 420 }}>
+          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '0.5rem' }}>
+            Round {completedRound} of {TOTAL_ROUNDS}
+          </p>
+          <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(4rem, 13vw, 6.5rem)', lineHeight: 1, letterSpacing: '-0.045em', color: 'var(--white)', marginBottom: '0.25rem' }}>
+            {acc}
+            <span style={{ fontSize: '0.35em', color: 'var(--w60)', marginLeft: 8, letterSpacing: '0.02em' }}>%</span>
+          </p>
+          <p style={{ fontSize: 14, color: 'var(--w70)', marginBottom: '2rem' }}>Accuracy</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.625rem', width: '100%', maxWidth: 360, marginBottom: '3rem' }}>
-          {[
-            { label: 'Correct go', val: hits, of: roundSlice.filter(r => r.type === 'go').length, bad: false },
-            { label: 'Correct hold', val: correctNogo, of: roundSlice.filter(r => r.type === 'nogo').length, bad: false },
-            { label: 'False alarms', val: commissions, bad: true },
-            { label: 'Missed', val: omissions, bad: true },
-          ].map(s => (
-            <div key={s.label} style={{
-              background: 'rgba(235,228,210,0.04)', border: '0.5px solid rgba(235,228,210,0.1)',
-              borderRadius: 14, padding: '1rem',
-            }}>
-              <p style={{ fontSize: 22, fontWeight: 700, color: s.bad && s.val > 0 ? RED : BONE, marginBottom: 4 }}>
-                {s.val}{s.of !== undefined ? `/${s.of}` : ''}
-              </p>
-              <p style={{ fontSize: 12, color: 'rgba(235,228,210,0.35)' }}>{s.label}</p>
-            </div>
-          ))}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: '2rem' }}>
+            {[
+              { label: 'Correct go', val: hits, of: roundSlice.filter(r => r.type === 'go').length },
+              { label: 'Correct hold', val: correctNogo, of: roundSlice.filter(r => r.type === 'nogo').length },
+              { label: 'False alarms', val: commissions, bad: true },
+              { label: 'Missed', val: omissions, bad: true },
+            ].map(s => (
+              <div key={s.label} style={{
+                background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
+                borderRadius: 12, padding: '14px',
+              }}>
+                <p style={{ fontSize: 22, fontWeight: 700, color: s.bad && s.val > 0 ? 'var(--red)' : 'var(--white)', marginBottom: 4, lineHeight: 1 }}>
+                  {s.val}{s.of !== undefined ? `/${s.of}` : ''}
+                </p>
+                <p style={{ fontSize: 11.5, color: 'var(--w60)', letterSpacing: '0.02em' }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="btn-primary"
+            style={{ fontSize: 15, height: 48, padding: '0 36px' }}
+            onClick={isLastRound ? () => setPhase('done') : continueRound}
+          >
+            {isLastRound ? 'See results' : 'Continue'}
+          </button>
         </div>
-
-        <button
-          onClick={isLastRound ? () => setPhase('done') : continueRound}
-          style={{
-            background: BONE, color: BG,
-            fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700,
-            padding: '14px 48px', borderRadius: 50, border: 'none', cursor: 'pointer',
-            letterSpacing: '-0.01em',
-          }}
-        >
-          {isLastRound ? 'Results' : 'Continue'}
-        </button>
-      </div>
+      </Shell>
     );
   }
 
@@ -221,117 +242,86 @@ export default function DrillGoNoGo() {
     const commissions = results.filter(r => r.type === 'nogo' && r.tapped).length;
     const omissions = results.filter(r => r.type === 'go' && !r.tapped).length;
     const acc = Math.round((hits + correctNogo) / TOTAL * 100);
+    const rating = acc >= 95 ? 'Elite' : acc >= 85 ? 'Sharp' : acc >= 70 ? 'Solid' : 'Warming up';
     return (
-      <div style={{
-        position: 'fixed', inset: 0, background: BG,
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        padding: '2rem', fontFamily: 'var(--font-body)', color: BONE,
-      }}>
-        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(235,228,210,0.3)', marginBottom: '1.5rem' }}>
-          {t('drillGoNoGo.score')}
-        </p>
-        <p style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(5rem, 18vw, 9rem)',
-          lineHeight: 0.9, letterSpacing: '-0.04em',
-          color: BONE, marginBottom: '0.25rem',
-        }}>
-          {acc}%
-        </p>
-        <p style={{ fontSize: 14, color: 'rgba(235,228,210,0.4)', marginBottom: '3rem' }}>{t('drillGoNoGo.accuracy')}</p>
+      <Shell>
+        <div style={{ textAlign: 'center', maxWidth: 460 }}>
+          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '0.75rem' }}>
+            {rating}
+          </p>
+          <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(4.5rem, 14vw, 8rem)', lineHeight: 1, letterSpacing: '-0.045em', color: 'var(--white)', marginBottom: '0.25rem' }}>
+            {acc}
+            <span style={{ fontSize: '0.28em', color: 'var(--w60)', marginLeft: 10, letterSpacing: '0.02em' }}>%</span>
+          </p>
+          <p style={{ fontSize: 14, color: 'var(--w70)', marginBottom: '2.5rem' }}>Overall accuracy</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.625rem', width: '100%', maxWidth: 360, marginBottom: '3rem' }}>
-          {[
-            { label: 'Correct go', val: hits, of: GO_COUNT, bad: false },
-            { label: 'Correct hold', val: correctNogo, of: TOTAL - GO_COUNT, bad: false },
-            { label: 'False alarms', val: commissions, bad: true },
-            { label: 'Missed', val: omissions, bad: true },
-          ].map(s => (
-            <div key={s.label} style={{
-              background: 'rgba(235,228,210,0.04)', border: '0.5px solid rgba(235,228,210,0.1)',
-              borderRadius: 14, padding: '1rem',
-            }}>
-              <p style={{ fontSize: 22, fontWeight: 700, color: s.bad && s.val > 0 ? RED : BONE, marginBottom: 4 }}>
-                {s.val}{s.of !== undefined ? `/${s.of}` : ''}
-              </p>
-              <p style={{ fontSize: 12, color: 'rgba(235,228,210,0.35)' }}>{s.label}</p>
-            </div>
-          ))}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: '2.5rem' }}>
+            {[
+              { label: 'Correct go', val: hits, of: GO_COUNT },
+              { label: 'Correct hold', val: correctNogo, of: TOTAL - GO_COUNT },
+              { label: 'False alarms', val: commissions, bad: true },
+              { label: 'Missed', val: omissions, bad: true },
+            ].map(s => (
+              <div key={s.label} style={{
+                background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
+                borderRadius: 12, padding: '14px',
+              }}>
+                <p style={{ fontSize: 24, fontWeight: 700, color: s.bad && s.val > 0 ? 'var(--red)' : 'var(--white)', marginBottom: 4, lineHeight: 1 }}>
+                  {s.val}{s.of !== undefined ? `/${s.of}` : ''}
+                </p>
+                <p style={{ fontSize: 11.5, color: 'var(--w60)', letterSpacing: '0.02em' }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn-secondary" onClick={reset}>Run again</button>
+            <button className="btn-primary" disabled={saving} onClick={saveAndFinish}>
+              {saving ? 'Saving…' : t('drillGoNoGo.save')}
+            </button>
+          </div>
         </div>
-
-        <button
-          onClick={saveAndFinish}
-          disabled={saving}
-          style={{
-            background: BONE, color: BG,
-            fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700,
-            padding: '14px 48px', borderRadius: 50, border: 'none', cursor: 'pointer',
-            letterSpacing: '-0.01em', opacity: saving ? 0.5 : 1,
-          }}
-        >
-          {saving ? 'Saving...' : t('drillGoNoGo.save')}
-        </button>
-      </div>
+      </Shell>
     );
   }
 
   // ── Intro ──────────────────────────────────────────────────────────────────
   return (
-    <Layout>
-      <div style={{ padding: '16px 24px' }}>
-        <button
-          onClick={() => navigate('/drills')}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w60)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Back
+    <Shell>
+      <div style={{ textAlign: 'center', maxWidth: 460 }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
+          Tap white, stop on red
+        </h1>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '2.5rem', marginBottom: '2rem' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              width: 60, height: 60, borderRadius: '50%',
+              background: 'var(--white)',
+              boxShadow: '0 0 24px rgba(255,255,255,0.10)',
+              margin: '0 auto 10px',
+            }} />
+            <p style={{ fontSize: 11, color: 'var(--w70)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Tap</p>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              width: 60, height: 60, borderRadius: '50%',
+              background: 'var(--red)',
+              boxShadow: '0 0 24px rgba(255,48,64,0.3)',
+              margin: '0 auto 10px',
+            }} />
+            <p style={{ fontSize: 11, color: 'var(--w70)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Hold</p>
+          </div>
+        </div>
+
+        <p style={{ fontSize: 15, color: 'var(--w70)', lineHeight: 1.55, marginBottom: '2.5rem', maxWidth: 360, margin: '0 auto 2.5rem' }}>
+          {TOTAL} signals over {TOTAL_ROUNDS} rounds. The hard part is stopping yourself.
+        </p>
+
+        <button className="btn-primary" style={{ fontSize: 15, height: 50, padding: '0 40px' }} onClick={start}>
+          Start
         </button>
       </div>
-      <div style={{
-        minHeight: 'calc(100vh - 180px)', display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center', padding: '2rem',
-      }}>
-        <div style={{ textAlign: 'center', maxWidth: 400 }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: '1.5rem' }}>
-            {t('drillGoNoGo.title')}
-          </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.8rem, 9vw, 5rem)', lineHeight: 0.92, letterSpacing: '-0.03em', marginBottom: '2.5rem' }}>
-            Tap white.<br />Stop red.
-          </h1>
-
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginBottom: '3rem' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{
-                width: 52, height: 52, borderRadius: '50%',
-                background: 'var(--white)',
-                boxShadow: '0 0 24px rgba(235,228,210,0.15)',
-                margin: '0 auto 10px',
-              }} />
-              <p style={{ fontSize: 12, color: 'var(--w40)', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 600 }}>Tap</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{
-                width: 52, height: 52, borderRadius: '50%',
-                background: 'var(--red)',
-                boxShadow: '0 0 24px rgba(255,48,64,0.2)',
-                margin: '0 auto 10px',
-              }} />
-              <p style={{ fontSize: 12, color: 'var(--w40)', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 600 }}>Stop</p>
-            </div>
-          </div>
-
-          <p style={{ fontSize: 14, color: 'var(--w50)', lineHeight: 1.7, marginBottom: '3rem' }}>
-            {TOTAL} signals across {TOTAL_ROUNDS} rounds. The hard part is stopping yourself.
-          </p>
-
-          <button className="btn-primary" style={{ fontSize: 15, padding: '15px 48px' }} onClick={start}>
-            Start
-          </button>
-        </div>
-      </div>
-    </Layout>
+    </Shell>
   );
 }

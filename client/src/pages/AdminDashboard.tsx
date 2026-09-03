@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
+import PlanChangeRequest from '../components/PlanChangeRequest';
 import { apiGet } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -12,9 +13,10 @@ const TIER_META: Record<string, { price: number; desc: string }> = {
 };
 
 export default function AdminDashboard() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [planModalOpen, setPlanModalOpen] = useState(false);
 
   useEffect(() => {
     apiGet('/api/org/overview')
@@ -29,6 +31,9 @@ export default function AdminDashboard() {
   const tier = TIER_META[org?.plan_tier ?? 'small'];
   const usagePct = tier && org?.athlete_limit ? Math.round((stats.total / org.athlete_limit) * 100) : 0;
 
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+
   if (loading) return (
     <Layout>
       <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '5rem' }}>
@@ -39,66 +44,99 @@ export default function AdminDashboard() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 680, margin: '0 auto', padding: '2rem 1.25rem 6rem' }}>
+      <div style={{ maxWidth: 700, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
 
         {/* Greeting */}
-        <div style={{ marginBottom: '1.75rem' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <p className="label" style={{ margin: 0, marginBottom: 10 }}>
+            {dateStr}
+          </p>
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.2rem, 8vw, 3.5rem)',
-            lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '0.4rem',
+            fontSize: 'clamp(2rem, 6vw, 3rem)',
+            lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: 6,
           }}>
             {firstName ? `Hi, ${firstName}.` : 'Dashboard'}
           </h1>
-          <p style={{ fontSize: 14, color: 'var(--w40)' }}>
-            {org?.org_name ?? 'Your organization'} · {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+          <p style={{ fontSize: 14, color: 'var(--w70)', letterSpacing: '-0.005em' }}>
+            {org?.org_name ?? 'Your organization'}
           </p>
         </div>
 
-        {/* Stats row */}
-        <div style={{
-          background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)',
-          borderTop: '1px solid rgba(255,48,64,0.35)',
-          borderRadius: 20, padding: '1.5rem 1.25rem', marginBottom: '1rem',
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem',
-        }}>
-          {[
-            { value: stats.active, label: 'Athletes', sub: 'active' },
-            { value: stats.pending, label: 'Invites', sub: 'pending' },
-            { value: tier?.price ? `$${tier.price.toLocaleString()}` : '—', label: 'Plan', sub: 'per month' },
-          ].map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: 32, lineHeight: 1, letterSpacing: '-0.03em', marginBottom: 6 }}>{s.value}</p>
-              <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--w60)', letterSpacing: '-0.01em', marginBottom: 2 }}>{s.label}</p>
-              <p style={{ fontSize: 11, color: 'var(--w30)' }}>{s.sub}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Plan usage */}
-        {org?.athlete_limit && (
+        {/* Plan hero — red gradient */}
+        {tier && (
           <div style={{
-            background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)',
-            borderRadius: 14, padding: '1rem 1.25rem', marginBottom: '1rem',
+            position: 'relative',
+            borderRadius: 24,
+            padding: '1.75rem',
+            marginBottom: '1.25rem',
+            background: 'linear-gradient(135deg, var(--red) 0%, #d92535 100%)',
+            overflow: 'hidden',
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-              <p style={{ fontSize: 13, color: 'var(--w60)' }}>
-                Plan capacity, <span style={{ fontWeight: 600 }}>{tier?.desc}</span>
+            <div style={{
+              position: 'absolute', top: -50, right: -40, width: 220, height: 220,
+              background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }}/>
+            <div style={{ position: 'relative' }}>
+              <p style={{
+                fontSize: 11, fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.75)', marginBottom: 10,
+              }}>
+                {org?.plan_tier ? `${org.plan_tier.charAt(0).toUpperCase() + org.plan_tier.slice(1)} plan` : 'Plan'}
               </p>
-              <p style={{ fontSize: 13, fontWeight: 600 }}>{stats.total} / {org.athlete_limit}</p>
-            </div>
-            <div style={{ height: 3, borderRadius: 2, background: 'var(--surface-border)', overflow: 'hidden' }}>
-              <div style={{
-                width: `${Math.min(usagePct, 100)}%`, height: '100%', borderRadius: 2,
-                background: usagePct >= 90 ? 'var(--red)' : 'rgba(52,211,153,0.7)',
-                transition: 'width 1s ease',
-              }} />
-            </div>
-            {usagePct >= 80 && (
-              <p style={{ fontSize: 12, color: 'var(--w40)', marginTop: 8 }}>
-                {usagePct >= 90 ? 'Almost at your limit.' : 'Approaching your plan limit.'} Contact us to upgrade.
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
+                <p style={{
+                  fontFamily: 'var(--font-display)', fontSize: 48, lineHeight: 1,
+                  letterSpacing: '-0.04em', color: '#fff', fontWeight: 700,
+                }}>
+                  ${tier.price.toLocaleString()}
+                </p>
+                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', letterSpacing: '-0.005em' }}>/mo</p>
+              </div>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', letterSpacing: '-0.005em', marginBottom: 16 }}>
+                {tier.desc}
               </p>
-            )}
+
+              {org?.athlete_limit && (
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)', letterSpacing: '-0.005em' }}>
+                      Athlete seats
+                    </span>
+                    <span style={{ fontSize: 13, color: '#fff', fontWeight: 700, letterSpacing: '-0.005em' }}>
+                      {stats.total} / {org.athlete_limit}
+                    </span>
+                  </div>
+                  <div style={{
+                    height: 4, borderRadius: 4, overflow: 'hidden',
+                    background: 'rgba(255,255,255,0.2)',
+                  }}>
+                    <div style={{
+                      width: `${Math.min(usagePct, 100)}%`, height: '100%', borderRadius: 4,
+                      background: '#fff',
+                      transition: 'width 800ms cubic-bezier(0.23, 1, 0.32, 1)',
+                    }} />
+                  </div>
+                </div>
+              )}
+
+              <button
+                onClick={() => setPlanModalOpen(true)}
+                style={{
+                  fontSize: 13, fontWeight: 700, letterSpacing: '-0.005em',
+                  color: 'var(--red)', background: '#fff',
+                  border: 'none', borderRadius: 50, padding: '9px 18px',
+                  cursor: 'pointer', fontFamily: 'var(--font-body)',
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                }}
+              >
+                Upgrade or change
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
           </div>
         )}
 
@@ -106,77 +144,113 @@ export default function AdminDashboard() {
         {!org?.onboarded && (
           <div style={{
             display: 'flex', alignItems: 'flex-start', gap: '0.875rem',
-            padding: '1rem 1.25rem', borderRadius: 14, marginBottom: '1rem',
-            background: 'rgba(251,191,36,0.06)', border: '0.5px solid rgba(251,191,36,0.2)',
+            padding: '1rem 1.25rem', borderRadius: 16, marginBottom: '1.25rem',
+            background: 'rgba(255,48,64,0.07)',
+            border: '0.5px solid rgba(255,48,64,0.22)',
           }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(251,191,36,0.9)', boxShadow: '0 0 6px rgba(251,191,36,0.6)', flexShrink: 0, marginTop: 5 }} />
+            <div style={{
+              width: 8, height: 8, borderRadius: '50%', background: 'var(--red)',
+              boxShadow: '0 0 8px rgba(255,48,64,0.6)',
+              flexShrink: 0, marginTop: 6,
+            }} />
             <div>
-              <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>Access request received</p>
-              <p style={{ fontSize: 12, color: 'var(--w40)' }}>Our team will contact you within 24 hours to activate your organization.</p>
+              <p style={{ fontSize: 14, fontWeight: 700, letterSpacing: '-0.005em', marginBottom: 3 }}>
+                Access request received
+              </p>
+              <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em', lineHeight: 1.5 }}>
+                Our team will contact you within 24 hours to activate your organization.
+              </p>
             </div>
           </div>
         )}
 
-        {/* Quick actions */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: '1rem' }}>
-          <Link to="/admin/athletes" style={{ textDecoration: 'none' }}>
+        {/* Athletes — rich hero-style card */}
+        <Link to="/admin/athletes" style={{ textDecoration: 'none', display: 'block', marginBottom: '1.25rem' }}>
+          <div style={{
+            position: 'relative',
+            background: 'var(--surface-1)',
+            border: '0.5px solid var(--surface-border-2)',
+            borderRadius: 22, padding: '1.5rem',
+            display: 'flex', alignItems: 'center', gap: '1.25rem',
+            cursor: 'pointer',
+            transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms',
+          }}>
             <div style={{
-              background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)',
-              borderRadius: 16, padding: '1.25rem',
-              cursor: 'pointer', transition: 'border-color 0.15s',
+              width: 56, height: 56, borderRadius: 16, flexShrink: 0,
+              background: 'rgba(255,48,64,0.1)',
+              border: '0.5px solid rgba(255,48,64,0.22)',
+              color: 'var(--red)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,48,64,0.08)', border: '0.5px solid rgba(255,48,64,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.875rem' }}>
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round">
-                  <circle cx="10" cy="7" r="3.5"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
-                </svg>
-              </div>
-              <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 3 }}>Athletes</p>
-              <p style={{ fontSize: 12, color: 'var(--w40)' }}>Invite and manage</p>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/>
+              </svg>
             </div>
-          </Link>
-
-          <Link to="/settings" style={{ textDecoration: 'none' }}>
-            <div style={{
-              background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)',
-              borderRadius: 16, padding: '1.25rem', cursor: 'pointer',
-            }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,48,64,0.08)', border: '0.5px solid rgba(255,48,64,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.875rem' }}>
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="var(--red)">
-                  <path d="M10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm6.5-1.74 1.73-1.35a.43.43 0 0 0 .1-.53l-1.64-2.84a.42.42 0 0 0-.51-.18l-2.04.82a5.95 5.95 0 0 0-1.38-.8l-.31-2.17A.42.42 0 0 0 12 4H8.74a.42.42 0 0 0-.42.36l-.31 2.17c-.5.2-.96.47-1.38.8L4.6 6.5a.42.42 0 0 0-.52.18L2.44 9.52a.42.42 0 0 0 .1.53l1.73 1.35A6 6 0 0 0 4.2 12c0 .21.02.41.07.6L2.54 13.95a.42.42 0 0 0-.1.53l1.64 2.84c.1.19.32.25.52.18l2.04-.82c.42.33.88.6 1.38.8l.31 2.17c.05.23.23.36.42.36H12c.2 0 .37-.13.41-.36l.31-2.17a5.95 5.95 0 0 0 1.38-.8l2.04.82c.2.07.41 0 .52-.18l1.64-2.84a.42.42 0 0 0-.1-.53L16.5 12.6c.04-.19.07-.4.07-.6 0-.21-.03-.41-.07-.6Z"/>
-                </svg>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p className="label" style={{ margin: 0, marginBottom: 8 }}>Athletes</p>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 4, flexWrap: 'wrap' }}>
+                <p style={{
+                  fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 700,
+                  letterSpacing: '-0.035em', lineHeight: 1,
+                }}>
+                  {stats.active}
+                </p>
+                <p style={{ fontSize: 13, color: 'var(--w60)', letterSpacing: '-0.005em' }}>
+                  active{stats.pending > 0 ? ` · ${stats.pending} pending` : ''}
+                </p>
               </div>
-              <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 3 }}>Settings</p>
-              <p style={{ fontSize: 12, color: 'var(--w40)' }}>Account and billing</p>
+              <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em' }}>
+                Invite and manage your roster
+              </p>
             </div>
-          </Link>
-        </div>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ color: 'var(--w60)', flexShrink: 0 }}>
+              <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        </Link>
 
         {/* Org details */}
-        <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 20, overflow: 'hidden' }}>
-          <div style={{ padding: '1rem 1.25rem', borderBottom: '0.5px solid var(--surface-border)' }}>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--w40)' }}>
-              Organization
-            </p>
+        <div style={{
+          background: 'var(--surface-1)',
+          border: '0.5px solid var(--surface-border-2)',
+          borderRadius: 20, padding: '1.5rem',
+        }}>
+          <p className="label" style={{ margin: 0, marginBottom: '1.25rem' }}>Organization</p>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {[
+              { label: 'Name', value: org?.org_name },
+              { label: 'Type', value: org?.org_type },
+              { label: 'Sport', value: org?.sport },
+              { label: 'Plan', value: org?.plan_tier ? org.plan_tier.charAt(0).toUpperCase() + org.plan_tier.slice(1) : 'Small' },
+              { label: 'Contact', value: org?.phone || '—' },
+            ].map((row, i) => (
+              <div
+                key={row.label}
+                style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '0.875rem 0',
+                  borderTop: i === 0 ? 'none' : '0.5px solid var(--surface-border-2)',
+                }}
+              >
+                <span style={{ fontSize: 13, color: 'var(--w60)', letterSpacing: '-0.005em' }}>{row.label}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w80)' }}>
+                  {row.value ?? '—'}
+                </span>
+              </div>
+            ))}
           </div>
-          {[
-            { label: 'Name', value: org?.org_name },
-            { label: 'Type', value: org?.org_type },
-            { label: 'Sport', value: org?.sport },
-            { label: 'Plan', value: org?.plan_tier ? org.plan_tier.charAt(0).toUpperCase() + org.plan_tier.slice(1) : 'Small' },
-            { label: 'Contact', value: org?.phone || '—' },
-          ].map((row, i) => (
-            <div key={row.label} style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              padding: '0.875rem 1.25rem',
-              borderTop: i === 0 ? 'none' : '0.5px solid var(--surface-border)',
-            }}>
-              <span style={{ fontSize: 13, color: 'var(--w40)' }}>{row.label}</span>
-              <span style={{ fontSize: 13, fontWeight: 500 }}>{row.value ?? '—'}</span>
-            </div>
-          ))}
         </div>
 
       </div>
+
+      {planModalOpen && (
+        <PlanChangeRequest
+          currentTier={org?.plan_tier || 'small'}
+          orgName={org?.org_name}
+          contactEmail={user?.email ?? undefined}
+          onClose={() => setPlanModalOpen(false)}
+        />
+      )}
     </Layout>
   );
 }

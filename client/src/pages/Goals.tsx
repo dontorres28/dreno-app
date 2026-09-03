@@ -35,8 +35,8 @@ export default function Goals() {
 
   const HORIZONS = [
     { key: 'short' as const, label: t('goals.shortTerm'), timeframe: t('goals.shortTimeframe'), accent: 'var(--red)' },
-    { key: 'mid' as const, label: t('goals.midTerm'), timeframe: t('goals.midTimeframe'), accent: 'rgba(251,191,36,0.8)' },
-    { key: 'long' as const, label: t('goals.longTerm'), timeframe: t('goals.longTimeframe'), accent: 'var(--w40)' },
+    { key: 'mid' as const, label: t('goals.midTerm'), timeframe: t('goals.midTimeframe'), accent: 'rgba(255,48,64,0.55)' },
+    { key: 'long' as const, label: t('goals.longTerm'), timeframe: t('goals.longTimeframe'), accent: 'rgba(255,48,64,0.28)' },
   ];
 
   async function load() {
@@ -80,11 +80,11 @@ export default function Goals() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 620, margin: '0 auto', padding: '3.5rem 1.5rem 6rem' }}>
+      <div style={{ maxWidth: 700, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
 
         <h1 style={{
           fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)',
-          lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '2.5rem',
+          lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2.5rem',
         }}>
           {t('goals.title')}
         </h1>
