@@ -115,7 +115,6 @@ export default function Navbar() {
   const adminLinks = [
     { label: 'Dashboard', to: '/admin-dashboard' },
     { label: 'Athletes', to: '/admin/athletes' },
-    { label: 'Settings', to: '/admin/settings' },
   ];
 
   const links = user ? (isAdmin ? adminLinks : isCoach ? coachLinks : athleteLinks) : [];

@@ -53,14 +53,14 @@ function SocialButton({ onClick, disabled, children }: { onClick: () => void; di
       onClick={onClick}
       disabled={disabled}
       style={{
-        width: '100%', padding: '13px 16px', borderRadius: 12,
-        background: 'var(--input-bg)', border: '0.5px solid var(--input-border)',
+        width: '100%', height: 46, padding: '0 16px', borderRadius: 12,
+        background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-        fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500,
+        fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 600, letterSpacing: '-0.005em',
         color: 'var(--white)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s',
       }}
-      onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)')}
-      onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--input-border)')}
+      onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-hover)'; e.currentTarget.style.borderColor = 'var(--line-2)'; }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface-1)'; e.currentTarget.style.borderColor = 'var(--surface-border-2)'; }}
     >
       {children}
     </button>
@@ -140,37 +140,27 @@ export default function Login() {
   const anyLoading = loading || !!oauthLoading;
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg)' }}>
-      {/* Left branding panel */}
-      <div className="hidden md:flex" style={{ width: '45%', flexDirection: 'column', justifyContent: 'space-between', padding: '3rem', background: 'var(--bg-2)', borderRight: '0.5px solid var(--line)' }}>
-        <span style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 22, letterSpacing: '-0.02em' }}>
+    <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Top bar */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 2rem', flexShrink: 0 }}>
+        <Link to="/" style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em', textDecoration: 'none' }}>
           <span style={{ color: 'var(--white)' }}>DRENO</span><span style={{ color: 'var(--red)' }}>/</span>
-        </span>
-        <div>
-          <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 3.5vw, 3rem)', lineHeight: 1.0, letterSpacing: '-0.03em', marginBottom: '1.5rem' }}>{t('login.tagline')}</p>
-          <p style={{ fontSize: 14, color: 'var(--w40)', lineHeight: 1.7, maxWidth: 280 }}>{t('login.taglineSub')}</p>
+        </Link>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <LanguagePicker /><ThemeToggle />
         </div>
       </div>
 
-      {/* Right form */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '3rem 2rem', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', gap: 8 }}>
-          <LanguagePicker /><ThemeToggle />
-        </div>
-        <div className="md:hidden" style={{ marginBottom: '3rem' }}>
-          <span style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em' }}>
-            <span style={{ color: 'var(--white)' }}>DRENO</span><span style={{ color: 'var(--red)' }}>/</span>
-          </span>
-        </div>
-
-        <div style={{ width: '100%', maxWidth: 380 }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 6vw, 3.75rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '0.75rem' }}>
+      {/* Centered card */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem 1.5rem 3rem' }}>
+        <div style={{ width: '100%', maxWidth: 400 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 44, lineHeight: 0.98, letterSpacing: '-0.035em', marginBottom: '0.5rem', color: 'var(--white)' }}>
             {t('login.welcomeBack')}
           </h1>
-          <p style={{ fontSize: 15, color: 'var(--w40)', marginBottom: '2rem' }}>{t('login.subtitle')}</p>
+          <p style={{ fontSize: 15, color: 'var(--w70)', marginBottom: '1.75rem', lineHeight: 1.5 }}>{t('login.subtitle')}</p>
 
-          {/* Social + passkey buttons */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.5rem' }}>
+          {/* OAuth buttons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1.25rem' }}>
             <SocialButton onClick={signInWithGoogle} disabled={anyLoading}>
               {oauthLoading === 'google' ? <Spinner size={16} /> : (
                 <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
@@ -203,37 +193,39 @@ export default function Login() {
           </div>
 
           {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem', opacity: 0.35 }}>
-            <div style={{ flex: 1, height: '0.5px', background: 'var(--white)' }} />
-            <span style={{ fontSize: 12 }}>or sign in with email</span>
-            <div style={{ flex: 1, height: '0.5px', background: 'var(--white)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', marginBottom: '1.25rem' }}>
+            <div style={{ flex: 1, height: '0.5px', background: 'var(--line-2)' }} />
+            <span style={{ fontSize: 11, color: 'var(--w60)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>or</span>
+            <div style={{ flex: 1, height: '0.5px', background: 'var(--line-2)' }} />
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div>
-              <label className="label">{t('login.email')}</label>
-              <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder={t('login.emailPlaceholder')} autoComplete="email" />
-            </div>
-            <div>
-              <label className="label">{t('login.password')}</label>
-              <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder={t('login.passwordPlaceholder')} autoComplete="current-password" />
-            </div>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            <input
+              className="input" type="email" value={email} onChange={e => setEmail(e.target.value)}
+              required placeholder="Email" autoComplete="email"
+              style={{ height: 46, fontSize: 15 }}
+            />
+            <input
+              className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
+              required placeholder="Password" autoComplete="current-password"
+              style={{ height: 46, fontSize: 15 }}
+            />
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', userSelect: 'none' }}>
-              <span onClick={() => setRememberMe(r => !r)} style={{ width: 18, height: 18, borderRadius: 5, flexShrink: 0, background: rememberMe ? 'var(--red)' : 'var(--input-bg)', border: rememberMe ? '0.5px solid var(--red)' : '0.5px solid var(--input-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s, border-color 0.15s' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', userSelect: 'none', marginTop: 2 }} onClick={() => setRememberMe(r => !r)}>
+              <span style={{ width: 18, height: 18, borderRadius: 5, flexShrink: 0, background: rememberMe ? 'var(--red)' : 'var(--input-bg)', border: rememberMe ? '0.5px solid var(--red)' : '0.5px solid var(--input-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s, border-color 0.15s' }}>
                 {rememberMe && <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>}
               </span>
-              <span onClick={() => setRememberMe(r => !r)} style={{ fontSize: 14, color: 'var(--w50)' }}>Remember me</span>
+              <span style={{ fontSize: 14, color: 'var(--w70)', fontWeight: 500 }}>Remember me</span>
             </label>
 
-            <button type="submit" className="btn-primary" style={{ fontSize: 16, padding: '15px', marginTop: '0.25rem' }} disabled={anyLoading}>
+            <button type="submit" className="btn-primary" style={{ fontSize: 15, height: 48, padding: 0, marginTop: '0.5rem' }} disabled={anyLoading}>
               {loading ? <Spinner size={18} /> : t('login.signIn')}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', fontSize: 14, color: 'var(--w40)', marginTop: '2rem' }}>
+          <p style={{ textAlign: 'center', fontSize: 14, color: 'var(--w70)', marginTop: '1.5rem' }}>
             {t('login.noAccount')}{' '}
-            <Link to="/signup" style={{ color: 'var(--white)', fontWeight: 600, textDecoration: 'none' }}>{t('login.signUp')}</Link>
+            <Link to="/signup" style={{ color: 'var(--red)', fontWeight: 600, textDecoration: 'none' }}>{t('login.signUp')}</Link>
           </p>
         </div>
       </div>

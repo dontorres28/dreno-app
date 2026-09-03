@@ -38,14 +38,14 @@
   --line-2:   rgba(255,255,255,0.14);
   --white:    #ffffff;
   --red:      #FF3040;
-  --w85:      rgba(255,255,255,0.92);
-  --w80:      rgba(255,255,255,0.86);
-  --w70:      rgba(255,255,255,0.80);
-  --w60:      rgba(255,255,255,0.72);
-  --w50:      rgba(255,255,255,0.62);
-  --w45:      rgba(255,255,255,0.55);
-  --w40:      rgba(255,255,255,0.48);
-  --w20:      rgba(255,255,255,0.20);
+  --w85:      rgba(255,255,255,0.94);
+  --w80:      rgba(255,255,255,0.88);
+  --w70:      rgba(255,255,255,0.82);
+  --w60:      rgba(255,255,255,0.75);
+  --w50:      rgba(255,255,255,0.68);
+  --w45:      rgba(255,255,255,0.62);
+  --w40:      rgba(255,255,255,0.58);
+  --w20:      rgba(255,255,255,0.22);
   --w08:      rgba(255,255,255,0.08);
 
   --surface-1:       rgba(255,255,255,0.05);
@@ -83,14 +83,14 @@
   --line:     rgba(30,24,16,0.09);
   --line-2:   rgba(30,24,16,0.15);
   --white:    #1C1814;
-  --w85:      rgba(30,24,16,0.92);
-  --w80:      rgba(30,24,16,0.85);
-  --w70:      rgba(30,24,16,0.75);
-  --w60:      rgba(30,24,16,0.68);
-  --w50:      rgba(30,24,16,0.58);
-  --w45:      rgba(30,24,16,0.52);
-  --w40:      rgba(30,24,16,0.46);
-  --w20:      rgba(30,24,16,0.20);
+  --w85:      rgba(30,24,16,0.94);
+  --w80:      rgba(30,24,16,0.88);
+  --w70:      rgba(30,24,16,0.80);
+  --w60:      rgba(30,24,16,0.72);
+  --w50:      rgba(30,24,16,0.62);
+  --w45:      rgba(30,24,16,0.56);
+  --w40:      rgba(30,24,16,0.50);
+  --w20:      rgba(30,24,16,0.22);
   --w08:      rgba(30,24,16,0.08);
 
   --surface-1:       rgba(30,24,16,0.05);
@@ -204,57 +204,55 @@ html {
 h1, h2, h3 { font-family: var(--font-display); }
 
 @layer components {
-  /* --- Buttons --- */
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2;
-    padding: 14px 28px;
-    background: var(--red);
-    color: #fff;
-    font-weight: 600;
-    font-size: 15px;
-    border-radius: 50px;
-    letter-spacing: -0.01em;
-    /* inherits global spring transition */
-  }
-  .btn-primary:hover  { opacity: 0.86; }
-
+  /* --- Buttons ---
+     All buttons share the same pill shape and rhythm.
+     Only fill differs: primary=red, secondary=surface, ghost=transparent, danger=red. */
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
   .btn-danger {
     @apply inline-flex items-center justify-center gap-2;
+    padding: 12px 22px;
+    min-height: 44px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14.5px;
+    letter-spacing: -0.005em;
+    border-radius: 50px;
+    border: 0.5px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn-primary,
+  .btn-danger {
     background: var(--red);
     color: #fff;
-    font-weight: 600;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    font-family: var(--font-body);
   }
-  .btn-danger:hover { opacity: 0.85; }
+  .btn-primary:hover:not(:disabled),
+  .btn-danger:hover:not(:disabled) { opacity: 0.88; }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2;
-    padding: 13px 24px;
-    background: var(--red);
-    color: #fff;
-    font-weight: 600;
-    font-size: 15px;
-    border-radius: 50px;
-    border: none;
-    letter-spacing: -0.01em;
+    background: var(--surface-1);
+    color: var(--white);
+    border-color: var(--surface-border-2);
   }
-  .btn-secondary:hover { opacity: 0.86; }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--surface-hover);
+    border-color: var(--line-2);
+  }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2;
-    padding: 13px 24px;
-    background: var(--red);
-    color: #fff;
-    font-weight: 600;
-    font-size: 15px;
-    border-radius: 50px;
-    border: none;
-    letter-spacing: -0.01em;
+    background: transparent;
+    color: var(--w80);
+    border-color: transparent;
   }
-  .btn-ghost:hover { opacity: 0.86; }
+  .btn-ghost:hover:not(:disabled) { color: var(--white); background: var(--surface-1); }
+
+  .btn-primary:disabled,
+  .btn-secondary:disabled,
+  .btn-ghost:disabled,
+  .btn-danger:disabled { opacity: 0.45; cursor: not-allowed; }
 
   /* --- Cards --- */
   .card {

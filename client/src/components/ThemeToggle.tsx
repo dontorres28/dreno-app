@@ -40,25 +40,16 @@ export default function ThemeToggle() {
             : '0 2px 8px rgba(0,0,0,0.18)',
         }}
       >
-        <motion.div
-          key={isDark ? 'moon' : 'sun'}
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {isDark ? (
-            /* Moon */
-            <svg width="11" height="11" viewBox="0 0 14 14" fill="none">
-              <path d="M12 9.3A5.5 5.5 0 0 1 4.7 2a5.5 5.5 0 1 0 7.3 7.3Z" fill="#c8d0e0"/>
-            </svg>
-          ) : (
-            /* Sun */
-            <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="#6b7a96" strokeWidth="1.8" strokeLinecap="round">
-              <circle cx="10" cy="10" r="3.5"/>
-              <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.1 4.1l1.4 1.4M14.5 14.5l1.4 1.4M4.1 15.9l1.4-1.4M14.5 5.5l1.4-1.4"/>
-            </svg>
-          )}
-        </motion.div>
+        {isDark ? (
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none">
+            <path d="M12 9.3A5.5 5.5 0 0 1 4.7 2a5.5 5.5 0 1 0 7.3 7.3Z" fill="#c8d0e0"/>
+          </svg>
+        ) : (
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="#6b7a96" strokeWidth="1.8" strokeLinecap="round">
+            <circle cx="10" cy="10" r="3.5"/>
+            <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.1 4.1l1.4 1.4M14.5 14.5l1.4 1.4M4.1 15.9l1.4-1.4M14.5 5.5l1.4-1.4"/>
+          </svg>
+        )}
       </motion.div>
 
       {/* Static background icons */}

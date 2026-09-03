@@ -51,14 +51,14 @@ function SocialButton({ onClick, disabled, children }: { onClick: () => void; di
       onClick={onClick}
       disabled={disabled}
       style={{
-        width: '100%', padding: '13px 16px', borderRadius: 12,
-        background: 'var(--input-bg)', border: '0.5px solid var(--input-border)',
+        width: '100%', height: 46, padding: '0 16px', borderRadius: 12,
+        background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-        fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500,
-        color: 'var(--white)', cursor: 'pointer', transition: 'border-color 0.15s',
+        fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 600, letterSpacing: '-0.005em',
+        color: 'var(--white)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s',
       }}
-      onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)')}
-      onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--input-border)')}
+      onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-hover)'; e.currentTarget.style.borderColor = 'var(--line-2)'; }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface-1)'; e.currentTarget.style.borderColor = 'var(--surface-border-2)'; }}
     >
       {children}
     </button>
@@ -128,57 +128,59 @@ export default function Signup() {
   const anyLoading = loading || !!oauthLoading;
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg)' }}>
-      {/* Left branding */}
-      <div className="hidden md:flex" style={{ width: '45%', flexDirection: 'column', justifyContent: 'space-between', padding: '3rem', background: 'var(--bg-2)', borderRight: '0.5px solid var(--line)' }}>
-        <span style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 22, letterSpacing: '-0.02em' }}>
+    <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Top bar */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 2rem', flexShrink: 0 }}>
+        <Link to="/" style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em', textDecoration: 'none' }}>
           <span style={{ color: 'var(--white)' }}>DRENO</span><span style={{ color: 'var(--red)' }}>/</span>
-        </span>
-        <div>
-          <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 3.5vw, 3rem)', lineHeight: 1.0, letterSpacing: '-0.03em', marginBottom: '1.5rem' }}>{t('login.tagline')}</p>
-          <p style={{ fontSize: 14, color: 'var(--w40)', lineHeight: 1.7, maxWidth: 280 }}>{t('login.taglineSub')}</p>
+        </Link>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <LanguagePicker /><ThemeToggle />
         </div>
       </div>
 
-      {/* Right form */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '3rem 2rem', position: 'relative', overflowY: 'auto' }}>
-        <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', gap: 8 }}>
-          <LanguagePicker /><ThemeToggle />
-        </div>
-        <div className="md:hidden" style={{ marginBottom: '2.5rem' }}>
-          <span style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em' }}>
-            <span style={{ color: 'var(--white)' }}>DRENO</span><span style={{ color: 'var(--red)' }}>/</span>
-          </span>
-        </div>
-
-        <div style={{ width: '100%', maxWidth: 380 }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 6vw, 3.75rem)', lineHeight: 0.95, letterSpacing: '-0.03em', marginBottom: '0.75rem' }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem 1.5rem 3rem' }}>
+        <div style={{ width: '100%', maxWidth: 420 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 44, lineHeight: 0.98, letterSpacing: '-0.035em', marginBottom: '0.5rem', color: 'var(--white)' }}>
             Start here.
           </h1>
-          <p style={{ fontSize: 15, color: 'var(--w40)', marginBottom: '2rem' }}>Pick your role to get started.</p>
+          <p style={{ fontSize: 15, color: 'var(--w70)', marginBottom: '1.5rem', lineHeight: 1.5 }}>Pick your role to continue.</p>
 
           {/* Role cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1.75rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1.5rem' }}>
             {([
               { key: 'athlete', label: t('signup.iAmAthlete'), sub: 'Track your mental performance' },
               { key: 'coach', label: t('signup.iAmCoach'), sub: 'Support and monitor your athletes' },
               { key: 'administrator', label: "I'm an administrator", sub: 'Schools, clubs, sports programs' },
-            ] as const).map(r => (
-              <button key={r.key} type="button" onClick={() => setRole(r.key)} style={{
-                width: '100%', padding: '13px 16px', borderRadius: 12, textAlign: 'left',
-                fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'all 0.15s',
-                background: role === r.key ? 'rgba(255,48,64,0.10)' : 'var(--input-bg)',
-                border: role === r.key ? '0.5px solid rgba(255,48,64,0.45)' : '0.5px solid var(--input-border)',
-                color: role === r.key ? 'var(--white)' : 'var(--w50)',
-              }}>
-                <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{r.label}</p>
-                <p style={{ fontSize: 12, opacity: 0.6 }}>{r.sub}</p>
-              </button>
-            ))}
+            ] as const).map(r => {
+              const on = role === r.key;
+              return (
+                <button key={r.key} type="button" onClick={() => setRole(r.key)} style={{
+                  width: '100%', padding: '14px 16px', borderRadius: 12, textAlign: 'left',
+                  fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'all 0.15s',
+                  background: on ? 'rgba(255,48,64,0.10)' : 'var(--surface-1)',
+                  border: on ? '0.5px solid rgba(255,48,64,0.5)' : '0.5px solid var(--surface-border-2)',
+                  display: 'flex', alignItems: 'center', gap: 12,
+                }}>
+                  <span style={{
+                    width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                    background: on ? 'var(--red)' : 'transparent',
+                    border: on ? 'none' : '1.5px solid var(--w40)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    {on && <svg width="11" height="11" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.2 2.2L8 2.6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                  </span>
+                  <span style={{ flex: 1 }}>
+                    <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--white)', marginBottom: 2 }}>{r.label}</p>
+                    <p style={{ fontSize: 12.5, color: 'var(--w60)' }}>{r.sub}</p>
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Social buttons */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1.25rem' }}>
             <SocialButton onClick={signUpWithGoogle} disabled={anyLoading}>
               {oauthLoading === 'google' ? <Spinner size={16} /> : (
                 <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
@@ -202,32 +204,34 @@ export default function Signup() {
           </div>
 
           {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem', opacity: 0.35 }}>
-            <div style={{ flex: 1, height: '0.5px', background: 'var(--white)' }} />
-            <span style={{ fontSize: 12 }}>or sign up with email</span>
-            <div style={{ flex: 1, height: '0.5px', background: 'var(--white)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', marginBottom: '1.25rem' }}>
+            <div style={{ flex: 1, height: '0.5px', background: 'var(--line-2)' }} />
+            <span style={{ fontSize: 11, color: 'var(--w60)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>or</span>
+            <div style={{ flex: 1, height: '0.5px', background: 'var(--line-2)' }} />
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div>
-              <label className="label">{t('signup.email')}</label>
-              <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder={t('signup.emailPlaceholder')} autoComplete="email" style={{ fontSize: 16 }} />
-            </div>
-            <div>
-              <label className="label">{t('signup.password')}</label>
-              <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder={t('signup.passwordPlaceholder')} autoComplete="new-password" minLength={8} style={{ fontSize: 16 }} />
-            </div>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            <input
+              className="input" type="email" value={email} onChange={e => setEmail(e.target.value)}
+              required placeholder="Email" autoComplete="email"
+              style={{ height: 46, fontSize: 15 }}
+            />
+            <input
+              className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
+              required placeholder="Password (8+ characters)" autoComplete="new-password" minLength={8}
+              style={{ height: 46, fontSize: 15 }}
+            />
 
-            <p style={{ fontSize: 11, color: 'var(--w40)', lineHeight: 1.6, textAlign: 'center' }}>{t('signup.disclaimer')}</p>
+            <p style={{ fontSize: 12, color: 'var(--w60)', lineHeight: 1.5, marginTop: 4 }}>{t('signup.disclaimer')}</p>
 
-            <button type="submit" className="btn-primary" style={{ fontSize: 16, padding: '15px', marginTop: '0.25rem' }} disabled={anyLoading || !role}>
+            <button type="submit" className="btn-primary" style={{ fontSize: 15, height: 48, padding: 0, marginTop: '0.25rem' }} disabled={anyLoading || !role}>
               {loading ? <Spinner size={18} /> : t('signup.createAccountBtn')}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', fontSize: 14, color: 'var(--w40)', marginTop: '2rem' }}>
+          <p style={{ textAlign: 'center', fontSize: 14, color: 'var(--w70)', marginTop: '1.5rem' }}>
             {t('signup.alreadyHaveAccount')}{' '}
-            <Link to="/login" style={{ color: 'var(--white)', fontWeight: 600, textDecoration: 'none' }}>{t('signup.signIn')}</Link>
+            <Link to="/login" style={{ color: 'var(--red)', fontWeight: 600, textDecoration: 'none' }}>{t('signup.signIn')}</Link>
           </p>
         </div>
       </div>
