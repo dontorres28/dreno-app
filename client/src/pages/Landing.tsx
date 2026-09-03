@@ -84,9 +84,10 @@ export default function Landing() {
           font-family: var(--font-display);
           font-weight: 700;
           letter-spacing: -0.04em;
-          line-height: 1;
+          line-height: 0.92;
           color: var(--red);
-          font-size: clamp(3rem, 6vw, 4.5rem);
+          font-size: clamp(3rem, 7vw, 5rem);
+          font-optical-sizing: auto;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -215,9 +216,9 @@ export default function Landing() {
                 className="iphone-wrap"
                 style={{
                   position: 'absolute',
-                  top: '62%', left: '50%',
+                  top: '58%', left: '50%',
                   transform: 'translate(-50%, -50%)',
-                  width: 'clamp(200px, 30vw, 420px)',
+                  width: 'clamp(140px, 18vw, 260px)',
                 }}
               >
                 <motion.div
@@ -318,9 +319,9 @@ export default function Landing() {
         <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2rem, 6vw, 4rem)',
-            lineHeight: 0.95, letterSpacing: '-0.04em', fontWeight: 700,
-            marginBottom: '1rem',
+            fontSize: 'clamp(3rem, 9vw, 6.5rem)',
+            lineHeight: 0.92, letterSpacing: '-0.04em', fontWeight: 700,
+            marginBottom: '1.25rem',
           }}>
             {t('landing.ctaLine1')}{' '}
             <span style={{ color: 'var(--red)' }}>{t('landing.ctaLine2')}</span>
