@@ -27,7 +27,7 @@ function LanguagePicker() {
   return (
     <div ref={ref} style={{ position: 'relative' }}>
       <button onClick={() => setOpen(o => !o)} aria-label="Change language" style={{ height: 34, padding: '0 12px', borderRadius: 20, background: 'var(--toggle-bg)', border: '0.5px solid var(--line-2)', display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', color: 'var(--w60)', fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500, letterSpacing: '0.03em' }}>
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="10" cy="10" r="8"/><path d="M2 10h16"/><path d="M10 2a11 11 0 0 1 3 8 11 11 0 0 1-3 8 11 11 0 0 1-3-8 11 11 0 0 1 3-8z"/></svg>
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><circle cx="10" cy="10" r="8"/><path d="M2 10h16"/><path d="M10 2a11 11 0 0 1 3 8 11 11 0 0 1-3 8 11 11 0 0 1-3-8 11 11 0 0 1 3-8z"/></svg>
         {code}
       </button>
       {open && (

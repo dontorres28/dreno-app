@@ -48,7 +48,7 @@ function LanguagePicker() {
         onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--w40)')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--line-2)')}
       >
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
           <circle cx="10" cy="10" r="8"/>
           <path d="M2 10h16"/>
           <path d="M10 2a11 11 0 0 1 3 8 11 11 0 0 1-3 8 11 11 0 0 1-3-8 11 11 0 0 1 3-8z"/>
@@ -178,8 +178,9 @@ export default function Navbar() {
                   transition: 'color 0.15s, background 0.2s',
                 }}
               >
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm7.43-2.06c.04-.3.07-.62.07-.94s-.03-.65-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.62l-1.92-3.32a.49.49 0 0 0-.6-.21l-2.39.96a6.97 6.97 0 0 0-1.62-.94l-.36-2.54A.49.49 0 0 0 14 3h-3.84a.49.49 0 0 0-.49.42l-.36 2.54a7.1 7.1 0 0 0-1.62.94l-2.39-.96a.48.48 0 0 0-.6.21L2.78 9.47a.48.48 0 0 0 .12.62l2.03 1.58c-.04.29-.07.63-.07.94s.03.65.07.94L2.9 15.13a.48.48 0 0 0-.12.62l1.92 3.32c.12.22.37.29.6.21l2.39-.96c.5.36 1.04.67 1.62.94l.36 2.54c.07.26.3.42.49.42H14c.26 0 .47-.18.49-.42l.36-2.54a7.1 7.1 0 0 0 1.62-.94l2.39.96c.23.08.48 0 .6-.21l1.92-3.32a.48.48 0 0 0-.12-.62l-2.03-1.58Z"/>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
                 </svg>
               </Link>
               </div>
@@ -211,10 +212,8 @@ export default function Navbar() {
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, color: 'var(--w60)' }}
             aria-label="Menu"
           >
-            <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
-              <rect width="20" height="2" rx="1" fill="currentColor" />
-              <rect y="6" width="14" height="2" rx="1" fill="currentColor" />
-              <rect y="12" width="20" height="2" rx="1" fill="currentColor" />
+            <svg width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+              <path d="M1 1h18M1 7h12M1 13h18"/>
             </svg>
           </button>
         </div>

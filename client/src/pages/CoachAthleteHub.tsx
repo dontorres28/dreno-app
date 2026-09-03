@@ -47,7 +47,7 @@ function MiniSparkline({ scores }: { scores: number[] }) {
   }).join(' ');
   return (
     <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`}>
-      <polyline points={pts} fill="none" stroke="rgba(255,48,64,0.6)" strokeWidth="1.5" strokeLinejoin="round"/>
+      <polyline points={pts} fill="none" stroke="rgba(255,48,64,0.6)" strokeWidth="1.6" strokeLinejoin="round"/>
     </svg>
   );
 }

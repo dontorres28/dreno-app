@@ -244,7 +244,7 @@ export default function Settings() {
               }}>
                 {avatarUploading
                   ? <Spinner size={12} />
-                  : <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 8.5l2.5-.5L10 2.5a1.414 1.414 0 0 0-2-2L2.5 6 2 8.5Z" stroke="var(--w60)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  : <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 8.5l2.5-.5L10 2.5a1.414 1.414 0 0 0-2-2L2.5 6 2 8.5Z" stroke="var(--w60)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 }
               </div>
             </label>
@@ -341,7 +341,7 @@ export default function Settings() {
               >
                 {t('settings.open')}
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
             </Row>

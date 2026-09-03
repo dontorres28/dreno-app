@@ -261,7 +261,7 @@ export default function CoachOnboard() {
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w60)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             Back
           </button>
@@ -303,7 +303,7 @@ export default function CoachOnboard() {
               >
                 {photoPreview
                   ? <img src={photoPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="var(--w40)" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                  : <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="var(--w40)" strokeWidth="1.6" strokeLinecap="round"/></svg>
                 }
               </button>
               <div>
@@ -556,7 +556,7 @@ export default function CoachOnboard() {
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--w60)', fontSize: 14 }}>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M3 8l3.5 3.5L13 4.5" stroke="var(--red)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M3 8l3.5 3.5L13 4.5" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     Approved
                   </div>

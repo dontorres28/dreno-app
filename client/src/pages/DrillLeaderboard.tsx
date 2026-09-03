@@ -62,7 +62,7 @@ export default function DrillLeaderboard() {
           style={{ fontSize: 13, color: 'var(--w40)', display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: '2.5rem' }}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M11 7H3M6 10L3 7l3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M11 7H3M6 10L3 7l3-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
           {t('common.back')}
         </Link>

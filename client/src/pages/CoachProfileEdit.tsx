@@ -232,7 +232,7 @@ export default function CoachProfileEdit() {
               >
                 {photoPreview
                   ? <img src={photoPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="var(--w40)" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                  : <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="var(--w40)" strokeWidth="1.6" strokeLinecap="round"/></svg>
                 }
               </button>
               <div>
@@ -310,7 +310,7 @@ export default function CoachProfileEdit() {
                   onClick={() => certRef.current?.click()}
                   style={{ fontSize: 12, fontWeight: 500, padding: '6px 14px', borderRadius: 50, background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', color: 'var(--w55)', cursor: 'pointer', fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 5 }}
                 >
-                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v7M2.5 4l3-3.5L8.5 4M1.5 9h8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v7M2.5 4l3-3.5L8.5 4M1.5 9h8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   Upload
                 </button>
               </div>
@@ -320,7 +320,7 @@ export default function CoachProfileEdit() {
                 {certFiles.map(c => (
                   <div key={c.url} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 10, background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)' }}>
                     <a href={c.url} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: 'var(--w60)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><rect x="1" y="1" width="12" height="14" rx="2" stroke="var(--w40)" strokeWidth="1.2"/><path d="M4 6h6M4 9h4" stroke="var(--w40)" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                      <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><rect x="1" y="1" width="12" height="14" rx="2" stroke="var(--w40)" strokeWidth="1.4"/><path d="M4 6h6M4 9h4" stroke="var(--w40)" strokeWidth="1.4" strokeLinecap="round"/></svg>
                       {c.name}
                     </a>
                     <button onClick={() => removeCert(c.url)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w50)', fontSize: 16, padding: '0 4px', lineHeight: 1 }}>×</button>
@@ -329,7 +329,7 @@ export default function CoachProfileEdit() {
                 {pendingCerts.map((f, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 10, background: 'rgba(255,48,64,0.06)', border: '0.5px solid rgba(255,48,64,0.15)' }}>
                     <span style={{ fontSize: 13, color: 'var(--w60)', display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><rect x="1" y="1" width="12" height="14" rx="2" stroke="rgba(255,48,64,0.4)" strokeWidth="1.2"/><path d="M4 6h6M4 9h4" stroke="rgba(255,48,64,0.4)" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                      <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><rect x="1" y="1" width="12" height="14" rx="2" stroke="rgba(255,48,64,0.4)" strokeWidth="1.4"/><path d="M4 6h6M4 9h4" stroke="rgba(255,48,64,0.4)" strokeWidth="1.4" strokeLinecap="round"/></svg>
                       {f.name}
                     </span>
                     <button onClick={() => removePending(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w50)', fontSize: 16, padding: '0 4px', lineHeight: 1 }}>×</button>

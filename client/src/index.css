@@ -1,4 +1,4 @@
-@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&display=swap');
 
 @font-face {
@@ -38,13 +38,13 @@
   --line-2:   rgba(255,255,255,0.14);
   --white:    #ffffff;
   --red:      #FF3040;
-  --w85:      rgba(255,255,255,0.85);
-  --w80:      rgba(255,255,255,0.80);
-  --w70:      rgba(255,255,255,0.70);
-  --w60:      rgba(255,255,255,0.60);
-  --w50:      rgba(255,255,255,0.50);
-  --w45:      rgba(255,255,255,0.45);
-  --w40:      rgba(255,255,255,0.40);
+  --w85:      rgba(255,255,255,0.92);
+  --w80:      rgba(255,255,255,0.86);
+  --w70:      rgba(255,255,255,0.80);
+  --w60:      rgba(255,255,255,0.72);
+  --w50:      rgba(255,255,255,0.62);
+  --w45:      rgba(255,255,255,0.55);
+  --w40:      rgba(255,255,255,0.48);
   --w20:      rgba(255,255,255,0.20);
   --w08:      rgba(255,255,255,0.08);
 
@@ -83,13 +83,13 @@
   --line:     rgba(30,24,16,0.09);
   --line-2:   rgba(30,24,16,0.15);
   --white:    #1C1814;
-  --w85:      rgba(30,24,16,0.88);
-  --w80:      rgba(30,24,16,0.80);
-  --w70:      rgba(30,24,16,0.65);
-  --w60:      rgba(30,24,16,0.55);
-  --w50:      rgba(30,24,16,0.45);
-  --w45:      rgba(30,24,16,0.40);
-  --w40:      rgba(30,24,16,0.38);
+  --w85:      rgba(30,24,16,0.92);
+  --w80:      rgba(30,24,16,0.85);
+  --w70:      rgba(30,24,16,0.75);
+  --w60:      rgba(30,24,16,0.68);
+  --w50:      rgba(30,24,16,0.58);
+  --w45:      rgba(30,24,16,0.52);
+  --w40:      rgba(30,24,16,0.46);
   --w20:      rgba(30,24,16,0.20);
   --w08:      rgba(30,24,16,0.08);
 
@@ -155,13 +155,6 @@ a:not(.settings-link):not([disabled]):active {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Settings gear spin ── */
-.settings-link svg {
-  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.settings-link.rotated svg {
-  transform: rotate(90deg);
-}
 
 /* ── Theme toggle button ── */
 .theme-toggle {
@@ -186,7 +179,6 @@ a:not(.settings-link):not([disabled]):active {
 }
 .theme-toggle:hover {
   background: var(--surface-hover);
-  transform: scale(1.12);
 }
 .theme-toggle:active {
   transform: scale(0.86) !important;
@@ -309,7 +301,7 @@ h1, h2, h3 { font-family: var(--font-display); }
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--w50);
+    color: var(--w60);
     margin-bottom: 8px;
   }
 

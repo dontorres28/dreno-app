@@ -239,7 +239,7 @@ export default function Dashboard() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'background 0.3s',
                 }}>
-                  {drillDoneToday && <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 2.5" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                  {drillDoneToday && <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 2.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                 </span>
               </div>
               <p style={{ fontSize: 14, fontWeight: 500, color: drillDoneToday ? 'var(--w40)' : 'var(--white)' }}>
@@ -263,7 +263,7 @@ export default function Dashboard() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'background 0.3s',
                 }}>
-                  {journalDoneToday && <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 2.5" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                  {journalDoneToday && <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 2.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                 </span>
               </div>
               <p style={{ fontSize: 14, fontWeight: 500, color: journalDoneToday ? 'var(--w40)' : 'var(--white)' }}>
@@ -281,7 +281,7 @@ export default function Dashboard() {
               onMouseEnter={e => (e.currentTarget.style.color = 'var(--w80)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--w50)')}>
               {t('dashboard.all')}
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M5 3l3.5 3.5L5 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M5 3l3.5 3.5L5 10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </Link>
           </div>
 

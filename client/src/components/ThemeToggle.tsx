@@ -42,9 +42,9 @@ export default function ThemeToggle() {
       >
         <motion.div
           key={isDark ? 'moon' : 'sun'}
-          initial={{ opacity: 0, rotate: -80, scale: 0.5 }}
-          animate={{ opacity: 1, rotate: 0, scale: 1 }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
         >
           {isDark ? (
             /* Moon */

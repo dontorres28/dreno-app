@@ -29,7 +29,7 @@ function TrendLine({ data, color = 'var(--red)' }: { data: number[]; color?: str
         points={pts.join(' ')}
         fill="none"
         stroke={color}
-        strokeWidth="1.5"
+        strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
         opacity="0.7"
@@ -51,22 +51,22 @@ const DRILL_META: Record<string, { icon: React.ReactNode }> = {
   reaction: {
     icon: (
       <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <path d="M10 2v7h5l-5 9V11H5l5-9Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M10 2v7h5l-5 9V11H5l5-9Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
   goNoGo: {
     icon: (
       <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.4"/>
-        <path d="M7.5 10l2 2L13 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.6"/>
+        <path d="M7.5 10l2 2L13 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
   eyeTrack: {
     icon: (
       <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <path d="M2 10c2-4 4-6 8-6s6 2 8 6c-2 4-4 6-8 6s-6-2-8-6Z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+        <path d="M2 10c2-4 4-6 8-6s6 2 8 6c-2 4-4 6-8 6s-6-2-8-6Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
         <circle cx="10" cy="10" r="2" fill="currentColor"/>
       </svg>
     ),
@@ -74,8 +74,8 @@ const DRILL_META: Record<string, { icon: React.ReactNode }> = {
   sigh: {
     icon: (
       <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <path d="M2 13c1.5-3 3-5 5-5s3.5 4 5 4 3.5-5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M2 8c1 1 2 2 3 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4"/>
+        <path d="M2 13c1.5-3 3-5 5-5s3.5 4 5 4 3.5-5 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M2 8c1 1 2 2 3 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.4"/>
       </svg>
     ),
   },
@@ -195,7 +195,7 @@ function DrillCard({
           }}>
             {hasResult ? 'Run again' : 'Start drill'}
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6h8M7 3l3 3-3 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
           {hasResult && (
@@ -284,7 +284,7 @@ function SighCard({ results }: { results: Result[] }) {
           }}>
             {hasResult ? 'Run again' : 'Start drill'}
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6h8M7 3l3 3-3 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
         </div>
@@ -374,7 +374,7 @@ export default function Drills() {
           >
             {t('drills.leaderboard')}
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </Link>
         </div>

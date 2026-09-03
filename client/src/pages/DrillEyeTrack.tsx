@@ -236,7 +236,7 @@ export default function DrillEyeTrack() {
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(235,228,210,0.4)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)', marginBottom: '2rem' }}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             Back
           </button>
@@ -296,7 +296,7 @@ export default function DrillEyeTrack() {
                     <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
                       {done > 0 && <p style={{ fontSize: 11, color: 'rgba(235,228,210,0.3)' }}>{done}x</p>}
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ color: 'rgba(235,228,210,0.25)' }}>
-                        <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                   )}

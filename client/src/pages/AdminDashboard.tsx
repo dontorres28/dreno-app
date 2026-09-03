@@ -126,7 +126,7 @@ export default function AdminDashboard() {
               cursor: 'pointer', transition: 'border-color 0.15s',
             }}>
               <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,48,64,0.08)', border: '0.5px solid rgba(255,48,64,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.875rem' }}>
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--red)" strokeWidth="1.5" strokeLinecap="round">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round">
                   <circle cx="10" cy="7" r="3.5"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
                 </svg>
               </div>
