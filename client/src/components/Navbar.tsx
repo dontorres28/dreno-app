@@ -3,14 +3,17 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Logo from './Logo';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
+import ThemeToggle from './ThemeToggle';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 
 const LANGUAGES = Object.keys(LANGUAGE_CODES);
 
 function LanguagePicker() {
   const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState('English');
+  const [current, setCurrent] = useState(() => {
+    const code = localStorage.getItem('i18nextLng') ?? 'en';
+    return LANGUAGES.find(l => LANGUAGE_CODES[l] === code) ?? 'English';
+  });
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,26 +30,30 @@ function LanguagePicker() {
     setOpen(false);
   }
 
+  const code = LANGUAGE_CODES[current]?.toUpperCase() ?? 'EN';
+
   return (
     <div ref={ref} style={{ position: 'relative' }}>
       <button
         onClick={() => setOpen(o => !o)}
         aria-label="Change language"
         style={{
-          width: 34, height: 34, borderRadius: '50%',
+          height: 34, padding: '0 12px', borderRadius: 20,
           background: 'var(--toggle-bg)', border: '0.5px solid var(--line-2)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          display: 'flex', alignItems: 'center', gap: 6,
           cursor: 'pointer', color: 'var(--w60)', flexShrink: 0,
-          transition: 'background 0.2s, transform 0.28s cubic-bezier(0.34,1.56,0.64,1)',
+          fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500,
+          letterSpacing: '0.03em', transition: 'border-color 0.2s',
         }}
-        onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.12)')}
-        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+        onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--w40)')}
+        onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--line-2)')}
       >
-        <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
           <circle cx="10" cy="10" r="8"/>
           <path d="M2 10h16"/>
           <path d="M10 2a11 11 0 0 1 3 8 11 11 0 0 1-3 8 11 11 0 0 1-3-8 11 11 0 0 1 3-8z"/>
         </svg>
+        {code}
       </button>
       {open && (
         <div style={{
@@ -64,57 +71,13 @@ function LanguagePicker() {
               fontSize: 14, fontFamily: 'var(--font-body)', cursor: 'pointer',
               color: lang === current ? 'var(--white)' : 'var(--w60)',
               fontWeight: lang === current ? 600 : 400,
-              transition: 'color 0.12s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--white)')}
-            onMouseLeave={e => (e.currentTarget.style.color = lang === current ? 'var(--white)' : 'var(--w60)')}
-            >
+            }}>
               {lang}
             </button>
           ))}
         </div>
       )}
     </div>
-  );
-}
-
-function ThemeToggle() {
-  const { theme, toggle } = useTheme();
-  const isDark = theme === 'dark';
-
-  return (
-    <button
-      className="theme-toggle"
-      onClick={toggle}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-    >
-      {/* Sun — visible in light mode */}
-      <svg
-        width="15" height="15" viewBox="0 0 20 20" fill="none"
-        style={{
-          position: 'absolute',
-          opacity: isDark ? 0 : 1,
-          transform: isDark ? 'rotate(60deg) scale(0.4)' : 'rotate(0deg) scale(1)',
-          transition: 'opacity 0.22s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        }}
-      >
-        <circle cx="10" cy="10" r="3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.1 4.1l1.4 1.4M14.5 14.5l1.4 1.4M4.1 15.9l1.4-1.4M14.5 5.5l1.4-1.4"
-          stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-      {/* Moon — visible in dark mode */}
-      <svg
-        width="14" height="14" viewBox="0 0 14 14" fill="none"
-        style={{
-          position: 'absolute',
-          opacity: isDark ? 1 : 0,
-          transform: isDark ? 'rotate(0deg) scale(1)' : 'rotate(-60deg) scale(0.4)',
-          transition: 'opacity 0.22s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        }}
-      >
-        <path d="M12 9.3A5.5 5.5 0 0 1 4.7 2a5.5 5.5 0 1 0 7.3 7.3Z" fill="currentColor" />
-      </svg>
-    </button>
   );
 }
 

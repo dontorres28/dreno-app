@@ -5,7 +5,7 @@ import Spinner from '../components/Spinner';
 import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
-import { useTheme } from '../context/ThemeContext';
+import ThemeToggle from '../components/ThemeToggle';
 import { startAuthentication } from '@simplewebauthn/browser';
 
 const LANGUAGES = Object.keys(LANGUAGE_CODES);
@@ -45,20 +45,6 @@ function LanguagePicker() {
   );
 }
 
-function ThemeToggleSmall() {
-  const { theme, toggle } = useTheme();
-  const isDark = theme === 'dark';
-  return (
-    <button onClick={toggle} aria-label="Toggle theme" style={{ width: 34, height: 34, borderRadius: '50%', background: 'var(--toggle-bg)', border: '0.5px solid var(--line-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--w60)', position: 'relative', overflow: 'hidden' }}>
-      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" style={{ position: 'absolute', opacity: isDark ? 0 : 1, transform: isDark ? 'scale(0.4)' : 'scale(1)', transition: 'opacity 0.22s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}>
-        <circle cx="10" cy="10" r="3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.1 4.1l1.4 1.4M14.5 14.5l1.4 1.4M4.1 15.9l1.4-1.4M14.5 5.5l1.4-1.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ position: 'absolute', opacity: isDark ? 1 : 0, transform: isDark ? 'scale(1)' : 'scale(0.4)', transition: 'opacity 0.22s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}>
-        <path d="M12 9.3A5.5 5.5 0 0 1 4.7 2a5.5 5.5 0 1 0 7.3 7.3Z" fill="currentColor"/>
-      </svg>
-    </button>
-  );
-}
 
 function SocialButton({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
   return (
@@ -169,7 +155,7 @@ export default function Login() {
       {/* Right form */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '3rem 2rem', position: 'relative' }}>
         <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', gap: 8 }}>
-          <LanguagePicker /><ThemeToggleSmall />
+          <LanguagePicker /><ThemeToggle />
         </div>
         <div className="md:hidden" style={{ marginBottom: '3rem' }}>
           <span style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.02em' }}>
