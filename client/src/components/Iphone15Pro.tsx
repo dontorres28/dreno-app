@@ -69,11 +69,12 @@ export const Iphone15Pro: React.FC<Iphone15ProProps> = ({
               width: '100%', height: '100%',
               borderRadius: '55.75px', overflow: 'hidden',
               position: 'relative',
-              background: 'var(--iphone-safe-area, var(--iphone-screen-bg, #111))',
+              /* Matches the top edge of the screenshot so the safe-area reads as one continuous surface */
+              background: '#F7F5F1',
               display: 'flex', flexDirection: 'column',
             }}>
               {/* Notch safe-area — pushes the screenshot below the Dynamic Island */}
-              <div style={{ height: 68, flexShrink: 0 }} />
+              <div style={{ height: 68, flexShrink: 0, background: '#F7F5F1' }} />
               <img
                 src={src}
                 alt={alt}
