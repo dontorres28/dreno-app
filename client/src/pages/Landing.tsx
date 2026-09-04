@@ -256,11 +256,12 @@ export default function Landing() {
             <p className="label" style={{ margin: 0, marginBottom: 12 }}>How it works</p>
             <h2 style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2rem, 5vw, 3.25rem)',
-              lineHeight: 1, letterSpacing: '-0.04em', fontWeight: 700,
-              maxWidth: 620,
+              fontSize: 'clamp(3rem, 9vw, 6.5rem)',
+              lineHeight: 0.92, letterSpacing: '-0.04em', fontWeight: 700,
+              maxWidth: 900,
             }}>
-              Four moves. <span style={{ color: 'var(--w60)' }}>That's it.</span>
+              From doubt<br />
+              <span style={{ color: 'var(--red)' }}>to done.</span>
             </h2>
           </div>
 
