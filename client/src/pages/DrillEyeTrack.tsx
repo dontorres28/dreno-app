@@ -21,11 +21,11 @@ interface LevelDef {
 }
 
 const LEVELS: LevelDef[] = [
-  { n: 1, name: 'Saccade',  desc: 'Snap left to right. No tracking, just snap.',       pattern: 'horizontal', totalDuration: 45, holdMs: 700, dotCount: 1 },
-  { n: 2, name: 'Cross',    desc: 'Four directions. Full range of motion.',            pattern: 'cross',      totalDuration: 60, holdMs: 520, dotCount: 1 },
-  { n: 3, name: 'Random',   desc: 'Unpredictable positions anywhere on screen.',       pattern: 'random',     totalDuration: 75, holdMs: 400, dotCount: 1 },
-  { n: 4, name: 'Split',    desc: 'Two dots moving independently. Track both.',        pattern: 'dual',       totalDuration: 90, holdMs: 480, dotCount: 2 },
-  { n: 5, name: 'Rapid',    desc: 'Fast random. Some positions blink and vanish.',     pattern: 'rapid',      totalDuration: 90, holdMs: 260, dotCount: 1, blinkChance: 0.3, blinkMs: 110 },
+  { n: 1, name: 'Saccade',  desc: 'Snap left to right. No tracking, just snap.',       pattern: 'horizontal', totalDuration: 15, holdMs: 700, dotCount: 1 },
+  { n: 2, name: 'Cross',    desc: 'Four directions. Full range of motion.',            pattern: 'cross',      totalDuration: 20, holdMs: 520, dotCount: 1 },
+  { n: 3, name: 'Random',   desc: 'Unpredictable positions anywhere on screen.',       pattern: 'random',     totalDuration: 25, holdMs: 400, dotCount: 1 },
+  { n: 4, name: 'Split',    desc: 'Two dots moving independently. Track both.',        pattern: 'dual',       totalDuration: 30, holdMs: 480, dotCount: 2 },
+  { n: 5, name: 'Rapid',    desc: 'Fast random. Some positions blink and vanish.',     pattern: 'rapid',      totalDuration: 30, holdMs: 260, dotCount: 1, blinkChance: 0.3, blinkMs: 110 },
 ];
 
 const UNLOCK_AT = 5;
