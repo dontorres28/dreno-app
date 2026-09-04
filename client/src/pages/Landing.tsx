@@ -126,7 +126,7 @@ export default function Landing() {
         <div style={{
           position: 'relative', zIndex: 10,
           maxWidth: 1120, margin: '0 auto',
-          padding: 'clamp(3rem, 8vh, 5rem) 1.5rem 0',
+          padding: 'clamp(3rem, 8vh, 5rem) 1.5rem clamp(3rem, 8vh, 6rem)',
           textAlign: 'center',
         }}>
           <AnimatedGroup
@@ -239,20 +239,6 @@ export default function Landing() {
               </motion.div>
             </div>
 
-            {/* Bottom fade — dissolves the mockup into the page */}
-            <motion.div
-              aria-hidden
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
-              style={{
-                position: 'absolute',
-                left: 0, right: 0, bottom: -2,
-                height: 'clamp(160px, 30vh, 320px)',
-                background: 'linear-gradient(to top, var(--bg) 20%, transparent 100%)',
-                pointerEvents: 'none', zIndex: 30,
-              }}
-            />
           </div>
         </div>
       </section>
