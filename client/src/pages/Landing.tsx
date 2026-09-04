@@ -112,12 +112,16 @@ export default function Landing() {
           overflow: 'hidden',
         }}
       >
-        {/* Full-viewport radial background */}
+        {/* Layered ambient gradient — soft, focused warmth behind the H1, no hot edges */}
         <div
           aria-hidden
           style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(125% 125% at 50% 10%, var(--bg) 40%, rgba(255,48,64,0.55) 100%)',
+            background: `
+              radial-gradient(ellipse 65% 45% at 50% 32%, rgba(255,48,64,0.20) 0%, transparent 70%),
+              radial-gradient(ellipse 110% 80% at 50% 15%, rgba(255,48,64,0.06) 0%, transparent 75%),
+              linear-gradient(to bottom, transparent 60%, rgba(255,48,64,0.03) 100%)
+            `,
             zIndex: 0,
           }}
         />
