@@ -35,5 +35,10 @@
   "trustedDependencies": ["esbuild"],
   "pnpm": {
     "onlyBuiltDependencies": ["esbuild"]
+  },
+  "lavamoat": {
+    "allowScripts": {
+      "esbuild": true
+    }
   }
 }
