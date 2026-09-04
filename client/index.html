@@ -20,7 +20,19 @@
     <meta name="apple-mobile-web-app-title" content="Dreno" />
 
     <!-- Theme color for Android Chrome address bar -->
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#F7F5F1" />
+
+    <!-- Set theme before paint to avoid FOUC. Default: light. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('dreno-theme');
+          document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
