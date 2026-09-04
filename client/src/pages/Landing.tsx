@@ -90,6 +90,13 @@ export default function Landing() {
           font-optical-sizing: auto;
         }
 
+        /* Mobile — stack the phone above the desktop mockup so both remain readable */
+        @media (max-width: 720px) {
+          .mockup-row { flex-direction: column-reverse !important; gap: 1.5rem !important; }
+          .mockup-row > div:first-child { width: min(680px, 90vw) !important; }
+          .mockup-row > div:last-child { width: clamp(180px, 44vw, 240px) !important; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
           .step-row { transition: opacity 200ms ease; transform: none !important; }
           .step-row[data-visible="true"] { transform: none !important; }
@@ -187,16 +194,34 @@ export default function Landing() {
             </div>
           </AnimatedGroup>
 
-          {/* Product mockup — desktop screenshot with iPhone overlaid */}
-          <div style={{ position: 'relative', width: '100%', maxWidth: 1000, margin: '0 auto', zIndex: 20 }}>
-            <div style={{ position: 'relative' }}>
-              {/* Desktop screenshot */}
+          {/* Product mockup — phone left of desktop, pair centered */}
+          <div style={{ position: 'relative', width: '100%', maxWidth: 1200, margin: '0 auto', zIndex: 20 }}>
+            <div className="mockup-row" style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              gap: 'clamp(1rem, 3vw, 2.5rem)',
+            }}>
+              {/* Phone — left */}
               <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
+                initial={{ opacity: 0, x: -30, scale: 0.94 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.7, ease: [0.23, 1, 0.32, 1] }}
+                style={{
+                  flex: '0 0 auto',
+                  width: 'clamp(180px, 22vw, 300px)',
+                  filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.35))',
+                }}
+              >
+                <Iphone15Pro src={MOBILE_SHOT} />
+              </motion.div>
+
+              {/* Desktop — right */}
+              <motion.div
+                initial={{ opacity: 0, x: 30, scale: 0.98 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
                 style={{
-                  position: 'relative', width: '100%',
+                  flex: '0 1 auto',
+                  width: 'min(820px, 70vw)',
                   borderRadius: 12, overflow: 'hidden',
                   border: '0.5px solid var(--surface-border-2)',
                   boxShadow: '0 40px 120px rgba(0,0,0,0.5), 0 12px 40px rgba(0,0,0,0.35)',
@@ -207,28 +232,9 @@ export default function Landing() {
                   src={DESKTOP_SHOT}
                   alt="Dreno on desktop"
                   loading="lazy"
-                  style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'cover', objectPosition: 'left' }}
+                  style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'cover' }}
                 />
               </motion.div>
-
-              {/* iPhone overlay */}
-              <div
-                className="iphone-wrap"
-                style={{
-                  position: 'absolute',
-                  top: '58%', left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 'clamp(140px, 18vw, 260px)',
-                }}
-              >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.7, ease: [0.23, 1, 0.32, 1] }}
-                >
-                  <Iphone15Pro src={MOBILE_SHOT} />
-                </motion.div>
-              </div>
             </div>
 
             {/* Bottom fade — dissolves the mockup into the page */}
@@ -242,7 +248,7 @@ export default function Landing() {
                 left: 0, right: 0, bottom: -2,
                 height: 'clamp(160px, 30vh, 320px)',
                 background: 'linear-gradient(to top, var(--bg) 20%, transparent 100%)',
-                pointerEvents: 'none', zIndex: 30, borderRadius: 12,
+                pointerEvents: 'none', zIndex: 30,
               }}
             />
           </div>
