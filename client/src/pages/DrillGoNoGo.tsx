@@ -12,8 +12,8 @@ const TOTAL = 15;
 const GO_COUNT = 11;
 const ROUND_SIZE = 5;
 const TOTAL_ROUNDS = TOTAL / ROUND_SIZE;
-const SHOW_MS = 800;
-const BLANK_MS = 500;
+const SHOW_MS = 1300;   // stimulus visible — long enough to read + decide, still tests inhibition
+const BLANK_MS = 700;   // clean pause between stimuli
 
 const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
 
@@ -133,21 +133,32 @@ export default function DrillGoNoGo() {
           Round {Math.floor(results.length / ROUND_SIZE) + 1} of {TOTAL_ROUNDS}
         </p>
 
-        {/* Stimulus */}
-        {phase === 'running' ? (
+        {/* Stimulus — single persistent div, animated between filled ↔ empty rest state
+             so React can never rip the DOM node out mid-frame (kills the glitch). */}
+        <div style={{
+          position: 'relative',
+          width: 180, height: 180,
+        }}>
+          {/* Rest ring — always mounted, shown when phase === 'blank' */}
           <div style={{
-            width: 180, height: 180, borderRadius: '50%',
+            position: 'absolute', inset: 0, borderRadius: '50%',
+            border: '0.5px solid var(--surface-border-2)',
+            opacity: phase === 'blank' ? 1 : 0,
+            transition: `opacity 220ms ${EASE_OUT}`,
+          }} />
+          {/* Live stimulus — always mounted, cross-fades in when running */}
+          <div style={{
+            position: 'absolute', inset: 0, borderRadius: '50%',
             background: isGo ? 'var(--white)' : 'var(--red)',
             boxShadow: isGo
               ? '0 0 80px rgba(255,255,255,0.08), 0 0 30px rgba(255,255,255,0.15) inset'
               : '0 0 80px rgba(255,48,64,0.4), 0 0 30px rgba(255,48,64,0.3) inset',
+            opacity: phase === 'running' ? 1 : 0,
+            transform: phase === 'running' ? 'scale(1)' : 'scale(0.94)',
+            transition: `opacity 220ms ${EASE_OUT}, transform 240ms ${EASE_OUT}, background 160ms ${EASE_OUT}`,
+            willChange: 'opacity, transform',
           }} />
-        ) : (
-          <div style={{
-            width: 180, height: 180, borderRadius: '50%',
-            border: '0.5px solid var(--surface-border-2)',
-          }} />
-        )}
+        </div>
 
         {/* Hint */}
         <p style={{ position: 'absolute', bottom: 40, fontSize: 11, letterSpacing: '0.14em', color: 'var(--w50)', textTransform: 'uppercase', fontWeight: 600 }}>
