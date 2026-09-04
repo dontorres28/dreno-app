@@ -1,6 +1,8 @@
 import { supabase } from './supabase';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL as string;
+// Fallback so undefined VITE_SERVER_URL doesn't blank-screen the app.
+// API calls will 404 gracefully instead of crashing at import time.
+const SERVER_URL = (import.meta.env.VITE_SERVER_URL as string | undefined) || 'https://api.dreno.app';
 
 async function getAuthHeaders(): Promise<HeadersInit> {
   const { data } = await supabase.auth.getSession();
