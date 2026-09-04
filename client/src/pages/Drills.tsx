@@ -130,7 +130,7 @@ function DrillTile({ title, subtitle, to, visual, metric, done, isNew }: DrillPr
           </p>
           <div style={{
             display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 6,
-            color: 'var(--red)', fontSize: 13.5, fontWeight: 700, letterSpacing: '-0.005em',
+            color: 'var(--white)', fontSize: 13.5, fontWeight: 700, letterSpacing: '-0.005em',
           }}>
             {isNew ? 'Start now' : 'Run again'}
             <svg width="13" height="13" viewBox="0 0 12 12" fill="none">
