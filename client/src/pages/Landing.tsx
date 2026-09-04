@@ -199,7 +199,7 @@ export default function Landing() {
           {/* Product mockup — phone left of desktop, pair centered */}
           <div style={{ position: 'relative', width: '100%', maxWidth: 1200, margin: '0 auto', zIndex: 20 }}>
             <div className="mockup-row" style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
               gap: 'clamp(1rem, 3vw, 2.5rem)',
             }}>
               {/* Phone — left */}
