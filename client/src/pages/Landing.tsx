@@ -55,6 +55,7 @@ export default function Landing() {
           --iphone-frame: #404040;
           --iphone-body: #262626;
           --iphone-screen-bg: #111;
+          --iphone-safe-area: #000;
           --iphone-notch: #0a0a0a;
           --iphone-camera: #1a1a1a;
         }
@@ -62,6 +63,7 @@ export default function Landing() {
           --iphone-frame: #DADADA;
           --iphone-body: #000;
           --iphone-screen-bg: #F5F5F5;
+          --iphone-safe-area: #F7F5F1;
           --iphone-notch: #F0F0F0;
           --iphone-camera: #D1D1D1;
         }
@@ -86,7 +88,7 @@ export default function Landing() {
           letter-spacing: -0.04em;
           line-height: 0.92;
           color: var(--red);
-          font-size: clamp(3rem, 7vw, 5rem);
+          font-size: clamp(3rem, 9vw, 6.5rem);
           font-optical-sizing: auto;
         }
 
@@ -278,7 +280,7 @@ export default function Landing() {
                 data-visible={stepsVisible}
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'clamp(72px, 12%, 108px) 1fr',
+                  gridTemplateColumns: 'clamp(96px, 15%, 140px) 1fr',
                   gap: 'clamp(1rem, 3vw, 2rem)',
                   alignItems: 'baseline',
                   padding: 'clamp(1.5rem, 3vh, 2rem) 0',
