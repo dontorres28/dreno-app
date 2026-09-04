@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from '../components/ThemeToggle';
 
 type Phase = 'intro' | 'running' | 'blank' | 'round_result' | 'done';
@@ -28,7 +29,9 @@ function buildSequence() {
 export default function DrillGoNoGo() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
+  const tapColorWord = theme === 'light' ? 'black' : 'white';
   const [phase, setPhase] = useState<Phase>('intro');
   const [idx, setIdx] = useState(0);
   const [seq, setSeq] = useState<('go' | 'nogo')[]>(buildSequence);
@@ -290,7 +293,7 @@ export default function DrillGoNoGo() {
     <Shell>
       <div style={{ textAlign: 'center', maxWidth: 460 }}>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 7vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
-          Tap white, stop on red
+          Tap {tapColorWord}, hold on red
         </h1>
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: '2.5rem', marginBottom: '2rem' }}>
