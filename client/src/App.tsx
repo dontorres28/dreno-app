@@ -67,7 +67,10 @@ export default function App() {
         />
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/preview/dashboard" element={<PreviewDashboard />} />
+          {/* Dev-only preview route for capturing the athlete dashboard screenshot; not exposed in prod builds. */}
+          {import.meta.env.DEV && (
+            <Route path="/preview/dashboard" element={<PreviewDashboard />} />
+          )}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
