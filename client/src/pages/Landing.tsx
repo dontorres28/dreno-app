@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, useReducedMotion } from 'framer-motion';
 import Layout from '../components/Layout';
 import { AnimatedGroup } from '../components/AnimatedGroup';
 import { Iphone15Pro } from '../components/Iphone15Pro';
@@ -12,6 +12,7 @@ const MOBILE_SHOT  = '/signup-mobile.png';
 
 export default function Landing() {
   const { t } = useTranslation();
+  const reduced = useReducedMotion();
   const stepsRef = useRef<HTMLDivElement>(null);
   const [stepsVisible, setStepsVisible] = useState(false);
 
@@ -38,13 +39,27 @@ export default function Landing() {
     { n: '04', title: t('landing.step4Title'), body: t('landing.step4Body') },
   ];
 
-  const heroItem: Variants = {
-    hidden: { opacity: 0, filter: 'blur(10px)', y: 20 },
-    visible: {
-      opacity: 1, filter: 'blur(0px)', y: 0,
-      transition: { type: 'spring', bounce: 0.2, duration: 1 },
-    },
-  };
+  // §4 Behavior: critically damped spring, response ~0.4. §14 Reduced motion: opacity cross-fade only.
+  const heroItem: Variants = reduced
+    ? {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.2 } },
+      }
+    : {
+        hidden: { opacity: 0, filter: 'blur(8px)', y: 16 },
+        visible: {
+          opacity: 1, filter: 'blur(0px)', y: 0,
+          transition: { type: 'spring', bounce: 0, duration: 0.5 },
+        },
+      };
+
+  const mockupBase = { transition: { type: 'spring' as const, bounce: 0, duration: 0.5 } };
+  const phoneEnter = reduced
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.2, delay: 0.15 } }
+    : { initial: { opacity: 0, x: -30, scale: 0.94 }, animate: { opacity: 1, x: 0, scale: 1 }, transition: { ...mockupBase.transition, delay: 0.35 } };
+  const desktopEnter = reduced
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.2 } }
+    : { initial: { opacity: 0, x: 30, scale: 0.98 }, animate: { opacity: 1, x: 0, scale: 1 }, transition: { ...mockupBase.transition, delay: 0.2 } };
 
   return (
     <Layout>
@@ -84,7 +99,6 @@ export default function Landing() {
         .step-row:nth-child(4)[data-visible="true"] { transition-delay: 240ms; }
         .step-num {
           font-family: var(--font-display);
-          font-weight: 700;
           letter-spacing: -0.04em;
           line-height: 0.92;
           color: var(--red);
@@ -99,9 +113,22 @@ export default function Landing() {
           .mockup-row > div:last-child { width: clamp(180px, 44vw, 240px) !important; }
         }
 
+        /* §1 Response — CTAs respond on pointer-down, not release */
+        .cta-btn {
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+          transition:
+            transform 120ms cubic-bezier(0.23, 1, 0.32, 1),
+            opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
+            background 200ms cubic-bezier(0.23, 1, 0.32, 1),
+            color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+          will-change: transform;
+        }
+        .cta-btn:active { transform: scale(0.97); transition-duration: 90ms; }
         @media (prefers-reduced-motion: reduce) {
           .step-row { transition: opacity 200ms ease; transform: none !important; }
           .step-row[data-visible="true"] { transform: none !important; }
+          .cta-btn:active { transform: none !important; }
         }
       `}</style>
 
@@ -169,34 +196,34 @@ export default function Landing() {
             }}>
               <Link
                 to="/signup"
+                className="cta-btn"
                 style={{
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                   height: 44, padding: '0 22px', borderRadius: 50,
-                  fontSize: 14, fontWeight: 700, letterSpacing: '-0.005em',
+                  fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em',
                   fontFamily: 'var(--font-body)',
                   background: 'var(--red)', color: '#fff',
                   border: '0.5px solid var(--red)', textDecoration: 'none',
                   boxShadow: '0 10px 32px rgba(255,48,64,0.28)',
-                  transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)',
                 }}
               >
                 {t('landing.signUpFree')}
               </Link>
               <Link
                 to="/login"
+                className="cta-btn"
                 style={{
-                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                   height: 44, padding: '0 18px', borderRadius: 50,
-                  fontSize: 14, fontWeight: 600, letterSpacing: '-0.005em',
+                  fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em',
                   fontFamily: 'var(--font-body)',
                   background: 'transparent', color: 'var(--w80)',
                   border: '0.5px solid var(--surface-border-2)', textDecoration: 'none',
-                  transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), color 200ms',
                 }}
               >
                 Sign in
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                  <path d="M3 2l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+                  <path d="M3.5 2.5l3.5 3.5-3.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </Link>
             </div>
@@ -210,9 +237,7 @@ export default function Landing() {
             }}>
               {/* Phone — left */}
               <motion.div
-                initial={{ opacity: 0, x: -30, scale: 0.94 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.7, ease: [0.23, 1, 0.32, 1] }}
+                {...phoneEnter}
                 style={{
                   flex: '0 0 auto',
                   width: 'clamp(180px, 22vw, 300px)',
@@ -224,9 +249,7 @@ export default function Landing() {
 
               {/* Desktop — right */}
               <motion.div
-                initial={{ opacity: 0, x: 30, scale: 0.98 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                {...desktopEnter}
                 style={{
                   flex: '0 1 auto',
                   width: 'min(820px, 70vw)',
@@ -257,7 +280,7 @@ export default function Landing() {
             <h2 style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(3rem, 9vw, 6.5rem)',
-              lineHeight: 0.92, letterSpacing: '-0.04em', fontWeight: 700,
+              lineHeight: 0.92, letterSpacing: '-0.04em',
               maxWidth: 900,
             }}>
               From doubt<br />
@@ -285,7 +308,7 @@ export default function Landing() {
                   <p style={{
                     fontFamily: 'var(--font-display)',
                     fontSize: 'clamp(1.25rem, 2.4vw, 1.75rem)',
-                    fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15,
+                    letterSpacing: '-0.025em', lineHeight: 1.15,
                     marginBottom: '0.625rem',
                   }}>
                     {s.title}
@@ -321,7 +344,7 @@ export default function Landing() {
           <h2 style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(3rem, 9vw, 6.5rem)',
-            lineHeight: 0.92, letterSpacing: '-0.04em', fontWeight: 700,
+            lineHeight: 0.92, letterSpacing: '-0.04em',
             marginBottom: '1.25rem',
           }}>
             {t('landing.ctaLine1')}{' '}
@@ -335,14 +358,14 @@ export default function Landing() {
           </p>
           <Link
             to="/signup"
+            className="cta-btn"
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               height: 46, padding: '0 26px', borderRadius: 50,
-              fontSize: 14, fontWeight: 700, letterSpacing: '-0.005em',
+              fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em',
               fontFamily: 'var(--font-body)',
               background: 'var(--red)', color: '#fff',
               border: '0.5px solid var(--red)', textDecoration: 'none',
-              transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)',
             }}
           >
             {t('landing.getStarted')}
