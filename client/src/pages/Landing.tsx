@@ -112,16 +112,18 @@ export default function Landing() {
           overflow: 'hidden',
         }}
       >
-        {/* Layered ambient gradient — soft, focused warmth behind the H1, no hot edges */}
+        {/* Layered ambient gradient — soft warmth behind the H1, fully dissipated before the section edge */}
         <div
           aria-hidden
           style={{
             position: 'absolute', inset: 0,
             background: `
               radial-gradient(ellipse 65% 45% at 50% 32%, rgba(255,48,64,0.20) 0%, transparent 70%),
-              radial-gradient(ellipse 110% 80% at 50% 15%, rgba(255,48,64,0.06) 0%, transparent 75%),
-              linear-gradient(to bottom, transparent 60%, rgba(255,48,64,0.03) 100%)
+              radial-gradient(ellipse 110% 70% at 50% 15%, rgba(255,48,64,0.06) 0%, transparent 70%)
             `,
+            /* Feather the bottom so the glow dissolves into var(--bg) before the section edge — kills the hard seam */
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 65%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, black 0%, black 65%, transparent 100%)',
             zIndex: 0,
           }}
         />
@@ -130,7 +132,7 @@ export default function Landing() {
         <div style={{
           position: 'relative', zIndex: 10,
           maxWidth: 1120, margin: '0 auto',
-          padding: 'clamp(3rem, 8vh, 5rem) 1.5rem clamp(3rem, 8vh, 6rem)',
+          padding: 'clamp(3rem, 8vh, 5rem) 1.5rem clamp(1.5rem, 3vh, 2.5rem)',
           textAlign: 'center',
         }}>
           <AnimatedGroup
@@ -203,7 +205,7 @@ export default function Landing() {
           {/* Product mockup — phone left of desktop, pair centered */}
           <div style={{ position: 'relative', width: '100%', maxWidth: 1200, margin: '0 auto', zIndex: 20 }}>
             <div className="mockup-row" style={{
-              display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
               gap: 'clamp(1rem, 3vw, 2.5rem)',
             }}>
               {/* Phone — left */}
@@ -248,7 +250,7 @@ export default function Landing() {
       </section>
 
       {/* ── How it works — editorial rows, no boxes ── */}
-      <section style={{ padding: 'clamp(3rem, 8vh, 6rem) 1.5rem clamp(4rem, 10vh, 8rem)' }}>
+      <section style={{ padding: 'clamp(2rem, 5vh, 3.5rem) 1.5rem clamp(4rem, 10vh, 8rem)' }}>
         <div style={{ maxWidth: 780, margin: '0 auto' }}>
           <div style={{ marginBottom: 'clamp(2.5rem, 6vh, 4rem)' }}>
             <p className="label" style={{ margin: 0, marginBottom: 12 }}>How it works</p>
