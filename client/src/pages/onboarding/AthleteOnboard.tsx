@@ -124,17 +124,21 @@ export default function AthleteOnboard() {
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased' }}>
       {/* Top bar */}
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
-        {step > 0 && step < TOTAL_STEPS && (
-          <button onClick={() => setStep(s => s - 1)} style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            Back
-          </button>
-        )}
-        {step < TOTAL_STEPS && (
-          <Stepper step={step} total={TOTAL_STEPS} />
-        )}
-        <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '18px 20px', flexShrink: 0 }}>
+        <div style={{ width: 72, display: 'flex', justifyContent: 'flex-start' }}>
+          {step > 0 && step < TOTAL_STEPS && (
+            <button onClick={() => setStep(s => s - 1)} aria-label="Back" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, padding: '8px 4px 8px 0', fontFamily: 'var(--font-body)', letterSpacing: '-0.005em' }}>
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Back
+            </button>
+          )}
+        </div>
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', minWidth: 0 }}>
+          {step < TOTAL_STEPS && (
+            <Stepper step={step} total={TOTAL_STEPS} />
+          )}
+        </div>
+        <div style={{ width: 72, display: 'flex', justifyContent: 'flex-end' }}>
           <ThemeToggle />
         </div>
       </div>
