@@ -176,7 +176,7 @@ export default function AthleteOnboard() {
               </div>
               <div>
                 <label className="label">Country</label>
-                <input className="input" list="countries" value={country} onChange={e => setCountry(e.target.value)} placeholder="Switzerland" style={{ fontSize: 15 }} />
+                <input className="input" list="countries" value={country} onChange={e => setCountry(e.target.value)} placeholder="e.g. Switzerland" style={{ fontSize: 15 }} />
                 <datalist id="countries">{COUNTRIES.map(c => <option key={c} value={c} />)}</datalist>
               </div>
               <div>
