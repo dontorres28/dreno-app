@@ -69,9 +69,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(sess);
       setUser(sess?.user ?? null);
       if (sess?.user) {
-        loadProfile(sess.user.id);
+        // Block gated routes until the profile has loaded — otherwise the
+        // dashboard renders with profile=null and role checks silently pass.
+        setProfile(null);
+        setLoading(true);
+        loadProfile(sess.user.id).finally(() => setLoading(false));
       } else {
         setProfile(null);
+        setLoading(false);
       }
     });
 

@@ -10,7 +10,10 @@ interface ProtectedRouteProps {
 export default function ProtectedRoute({ children, role }: ProtectedRouteProps) {
   const { user, profile, loading } = useAuth();
 
-  if (loading) {
+  // Wait for the initial auth check AND for the profile fetch when a session
+  // exists. Otherwise a just-signed-in user renders gated pages with
+  // profile=null (role checks silently pass, data hooks read undefined).
+  if (loading || (user && !profile)) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--navy)' }}>
         <Spinner size={32} />
@@ -20,7 +23,7 @@ export default function ProtectedRoute({ children, role }: ProtectedRouteProps) 
 
   if (!user) return <Navigate to="/login" replace />;
 
-  if (role && profile?.role && profile.role !== role) {
+  if (role && profile && profile.role !== role) {
     return <Navigate to="/" replace />;
   }
 
