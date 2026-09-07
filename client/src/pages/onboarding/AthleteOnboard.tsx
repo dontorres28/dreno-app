@@ -21,10 +21,22 @@ const FORMATS = [
   { key: 'either', label: 'Either',     sub: 'Whatever works for your schedule' },
 ];
 
-const TIMEZONES = [
-  'Europe/Zurich', 'Europe/London', 'America/New_York', 'America/Chicago',
-  'America/Denver', 'America/Los_Angeles', 'Asia/Tokyo', 'Australia/Sydney',
-];
+const BROWSER_TZ = (() => {
+  try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Zurich'; }
+  catch { return 'Europe/Zurich'; }
+})();
+
+const TIMEZONES: string[] = (() => {
+  try {
+    const all = (Intl as any).supportedValuesOf?.('timeZone') as string[] | undefined;
+    if (all && all.length) return all;
+  } catch {}
+  return [
+    'Europe/Zurich', 'Europe/London', 'Europe/Berlin', 'Europe/Paris',
+    'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
+    'Asia/Tokyo', 'Australia/Sydney',
+  ];
+})();
 
 const LANGUAGES = [
   'English', 'German', 'French', 'Italian', 'Spanish', 'Portuguese',
@@ -60,7 +72,7 @@ export default function AthleteOnboard() {
   const [birthDate, setBirthDate] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
   const [format, setFormat] = useState('');
-  const [timezone, setTimezone] = useState('');
+  const [timezone, setTimezone] = useState(BROWSER_TZ);
   const [languages, setLanguages] = useState<string[]>([]);
 
   function toggleChallenge(tag: string) {

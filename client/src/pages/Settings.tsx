@@ -18,11 +18,22 @@ const SPORTS = [
 
 const LEVELS = ['Youth', 'Club', 'Regional', 'National', 'Professional'];
 
-const TIMEZONES = [
-  'Europe/London', 'Europe/Zurich', 'Europe/Berlin', 'Europe/Paris',
-  'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
-  'America/Toronto', 'Australia/Sydney', 'Asia/Tokyo', 'Asia/Singapore',
-];
+const BROWSER_TZ = (() => {
+  try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Zurich'; }
+  catch { return 'Europe/Zurich'; }
+})();
+
+const TIMEZONES: string[] = (() => {
+  try {
+    const all = (Intl as any).supportedValuesOf?.('timeZone') as string[] | undefined;
+    if (all && all.length) return all;
+  } catch {}
+  return [
+    'Europe/London', 'Europe/Zurich', 'Europe/Berlin', 'Europe/Paris',
+    'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
+    'America/Toronto', 'Australia/Sydney', 'Asia/Tokyo', 'Asia/Singapore',
+  ];
+})();
 
 const FORMATS = [
   { key: 'video',  label: 'Video call' },
@@ -135,7 +146,7 @@ export default function Settings() {
           if (data) {
             setSport(data.sport ?? '');
             setLevel(data.competition_level ?? '');
-            setTimezone(data.timezone ?? '');
+            setTimezone(data.timezone || BROWSER_TZ);
             setFormat(data.session_format_pref ?? '');
           }
           const { data: userData } = await supabase.auth.getUser();
