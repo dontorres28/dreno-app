@@ -3,6 +3,18 @@ import i18n, { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 
 const LANGUAGES = Object.keys(LANGUAGE_CODES);
 
+// Autonyms — each language shown in its OWN language, so a user always
+// recognises their native language regardless of what the app currently is.
+const AUTONYM: Record<string, string> = {
+  English:    'English',
+  German:     'Deutsch',
+  French:     'Français',
+  Italian:    'Italiano',
+  Spanish:    'Español',
+  Portuguese: 'Português',
+  Dutch:      'Nederlands',
+};
+
 function codeToName(code: string) {
   return LANGUAGES.find(l => LANGUAGE_CODES[l] === code) ?? 'English';
 }
@@ -60,7 +72,7 @@ export default function LanguagePicker() {
           WebkitTapHighlightColor: 'transparent',
         }}
       >
-        {current}
+        {AUTONYM[current] ?? current}
         <svg
           width="10" height="10" viewBox="0 0 10 10" fill="none"
           style={{
@@ -120,7 +132,7 @@ export default function LanguagePicker() {
                   transition: 'background 160ms cubic-bezier(0.23, 1, 0.32, 1)',
                 }}
               >
-                <span>{lang}</span>
+                <span>{AUTONYM[lang] ?? lang}</span>
                 {isCurrent && (
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: 'var(--red)', flexShrink: 0 }} aria-hidden>
                     <path d="M2.5 6l2.5 2.5L9.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
