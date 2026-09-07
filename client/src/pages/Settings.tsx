@@ -252,7 +252,20 @@ export default function Settings() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 620, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
+      {/* Global accessibility + tactile polish for this page's inputs & pills.
+          §14 focus-visible for keyboard nav, §1 :active for pointer response. */}
+      <style>{`
+        .settings-form input:focus-visible,
+        .settings-form select:focus-visible {
+          outline: 1.5px solid var(--red);
+          outline-offset: 2px;
+          border-radius: 4px;
+        }
+        .lang-chip { transition: background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms cubic-bezier(0.23, 1, 0.32, 1), color 200ms cubic-bezier(0.23, 1, 0.32, 1), transform 90ms cubic-bezier(0.4, 0, 1, 1); }
+        .lang-chip:active { transform: scale(0.97); }
+        @media (prefers-reduced-motion: reduce) { .lang-chip { transition: background 160ms ease, border-color 160ms ease, color 160ms ease !important; } .lang-chip:active { transform: none !important; } }
+      `}</style>
+      <div className="settings-form" style={{ maxWidth: 620, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
           {t('settings.title')}
         </h1>
@@ -374,11 +387,11 @@ export default function Settings() {
                   {level && !LEVELS.includes(level) && <option value={level}>{level}</option>}
                 </select>
               </Row>
-              <Row label="Country">
-                <input list="country-list" value={country} onChange={e => setCountry(e.target.value)} placeholder={t('common.select')} style={inputStyle} />
+              <Row label={t('settings.country')}>
+                <input list="country-list" value={country} onChange={e => setCountry(e.target.value)} placeholder="e.g. Switzerland" style={inputStyle} />
                 <datalist id="country-list">{COUNTRIES.map(c => <option key={c} value={c} />)}</datalist>
               </Row>
-              <Row label="Date of birth">
+              <Row label={t('settings.dob')}>
                 <input type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} style={{ ...inputStyle, maxWidth: 180 }} />
               </Row>
               <Row label={t('settings.timezone')}>
@@ -395,18 +408,18 @@ export default function Settings() {
               </Row>
             </Section>
 
-            <Section title="Languages for sessions">
+            <Section title={t('settings.languages')}>
               <div style={{ padding: '15px 18px', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {LANGUAGES.map(l => {
                   const on = languages.includes(l);
                   return (
-                    <button key={l} onClick={() => toggleLanguage(l)} type="button" style={{
+                    <button key={l} onClick={() => toggleLanguage(l)} type="button" className="lang-chip" style={{
                       padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 600,
                       cursor: 'pointer', fontFamily: 'var(--font-body)',
+                      WebkitTapHighlightColor: 'transparent',
                       background: on ? 'var(--red)' : 'transparent',
                       border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
                       color: on ? '#fff' : 'var(--w80)',
-                      transition: 'background 0.15s, border-color 0.15s, color 0.15s',
                     }}>{l}</button>
                   );
                 })}
@@ -445,8 +458,8 @@ export default function Settings() {
               }}
             >
               {theme === 'dark' ? t('settings.dark') : t('settings.light')}
-              <span style={{ width: 40, height: 24, borderRadius: 50, background: theme === 'dark' ? 'var(--red)' : 'var(--surface-2)', position: 'relative', display: 'inline-block', flexShrink: 0, transition: 'background 220ms cubic-bezier(0.23, 1, 0.32, 1)' }}>
-                <span style={{ width: 18, height: 18, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: 3, transform: `translateX(${theme === 'dark' ? 16 : 0}px)`, transition: 'transform 260ms cubic-bezier(0.4, 0, 0.2, 1)', display: 'block', boxShadow: '0 1px 2px rgba(0,0,0,0.15)' }} />
+              <span style={{ width: 40, height: 24, borderRadius: 50, background: theme === 'dark' ? 'var(--red)' : 'var(--surface-2)', position: 'relative', display: 'inline-block', flexShrink: 0, transition: 'background 260ms cubic-bezier(0.32, 0.72, 0, 1)' }}>
+                <span style={{ width: 18, height: 18, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: 3, transform: `translateX(${theme === 'dark' ? 16 : 0}px)`, transition: 'transform 260ms cubic-bezier(0.32, 0.72, 0, 1)', display: 'block', boxShadow: '0 1px 2px rgba(0,0,0,0.15)' }} />
               </span>
             </button>
           </Row>

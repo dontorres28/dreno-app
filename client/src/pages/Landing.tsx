@@ -119,12 +119,18 @@ export default function Landing() {
           touch-action: manipulation;
           transition:
             transform 120ms cubic-bezier(0.23, 1, 0.32, 1),
+            box-shadow 120ms cubic-bezier(0.23, 1, 0.32, 1),
             opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
             background 200ms cubic-bezier(0.23, 1, 0.32, 1),
             color 200ms cubic-bezier(0.23, 1, 0.32, 1);
           will-change: transform;
         }
-        .cta-btn:active { transform: scale(0.97); transition-duration: 90ms; }
+        .cta-btn:active {
+          transform: scale(0.97);
+          transition-duration: 90ms;
+          /* Cut the lift-shadow when pressed — a real button loses shadow under load */
+          box-shadow: 0 4px 12px rgba(255, 48, 64, 0.18) !important;
+        }
         @media (prefers-reduced-motion: reduce) {
           .step-row { transition: opacity 200ms ease; transform: none !important; }
           .step-row[data-visible="true"] { transform: none !important; }

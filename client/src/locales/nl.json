@@ -209,7 +209,10 @@
     "coachProfile": "Coachprofiel",
     "editProfile": "Bewerk je openbare profiel",
     "open": "Openen",
-    "saved": "Saved."
+    "saved": "Saved.",
+    "country": "Land",
+    "dob": "Geboortedatum",
+    "languages": "Talen voor sessies"
   },
   "drills": {
     "title": "Oefeningen",

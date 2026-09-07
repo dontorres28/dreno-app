@@ -209,7 +209,10 @@
     "coachProfile": "Perfil de entrenador",
     "editProfile": "Edita tu perfil público",
     "open": "Abrir",
-    "saved": "Saved."
+    "saved": "Saved.",
+    "country": "País",
+    "dob": "Fecha de nacimiento",
+    "languages": "Idiomas para las sesiones"
   },
   "drills": {
     "title": "Ejercicios",

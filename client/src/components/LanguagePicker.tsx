@@ -90,29 +90,36 @@ export default function LanguagePicker() {
           @media (prefers-reduced-motion: reduce) { .lang-pill:active { transform: none; } }
         `}</style>
       </button>
-      {open && (
-        <div
-          role="listbox"
-          className="lang-menu"
-          style={{
-            position: 'absolute', top: 42, right: 0, zIndex: 200,
-            background: 'var(--bg)',
-            border: '0.5px solid var(--surface-border-2)',
-            borderRadius: 16, padding: 6, minWidth: 180,
-            boxShadow: '0 20px 48px rgba(0,0,0,0.32)',
-            maxHeight: 320, overflowY: 'auto',
-            transformOrigin: 'top right',
-            animation: 'langMenuRise 200ms cubic-bezier(0.23, 1, 0.32, 1)',
-          }}
-        >
-          <style>{`
-            @keyframes langMenuRise {
-              from { opacity: 0; transform: translateY(-4px) scale(0.98); }
-              to   { opacity: 1; transform: translateY(0) scale(1); }
-            }
-            .lang-item:hover { background: var(--surface-2); }
-          `}</style>
-          {LANGUAGES.map(lang => {
+      <div
+        role="listbox"
+        aria-hidden={!open}
+        className="lang-menu"
+        data-open={open}
+        style={{
+          position: 'absolute', top: 42, right: 0, zIndex: 200,
+          background: 'var(--bg)',
+          border: '0.5px solid var(--surface-border-2)',
+          borderRadius: 16, padding: 6, minWidth: 180,
+          boxShadow: '0 20px 48px rgba(0,0,0,0.32)',
+          transformOrigin: 'top right',
+          opacity: open ? 1 : 0,
+          transform: open ? 'translateY(0) scale(1)' : 'translateY(-4px) scale(0.98)',
+          pointerEvents: open ? 'auto' : 'none',
+          transition:
+            'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),' +
+            ' transform 200ms cubic-bezier(0.23, 1, 0.32, 1)',
+          willChange: 'opacity, transform',
+        }}
+      >
+        <style>{`
+          .lang-item:hover { background: var(--surface-2); }
+          .lang-item:active { transform: scale(0.97); transition: transform 90ms cubic-bezier(0.4, 0, 1, 1); }
+          @media (prefers-reduced-motion: reduce) {
+            .lang-menu { transition: opacity 160ms ease !important; transform: none !important; }
+            .lang-item:active { transform: none !important; }
+          }
+        `}</style>
+        {open && LANGUAGES.map(lang => {
             const isCurrent = lang === current;
             return (
               <button
@@ -141,8 +148,7 @@ export default function LanguagePicker() {
               </button>
             );
           })}
-        </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -15,7 +15,11 @@ export default function ProtectedRoute({ children, role }: ProtectedRouteProps) 
   // profile=null (role checks silently pass, data hooks read undefined).
   if (loading || (user && !profile)) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--navy)' }}>
+      <div style={{
+        minHeight: '100dvh',
+        background: 'var(--bg)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
         <Spinner size={32} />
       </div>
     );

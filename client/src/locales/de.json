@@ -208,7 +208,10 @@
     "saved": "Gespeichert.",
     "coachProfile": "Trainerprofil",
     "editProfile": "Öffentliches Profil bearbeiten",
-    "open": "Öffnen"
+    "open": "Öffnen",
+    "country": "Land",
+    "dob": "Geburtsdatum",
+    "languages": "Sprachen für Sessions"
   },
   "drills": {
     "title": "Übungen",

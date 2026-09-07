@@ -208,7 +208,10 @@
     "saved": "Saved.",
     "coachProfile": "Coach profile",
     "editProfile": "Edit your public profile",
-    "open": "Open"
+    "open": "Open",
+    "country": "Country",
+    "dob": "Date of birth",
+    "languages": "Languages for sessions"
   },
   "drills": {
     "title": "Train",
