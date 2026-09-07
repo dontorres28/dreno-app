@@ -106,11 +106,13 @@ export default function Landing() {
           font-optical-sizing: auto;
         }
 
-        /* Mobile — stack the phone above the desktop mockup so both remain readable */
+        /* Mobile — the desktop mockup adds nothing on a phone-sized viewport
+           (illegible at 375px wide anyway). Drop it, and keep only the phone
+           mockup at a comfortable ~220px so the hero copy carries the frame. */
         @media (max-width: 720px) {
-          .mockup-row { flex-direction: column-reverse !important; gap: 1.5rem !important; }
-          .mockup-row > div:first-child { width: min(680px, 90vw) !important; }
-          .mockup-row > div:last-child { width: clamp(180px, 44vw, 240px) !important; }
+          .mockup-row { gap: 0 !important; }
+          .mockup-desktop { display: none !important; }
+          .mockup-phone { width: clamp(200px, 58vw, 260px) !important; }
         }
 
         /* §1 Response — CTAs respond on pointer-down, not release */
@@ -241,9 +243,10 @@ export default function Landing() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               gap: 'clamp(1rem, 3vw, 2.5rem)',
             }}>
-              {/* Phone — left */}
+              {/* Phone — left (and the ONLY mockup on mobile) */}
               <motion.div
                 {...phoneEnter}
+                className="mockup-phone"
                 style={{
                   flex: '0 0 auto',
                   width: 'clamp(180px, 22vw, 300px)',
@@ -253,9 +256,10 @@ export default function Landing() {
                 <Iphone15Pro src={MOBILE_SHOT} />
               </motion.div>
 
-              {/* Desktop — right */}
+              {/* Desktop — right, hidden on mobile (illegible at 375px) */}
               <motion.div
                 {...desktopEnter}
+                className="mockup-desktop"
                 style={{
                   flex: '0 1 auto',
                   width: 'min(820px, 70vw)',
@@ -268,7 +272,11 @@ export default function Landing() {
                 <img
                   src={DESKTOP_SHOT}
                   alt="Dreno on desktop"
-                  loading="lazy"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  width={1366}
+                  height={986}
                   style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'cover' }}
                 />
               </motion.div>

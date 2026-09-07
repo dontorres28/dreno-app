@@ -3,7 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dreno</title>
+
+    <!-- SEO -->
+    <title>Dreno — Mental performance coaches for athletes</title>
+    <meta name="description" content="Book one-on-one sessions with vetted mental performance coaches. Focus, confidence, pressure — the part of the game you can't practice alone." />
+    <link rel="canonical" href="https://dreno-app.vercel.app/" />
+
+    <!-- Open Graph — link previews on iMessage, WhatsApp, Slack, LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Dreno" />
+    <meta property="og:title" content="Dreno — Mental performance coaches for athletes" />
+    <meta property="og:description" content="Book one-on-one sessions with vetted mental performance coaches. Focus, confidence, pressure — the part of the game you can't practice alone." />
+    <meta property="og:url" content="https://dreno-app.vercel.app/" />
+    <meta property="og:image" content="https://dreno-app.vercel.app/dashboard-desktop.png" />
+    <meta property="og:image:width" content="1366" />
+    <meta property="og:image:height" content="986" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dreno — Mental performance coaches for athletes" />
+    <meta name="twitter:description" content="Book one-on-one sessions with vetted mental performance coaches. The part of the game you can't practice alone." />
+    <meta name="twitter:image" content="https://dreno-app.vercel.app/dashboard-desktop.png" />
+
+    <!-- Perf: warm up TLS for Supabase before its JS chunk parses -->
+    <link rel="preconnect" href="https://rsoncepevfkwthozudkx.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://rsoncepevfkwthozudkx.supabase.co" />
+
+    <!-- Perf: hero mockup is above-the-fold on desktop — start it immediately -->
+    <link rel="preload" as="image" href="/dashboard-desktop.png" fetchpriority="high" media="(min-width: 721px)" />
+    <link rel="preload" as="image" href="/signup-mobile.png" fetchpriority="high" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
@@ -21,6 +49,26 @@
 
     <!-- Theme color for Android Chrome address bar -->
     <meta name="theme-color" content="#F7F5F1" />
+
+    <!-- Structured data — Organization + WebSite for search results -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "Dreno",
+            "url": "https://dreno-app.vercel.app/",
+            "logo": "https://dreno-app.vercel.app/icon.svg"
+          },
+          {
+            "@type": "WebSite",
+            "name": "Dreno",
+            "url": "https://dreno-app.vercel.app/"
+          }
+        ]
+      }
+    </script>
 
     <!-- Set theme before paint to avoid FOUC. Default: light. -->
     <script>
