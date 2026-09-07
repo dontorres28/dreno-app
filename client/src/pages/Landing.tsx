@@ -298,13 +298,13 @@ export default function Landing() {
                   display: 'grid',
                   gridTemplateColumns: 'clamp(96px, 15%, 140px) 1fr',
                   gap: 'clamp(1rem, 3vw, 2rem)',
-                  alignItems: 'baseline',
+                  alignItems: 'center',
                   padding: 'clamp(1.5rem, 3vh, 2rem) 0',
                   borderTop: i === 0 ? 'none' : '0.5px solid var(--surface-border-2)',
                 }}
               >
                 <span className="step-num">{s.n}</span>
-                <div style={{ minWidth: 0, paddingTop: 4 }}>
+                <div style={{ minWidth: 0 }}>
                   <p style={{
                     fontFamily: 'var(--font-display)',
                     fontSize: 'clamp(1.25rem, 2.4vw, 1.75rem)',
