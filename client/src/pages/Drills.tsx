@@ -327,7 +327,7 @@ export default function Drills() {
                 )}
                 <div style={{ display: 'flex', gap: 6 }}>
                   {drills.map(d => (
-                    <Tooltip key={d.key} label={`${d.label} · ${doneTodaySet.has(d.key) ? 'done today' : 'not yet'}`} side="top">
+                    <Tooltip key={d.key} label={`${d.label} — ${doneTodaySet.has(d.key) ? 'done today' : 'not yet'}`} side="top">
                       <span style={{
                         display: 'inline-block',
                         width: 34, height: 6, borderRadius: 6,

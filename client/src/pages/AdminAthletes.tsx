@@ -110,7 +110,7 @@ export default function AdminAthletes() {
           <p style={{ fontSize: 14, color: 'var(--w70)', letterSpacing: '-0.005em' }}>
             {members.length === 0
               ? 'Invite your first athlete below.'
-              : `${members.length} total · ${activeCount} active · ${pendingCount} pending`}
+              : `${members.length} total — ${activeCount} active — ${pendingCount} pending`}
           </p>
         </div>
 

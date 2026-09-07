@@ -338,7 +338,7 @@ export default function DrillEyeTrack() {
   // ── Brief (per-level explanation before start) ────────────────────────────
   if (phase === 'brief') {
     return (
-      <Shell title={`Level ${level.n} · ${level.name}`} onBack={() => setPhase('select')}>
+      <Shell title={`Level ${level.n} — ${level.name}`} onBack={() => setPhase('select')}>
         <div style={{ textAlign: 'center', maxWidth: 460 }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
             Follow the dot with your eyes

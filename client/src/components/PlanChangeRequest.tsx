@@ -38,7 +38,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
     const body = [
       `Organization: ${orgName ?? '(unnamed)'}`,
       `Current plan: ${currentTier.charAt(0).toUpperCase() + currentTier.slice(1)}`,
-      `Requested plan: ${tier?.label ?? targetTier} · ${tier?.desc ?? ''}`,
+      `Requested plan: ${tier?.label ?? targetTier} — ${tier?.desc ?? ''}`,
       `Billing: ${billing === 'annual' ? 'Annual (15% off)' : 'Monthly'}`,
       '',
       note.trim() ? `Note:\n${note.trim()}` : '',
@@ -210,7 +210,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
             <LayoutGroup id="plan-billing">
               {[
                 { key: 'monthly' as const, label: 'Monthly' },
-                { key: 'annual' as const,  label: 'Annual · 15% off' },
+                { key: 'annual' as const,  label: 'Annual — 15% off' },
               ].map(b => {
                 const on = billing === b.key;
                 return (
@@ -266,7 +266,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
         {/* Recipient hint */}
         <p style={{ fontSize: 12, color: 'var(--w60)', letterSpacing: '-0.005em', textAlign: 'center', lineHeight: 1.5 }}>
           Sent to <span style={{ color: 'var(--w70)', fontWeight: 600 }}>hello@dreno.app</span>
-          {contactEmail ? <> · we'll reply to <span style={{ color: 'var(--w70)', fontWeight: 600 }}>{contactEmail}</span></> : null}
+          {contactEmail ? <> — we'll reply to <span style={{ color: 'var(--w70)', fontWeight: 600 }}>{contactEmail}</span></> : null}
         </p>
 
         {/* Actions */}

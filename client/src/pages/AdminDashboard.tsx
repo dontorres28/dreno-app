@@ -196,7 +196,7 @@ export default function AdminDashboard() {
                   {stats.active}
                 </p>
                 <p style={{ fontSize: 13, color: 'var(--w60)', letterSpacing: '-0.005em' }}>
-                  active{stats.pending > 0 ? ` · ${stats.pending} pending` : ''}
+                  active{stats.pending > 0 ? ` — ${stats.pending} pending` : ''}
                 </p>
               </div>
               <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em' }}>

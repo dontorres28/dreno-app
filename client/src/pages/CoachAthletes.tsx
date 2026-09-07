@@ -90,7 +90,7 @@ export default function CoachAthletes() {
           <p style={{ fontSize: 14, color: 'var(--w70)', letterSpacing: '-0.005em' }}>
             {athletes.length === 0
               ? 'No athletes yet.'
-              : `${athletes.length} total · ${activeCount} active · ${pastCount} past`}
+              : `${athletes.length} total — ${activeCount} active — ${pastCount} past`}
           </p>
         </div>
 
@@ -231,12 +231,12 @@ export default function CoachAthletes() {
                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                         marginBottom: 2,
                       }}>
-                        {meta.join(' · ')}
+                        {meta.join(' — ')}
                       </p>
                     )}
                     <p style={{ fontSize: 11, color: 'var(--w60)', letterSpacing: '-0.005em' }}>
                       {a.latest_booking_at
-                        ? `${isActive ? 'Next' : 'Last'} · ${lastSessionLabel(a.latest_booking_at)}`
+                        ? `${isActive ? 'Next' : 'Last'} — ${lastSessionLabel(a.latest_booking_at)}`
                         : 'No sessions yet'}
                     </p>
                   </div>

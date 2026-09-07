@@ -329,8 +329,8 @@ export default function Messages() {
                     </div>
                     <p style={{ fontSize: 12, color: 'var(--w60)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {new Date(t.starts_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                      {t.duration_min ? ` · ${t.duration_min}min` : ''}
-                      {' · '}
+                      {t.duration_min ? ` — ${t.duration_min}min` : ''}
+                      {' — '}
                       {t.status === 'completed' ? 'Completed' : 'Confirmed'}
                     </p>
                   </div>
@@ -381,7 +381,7 @@ export default function Messages() {
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--w60)' }}>
                   {sessionLabel(active.starts_at)}
-                  {active.duration_min ? ` · ${active.duration_min} ${t('messages.min')}` : ''}
+                  {active.duration_min ? ` — ${active.duration_min} ${t('messages.min')}` : ''}
                 </p>
               </div>
               {active.status === 'confirmed' && (

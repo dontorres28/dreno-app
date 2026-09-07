@@ -214,7 +214,7 @@ export default function CoachAthleteHub() {
               </h1>
               {metaBits.length > 0 && (
                 <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em' }}>
-                  {metaBits.join(' · ')}
+                  {metaBits.join(' — ')}
                 </p>
               )}
             </div>
@@ -269,7 +269,7 @@ export default function CoachAthleteHub() {
                 letterSpacing: '-0.02em', color: '#fff', lineHeight: 1.1,
               }}>
                 {new Date(upcomingSession.starts_at).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' })}
-                {' · '}
+                {' — '}
                 {new Date(upcomingSession.starts_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>

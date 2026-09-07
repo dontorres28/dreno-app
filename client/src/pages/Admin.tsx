@@ -145,7 +145,7 @@ export default function Admin() {
           <p style={{ fontSize: 14, color: 'var(--w70)', letterSpacing: '-0.005em' }}>
             {coaches.length === 0
               ? 'No coach applications yet.'
-              : `${pending.length} pending · ${verified.length} verified · ${rejected.length} rejected`}
+              : `${pending.length} pending — ${verified.length} verified — ${rejected.length} rejected`}
           </p>
         </div>
 

@@ -404,7 +404,7 @@ export default function Journal() {
                 <circle cx="4.5" cy="5.5" r="0.75" fill="currentColor"/>
                 <circle cx="8.5" cy="5.5" r="0.75" fill="currentColor"/>
               </svg>
-              {showScales ? `Mood ${mood}  ·  Energy ${energy}` : 'Add mood + energy'}
+              {showScales ? `Mood ${mood}  —  Energy ${energy}` : 'Add mood + energy'}
             </button>
             <div style={{
               overflow: 'hidden',

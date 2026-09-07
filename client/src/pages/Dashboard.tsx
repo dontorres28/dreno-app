@@ -98,7 +98,7 @@ function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
       {/* Week — one round chip per day, richer visual */}
       <div style={{ display: 'flex', gap: 8, position: 'relative', marginBottom: 4 }}>
         {days.map((d, i) => (
-          <Tooltip key={i} label={d.done ? `Trained · ${d.date}` : d.isToday ? "Today · nothing yet" : `Rest · ${d.date}`} side="top">
+          <Tooltip key={i} label={d.done ? `Trained — ${d.date}` : d.isToday ? "Today — nothing yet" : `Rest — ${d.date}`} side="top">
             <div style={{
               flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
               cursor: 'help',
@@ -290,7 +290,7 @@ export default function Dashboard() {
               </p>
               <p style={{ fontSize: 13, color: 'var(--w70)' }}>
                 {sessionDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
-                {' · '}
+                {' — '}
                 {sessionDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>

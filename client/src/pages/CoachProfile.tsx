@@ -186,7 +186,7 @@ export default function CoachProfile() {
             {rebookStats?.rebook_rate !== null && rebookStats?.rebook_rate !== undefined ? (
               <Tooltip label="Athletes who came back after their first session" side="bottom">
                 <span style={{ fontSize: 12, color: 'var(--w70)', fontWeight: 500, cursor: 'help' }}>
-                  {rebookStats.sessions_total} {rebookStats.sessions_total !== 1 ? t('coaches.sessions') : t('coaches.session')} · {rebookStats.rebook_rate}% {t('coaches.rebookRate')}
+                  {rebookStats.sessions_total} {rebookStats.sessions_total !== 1 ? t('coaches.sessions') : t('coaches.session')} — {rebookStats.rebook_rate}% {t('coaches.rebookRate')}
                 </span>
               </Tooltip>
             ) : rebookStats !== null ? (

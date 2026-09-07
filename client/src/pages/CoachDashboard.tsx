@@ -112,7 +112,7 @@ function WeekHero({ confirmedThisWeek, uniqueAthletes, profilePct, bookings }: {
       {/* Week strip */}
       <div style={{ display: 'flex', gap: 8, position: 'relative', marginBottom: 4 }}>
         {days.map((d, i) => (
-          <Tooltip key={i} label={d.booked ? `Session · ${d.date}` : d.isToday ? "Today · nothing yet" : `Free · ${d.date}`} side="top">
+          <Tooltip key={i} label={d.booked ? `Session — ${d.date}` : d.isToday ? "Today — nothing yet" : `Free — ${d.date}`} side="top">
             <div style={{
               flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
               cursor: 'help',
@@ -293,7 +293,7 @@ export default function CoachDashboard() {
               </p>
               <p style={{ fontSize: 13, color: 'var(--w70)' }}>
                 {sessionDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
-                {' · '}
+                {' — '}
                 {sessionDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
@@ -350,7 +350,7 @@ export default function CoachDashboard() {
             borderRadius: 22, padding: '1.5rem 1.75rem', marginBottom: '1rem',
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>Athlete feedback · 30d</p>
+              <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>Athlete feedback — 30d</p>
               <p style={{ fontSize: 12, color: 'var(--w60)', letterSpacing: '0.02em' }}>{checkInAgg.response_count_30d} responses</p>
             </div>
             <div style={{ display: 'flex', gap: '1.75rem', flexWrap: 'wrap' }}>
@@ -414,7 +414,7 @@ export default function CoachDashboard() {
                       </p>
                       <p style={{ fontSize: 12, color: 'var(--w70)', marginTop: 2 }}>
                         {new Date(b.starts_at).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
-                        {' · '}
+                        {' — '}
                         {new Date(b.starts_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
