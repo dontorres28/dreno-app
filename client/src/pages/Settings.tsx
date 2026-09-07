@@ -16,9 +16,7 @@ const SPORTS = [
   'Gymnastics', 'Rowing', 'Volleyball', 'Baseball', 'Golf', 'Other',
 ];
 
-const LEVELS = [
-  'Recreational', 'Club', 'Regional', 'National', 'Professional', 'Elite',
-];
+const LEVELS = ['Youth', 'Club', 'Regional', 'National', 'Professional'];
 
 const TIMEZONES = [
   'Europe/London', 'Europe/Zurich', 'Europe/Berlin', 'Europe/Paris',
@@ -27,8 +25,8 @@ const TIMEZONES = [
 ];
 
 const FORMATS = [
-  { key: 'video', label: 'Video call' },
-  { key: 'in_person', label: 'In person' },
+  { key: 'video',  label: 'Video call' },
+  { key: 'phone',  label: 'Phone call' },
   { key: 'either', label: 'Either' },
 ];
 
@@ -37,6 +35,14 @@ const LANGUAGES = [
   'Dutch', 'Polish', 'Swedish', 'Norwegian', 'Danish', 'Finnish',
   'Romanian', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese',
   'Korean', 'Hindi',
+];
+
+const COUNTRIES = [
+  'Switzerland', 'Germany', 'Austria', 'France', 'Italy', 'United Kingdom',
+  'United States', 'Canada', 'Australia', 'Netherlands', 'Belgium', 'Spain',
+  'Portugal', 'Sweden', 'Norway', 'Denmark', 'Finland', 'Poland', 'Czech Republic',
+  'Hungary', 'Romania', 'Russia', 'Turkey', 'Japan', 'South Korea', 'Brazil',
+  'Argentina', 'South Africa', 'New Zealand', 'Ireland',
 ];
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -110,7 +116,9 @@ export default function Settings() {
   const [level, setLevel] = useState('');
   const [timezone, setTimezone] = useState('');
   const [format, setFormat] = useState('');
-  const [language, setLanguage] = useState('');
+  const [languages, setLanguages] = useState<string[]>([]);
+  const [country, setCountry] = useState('');
+  const [birthDate, setBirthDate] = useState('');
 
   useEffect(() => {
     if (!user || !profile) return;
@@ -131,13 +139,24 @@ export default function Settings() {
             setFormat(data.session_format_pref ?? '');
           }
           const { data: userData } = await supabase.auth.getUser();
-          setLanguage(userData?.user?.user_metadata?.language ?? '');
+          const meta = userData?.user?.user_metadata ?? {};
+          // Accept both new array shape (languages) and legacy singular (language)
+          const langArr = Array.isArray(meta.languages)
+            ? meta.languages
+            : (meta.language ? [meta.language] : []);
+          setLanguages(langArr);
+          setCountry(meta.country ?? '');
+          setBirthDate(meta.birth_date ?? '');
           setLoading(false);
         });
     } else {
       setLoading(false);
     }
   }, [user, profile]);
+
+  function toggleLanguage(l: string) {
+    setLanguages(prev => prev.includes(l) ? prev.filter(x => x !== l) : [...prev, l]);
+  }
 
   async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -191,9 +210,17 @@ export default function Settings() {
             }).eq('id', user.id)
           ),
         );
-        if (language) {
-          promises.push(supabase.auth.updateUser({ data: { language } }).then(() => setLanguageFromPreference(language)));
-        }
+        promises.push(
+          supabase.auth.updateUser({
+            data: {
+              languages,
+              country: country || null,
+              birth_date: birthDate || null,
+            },
+          }).then(() => {
+            if (languages[0]) setLanguageFromPreference(languages[0]);
+          }),
+        );
       }
 
       await Promise.all(promises);
@@ -323,38 +350,61 @@ export default function Settings() {
 
         {/* Athlete-specific */}
         {!isCoach && (
-          <Section title={t('settings.trainingProfile')}>
-            <Row label={t('settings.sport')}>
-              <select value={sport} onChange={e => setSport(e.target.value)} style={selectStyle}>
-                <option value="">{t('common.select')}</option>
-                {SPORTS.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </Row>
-            <Row label={t('settings.level')}>
-              <select value={level} onChange={e => setLevel(e.target.value)} style={selectStyle}>
-                <option value="">{t('common.select')}</option>
-                {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-              </select>
-            </Row>
-            <Row label={t('settings.timezone')}>
-              <select value={timezone} onChange={e => setTimezone(e.target.value)} style={selectStyle}>
-                <option value="">{t('common.select')}</option>
-                {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>)}
-              </select>
-            </Row>
-            <Row label={t('settings.sessionFormat')}>
-              <select value={format} onChange={e => setFormat(e.target.value)} style={selectStyle}>
-                <option value="">{t('common.select')}</option>
-                {FORMATS.map(f => <option key={f.key} value={f.key}>{f.label}</option>)}
-              </select>
-            </Row>
-            <Row label={t('settings.preferredLanguage')} border={false}>
-              <select value={language} onChange={e => setLanguage(e.target.value)} style={selectStyle}>
-                <option value="">{t('common.select')}</option>
-                {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
-              </select>
-            </Row>
-          </Section>
+          <>
+            <Section title={t('settings.trainingProfile')}>
+              <Row label={t('settings.sport')}>
+                <select value={sport} onChange={e => setSport(e.target.value)} style={selectStyle}>
+                  <option value="">{t('common.select')}</option>
+                  {SPORTS.map(s => <option key={s} value={s}>{s}</option>)}
+                  {sport && !SPORTS.includes(sport) && <option value={sport}>{sport}</option>}
+                </select>
+              </Row>
+              <Row label={t('settings.level')}>
+                <select value={level} onChange={e => setLevel(e.target.value)} style={selectStyle}>
+                  <option value="">{t('common.select')}</option>
+                  {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+                  {level && !LEVELS.includes(level) && <option value={level}>{level}</option>}
+                </select>
+              </Row>
+              <Row label="Country">
+                <input list="country-list" value={country} onChange={e => setCountry(e.target.value)} placeholder={t('common.select')} style={inputStyle} />
+                <datalist id="country-list">{COUNTRIES.map(c => <option key={c} value={c} />)}</datalist>
+              </Row>
+              <Row label="Date of birth">
+                <input type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} style={{ ...inputStyle, maxWidth: 180 }} />
+              </Row>
+              <Row label={t('settings.timezone')}>
+                <select value={timezone} onChange={e => setTimezone(e.target.value)} style={selectStyle}>
+                  <option value="">{t('common.select')}</option>
+                  {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>)}
+                </select>
+              </Row>
+              <Row label={t('settings.sessionFormat')} border={false}>
+                <select value={format} onChange={e => setFormat(e.target.value)} style={selectStyle}>
+                  <option value="">{t('common.select')}</option>
+                  {FORMATS.map(f => <option key={f.key} value={f.key}>{f.label}</option>)}
+                </select>
+              </Row>
+            </Section>
+
+            <Section title="Languages for sessions">
+              <div style={{ padding: '15px 18px', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {LANGUAGES.map(l => {
+                  const on = languages.includes(l);
+                  return (
+                    <button key={l} onClick={() => toggleLanguage(l)} type="button" style={{
+                      padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 600,
+                      cursor: 'pointer', fontFamily: 'var(--font-body)',
+                      background: on ? 'var(--red)' : 'transparent',
+                      border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
+                      color: on ? '#fff' : 'var(--w80)',
+                      transition: 'background 0.15s, border-color 0.15s, color 0.15s',
+                    }}>{l}</button>
+                  );
+                })}
+              </div>
+            </Section>
+          </>
         )}
 
         {/* Coach shortcut */}

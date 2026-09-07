@@ -16,9 +16,9 @@ const CHALLENGES = [
 const LEVELS = ['Youth', 'Club', 'Regional', 'National', 'Professional'];
 
 const FORMATS = [
-  { label: 'Video call', sub: 'Remote sessions via the platform' },
-  { label: 'Phone call', sub: 'Audio only, no camera needed' },
-  { label: 'Either', sub: 'Whatever works for your schedule' },
+  { key: 'video',  label: 'Video call', sub: 'Remote sessions via the platform' },
+  { key: 'phone',  label: 'Phone call', sub: 'Audio only, no camera needed' },
+  { key: 'either', label: 'Either',     sub: 'Whatever works for your schedule' },
 ];
 
 const TIMEZONES = [
@@ -81,7 +81,7 @@ export default function AthleteOnboard() {
       await supabase.from('profiles').update({ name }).eq('id', user.id);
       await supabase.from('athletes').update({
         sport, competition_level: level, timezone,
-        session_format_pref: format.toLowerCase(), onboarded: true,
+        session_format_pref: format, onboarded: true,
       }).eq('id', user.id);
 
       const rows = selected.map((tag, i) => ({ athlete_id: user.id, challenge_tag: tag, rank: i + 1 }));
@@ -221,9 +221,9 @@ export default function AthleteOnboard() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                 <label className="label">Session format</label>
                 {FORMATS.map(f => {
-                  const on = format === f.label;
+                  const on = format === f.key;
                   return (
-                    <button key={f.label} onClick={() => setFormat(f.label)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '16px 20px', borderRadius: 14, cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', background: on ? 'var(--red)' : 'var(--surface-1)', border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', textAlign: 'left', fontFamily: 'var(--font-body)' }}>
+                    <button key={f.key} onClick={() => setFormat(f.key)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '16px 20px', borderRadius: 14, cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', background: on ? 'var(--red)' : 'var(--surface-1)', border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', textAlign: 'left', fontFamily: 'var(--font-body)' }}>
                       <p style={{ fontSize: 14, fontWeight: 600, color: on ? '#fff' : 'var(--white)', marginBottom: 3 }}>{f.label}</p>
                       <p style={{ fontSize: 12, color: on ? 'rgba(255,255,255,0.85)' : 'var(--w60)', lineHeight: 1.4 }}>{f.sub}</p>
                     </button>
