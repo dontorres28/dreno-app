@@ -42,10 +42,7 @@ const FORMATS = [
 ];
 
 const LANGUAGES = [
-  'English', 'German', 'French', 'Italian', 'Spanish', 'Portuguese',
-  'Dutch', 'Polish', 'Swedish', 'Norwegian', 'Danish', 'Finnish',
-  'Romanian', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese',
-  'Korean', 'Hindi',
+  'English', 'German', 'French', 'Italian', 'Spanish', 'Portuguese', 'Dutch',
 ];
 
 const COUNTRIES = [

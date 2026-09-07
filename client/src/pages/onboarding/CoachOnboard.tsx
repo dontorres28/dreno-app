@@ -36,9 +36,7 @@ const APPROACHES = [
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 const LANGUAGES = [
-  'English', 'German', 'French', 'Italian', 'Spanish', 'Portuguese',
-  'Dutch', 'Polish', 'Romanian', 'Russian', 'Turkish', 'Arabic',
-  'Chinese', 'Japanese', 'Korean', 'Hindi', 'Swedish', 'Norwegian',
+  'English', 'German', 'French', 'Italian', 'Spanish', 'Portuguese', 'Dutch',
 ];
 
 const COUNTRIES = [

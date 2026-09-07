@@ -39,9 +39,7 @@ const TIMEZONES: string[] = (() => {
 })();
 
 const LANGUAGES = [
-  'English', 'German', 'French', 'Italian', 'Spanish', 'Portuguese',
-  'Dutch', 'Polish', 'Romanian', 'Russian', 'Turkish', 'Arabic',
-  'Chinese', 'Japanese', 'Korean', 'Hindi', 'Swedish', 'Norwegian',
+  'English', 'German', 'French', 'Italian', 'Spanish', 'Portuguese', 'Dutch',
 ];
 
 const COUNTRIES = [
