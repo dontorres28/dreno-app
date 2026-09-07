@@ -10,19 +10,6 @@ export const LANGUAGE_CODES: Record<string, string> = {
   Spanish: 'es',
   Portuguese: 'pt',
   Dutch: 'nl',
-  Polish: 'pl',
-  Swedish: 'sv',
-  Norwegian: 'nb',
-  Danish: 'da',
-  Finnish: 'fi',
-  Romanian: 'ro',
-  Russian: 'ru',
-  Turkish: 'tr',
-  Arabic: 'ar',
-  Chinese: 'zh',
-  Japanese: 'ja',
-  Korean: 'ko',
-  Hindi: 'hi',
 };
 
 const loadedLangs = new Set<string>(['en']);
