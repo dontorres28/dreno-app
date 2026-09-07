@@ -39,7 +39,10 @@
     "ctaLine1": "Dein Kopf ist",
     "ctaLine2": "Teil des Spiels.",
     "ctaSub": "Trainiere ihn wie alles andere.",
-    "getStarted": "Loslegen"
+    "getStarted": "Loslegen",
+    "signIn": "Anmelden",
+    "hiwLine1": "Vom Zweifel",
+    "hiwLine2": "zum Ziel."
   },
   "login": {
     "welcomeBack": "Willkommen zurück.",

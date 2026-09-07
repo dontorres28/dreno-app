@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
+import i18n, { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 
 const LANGUAGES = Object.keys(LANGUAGE_CODES);
 
+function codeToName(code: string) {
+  return LANGUAGES.find(l => LANGUAGE_CODES[l] === code) ?? 'English';
+}
+
 export default function LanguagePicker() {
   const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState(() => {
-    const code = localStorage.getItem('i18nextLng') ?? 'en';
-    return LANGUAGES.find(l => LANGUAGE_CODES[l] === code) ?? 'English';
-  });
+  const [current, setCurrent] = useState(() => codeToName(i18n.language ?? 'en'));
+
+  useEffect(() => {
+    const onChange = (lng: string) => setCurrent(codeToName(lng));
+    i18n.on('languageChanged', onChange);
+    return () => { i18n.off('languageChanged', onChange); };
+  }, []);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

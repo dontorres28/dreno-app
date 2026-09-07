@@ -221,7 +221,7 @@ export default function Landing() {
                   border: '0.5px solid var(--surface-border-2)', textDecoration: 'none',
                 }}
               >
-                Sign in
+                {t('landing.signIn')}
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
                   <path d="M3.5 2.5l3.5 3.5-3.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -276,15 +276,15 @@ export default function Landing() {
       <section style={{ padding: 'clamp(2rem, 5vh, 3.5rem) 1.5rem clamp(4rem, 10vh, 8rem)' }}>
         <div style={{ maxWidth: 780, margin: '0 auto' }}>
           <div style={{ marginBottom: 'clamp(2.5rem, 6vh, 4rem)' }}>
-            <p className="label" style={{ margin: 0, marginBottom: 12 }}>How it works</p>
+            <p className="label" style={{ margin: 0, marginBottom: 12 }}>{t('landing.howItWorks')}</p>
             <h2 style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(3rem, 9vw, 6.5rem)',
               lineHeight: 0.92, letterSpacing: '-0.04em',
               maxWidth: 900,
             }}>
-              From doubt<br />
-              <span style={{ color: 'var(--red)' }}>to done.</span>
+              {t('landing.hiwLine1')}<br />
+              <span style={{ color: 'var(--red)' }}>{t('landing.hiwLine2')}</span>
             </h2>
           </div>
 

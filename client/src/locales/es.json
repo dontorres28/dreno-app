@@ -39,7 +39,10 @@
     "ctaLine1": "Tu cabeza es",
     "ctaLine2": "parte del juego.",
     "ctaSub": "Entrénala como todo lo demás.",
-    "getStarted": "Comenzar"
+    "getStarted": "Comenzar",
+    "signIn": "Iniciar sesión",
+    "hiwLine1": "De la duda",
+    "hiwLine2": "a la acción."
   },
   "login": {
     "welcomeBack": "Bienvenido de nuevo.",
@@ -66,7 +69,8 @@
     "createAccountBtn": "Crear cuenta",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "signIn": "Iniciar sesión",
-    "pickRole": "Elige un rol"
+    "pickRole": "Elige un rol",
+    "disclaimer": "Dreno is not therapy or medical care. If you are in crisis, contact local emergency services."
   },
   "dashboard": {
     "nextSession": "Próxima sesión",
@@ -162,7 +166,8 @@
     "notesPlaceholder": "¿En qué quieres trabajar?",
     "sessionRate": "Tarifa por sesión",
     "requestSession": "Solicitar sesión",
-    "noPayment": "Sin pago ahora. Tu entrenador confirma primero."
+    "noPayment": "Sin pago ahora. Tu entrenador confirma primero.",
+    "perHour": "/ hour"
   },
   "coaches": {
     "title": "Encuentra un entrenador",
@@ -178,7 +183,9 @@
     "isNew": "Nuevo",
     "sessions": "sesiones",
     "session": "sesión",
-    "rebookRate": "tasa de repetición"
+    "rebookRate": "tasa de repetición",
+    "new": "New",
+    "perHour": "/ hour"
   },
   "settings": {
     "title": "Ajustes",
@@ -201,7 +208,8 @@
     "saveChanges": "Guardar cambios",
     "coachProfile": "Perfil de entrenador",
     "editProfile": "Edita tu perfil público",
-    "open": "Abrir"
+    "open": "Abrir",
+    "saved": "Saved."
   },
   "drills": {
     "title": "Ejercicios",
@@ -220,7 +228,11 @@
     "noDrills": "Aún no hay resultados.",
     "ms": "ms",
     "streak": "Racha",
-    "sessions": "sesiones"
+    "sessions": "sesiones",
+    "thisWeek": "this week",
+    "trend": "Trend",
+    "startDrill": "Start drill",
+    "score": "Score"
   },
   "drillReaction": {
     "title": "Reacción",
@@ -301,7 +313,8 @@
     "high": "Alto",
     "adminNote": "¿Algo que Dreno deba saber? (opcional)",
     "done": "Listo",
-    "skip": "Omitir"
+    "skip": "Omitir",
+    "saving": "Saving..."
   },
   "payment": {
     "booked": "Reservado.",
@@ -341,7 +354,56 @@
     "languagesLabel": "Idiomas en los que entrenas",
     "videoCall": "Videollamada",
     "phoneCall": "Llamada telefónica",
-    "either": "Cualquiera"
+    "either": "Cualquiera",
+    "athlete": {
+      "welcome": "Welcome.",
+      "letsSetUp": "Let's set up your profile.",
+      "next": "Next",
+      "back": "Back",
+      "finish": "Finish",
+      "saving": "Saving...",
+      "step": "Step {{current}} of {{total}}",
+      "nameLabel": "What's your name?",
+      "namePlaceholder": "Full name",
+      "sportLabel": "What sport do you compete in?",
+      "sportPlaceholder": "Select your sport",
+      "levelLabel": "What level do you compete at?",
+      "challengesLabel": "What do you want to work on?",
+      "formatLabel": "How do you prefer to work with a coach?",
+      "timezoneLabel": "Your timezone",
+      "countryLabel": "Your country",
+      "languageLabel": "Preferred language"
+    },
+    "coach": {
+      "welcome": "Welcome, coach.",
+      "letsSetUp": "Let's build your profile.",
+      "next": "Next",
+      "back": "Back",
+      "finish": "Finish",
+      "saving": "Saving...",
+      "step": "Step {{current}} of {{total}}",
+      "nameLabel": "Your full name",
+      "namePlaceholder": "Full name",
+      "headlineLabel": "One-line headline",
+      "headlinePlaceholder": "e.g. Mental performance coach for hockey players",
+      "bioLabel": "Your bio",
+      "bioPlaceholder": "Tell athletes about yourself, your background, and your approach.",
+      "credentialsLabel": "Credentials",
+      "credentialsPlaceholder": "Degrees, certifications, years of experience...",
+      "sportsLabel": "Sports you work with",
+      "expertiseLabel": "Areas of expertise",
+      "rateLabel": "Hourly rate (USD)",
+      "ratePlaceholder": "e.g. 120",
+      "linkedinLabel": "LinkedIn URL (optional)",
+      "linkedinPlaceholder": "https://linkedin.com/in/yourname",
+      "photoLabel": "Profile photo URL (optional)",
+      "photoPlaceholder": "https://...",
+      "sessionLengthLabel": "Session length",
+      "minLabel": "Minimum",
+      "maxLabel": "Maximum",
+      "timezoneLabel": "Your timezone",
+      "languagesLabel": "Languages you coach in"
+    }
   },
   "coachDashboard": {
     "title": "Panel",
@@ -357,7 +419,10 @@
     "totalSessions": "Sesiones totales",
     "thisWeek": "esta semana",
     "days": "días",
-    "active": "activo"
+    "active": "activo",
+    "sessionNotes": "Session notes",
+    "drillsThisWeek": "Drills this week",
+    "streakDays": "Streak days"
   },
   "common": {
     "loading": "Cargando...",
@@ -371,6 +436,20 @@
     "select": "Seleccionar",
     "hour": "hora",
     "min": "min",
-    "of": "de"
+    "of": "de",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "coachNotFound": "Coach not found.",
+    "accessDenied": "Access denied",
+    "sessionEnded": "Session ended",
+    "saved": "Saved.",
+    "notesPlaceholder": "Write anything from this session...",
+    "perHour": "/ hour"
+  },
+  "coachAthletes": {
+    "title": "Your athletes",
+    "noAthletes": "No athletes yet.",
+    "view": "View"
   }
 }

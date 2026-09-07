@@ -39,7 +39,10 @@
     "ctaLine1": "Your head is",
     "ctaLine2": "part of the game.",
     "ctaSub": "Train it like everything else.",
-    "getStarted": "Get started"
+    "getStarted": "Get started",
+    "signIn": "Sign in",
+    "hiwLine1": "From doubt",
+    "hiwLine2": "to done."
   },
   "login": {
     "welcomeBack": "Welcome back.",
