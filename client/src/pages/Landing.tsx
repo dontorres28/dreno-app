@@ -106,13 +106,12 @@ export default function Landing() {
           font-optical-sizing: auto;
         }
 
-        /* Mobile — the desktop mockup adds nothing on a phone-sized viewport
-           (illegible at 375px wide anyway). Drop it, and keep only the phone
-           mockup at a comfortable ~220px so the hero copy carries the frame. */
+        /* Mobile — the user is already on a phone, so a phone-inside-a-phone
+           mockup reads as goofy AND the desktop screenshot is illegible at
+           375px. Drop the whole mockup row on mobile: hero is pure copy + CTAs.
+           Saves ~230KB of image bandwidth on mobile too. */
         @media (max-width: 720px) {
-          .mockup-row { gap: 0 !important; }
-          .mockup-desktop { display: none !important; }
-          .mockup-phone { width: clamp(200px, 58vw, 260px) !important; }
+          .mockup-row { display: none !important; }
         }
 
         /* §1 Response — CTAs respond on pointer-down, not release */

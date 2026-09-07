@@ -29,9 +29,10 @@
     <link rel="preconnect" href="https://rsoncepevfkwthozudkx.supabase.co" crossorigin />
     <link rel="dns-prefetch" href="https://rsoncepevfkwthozudkx.supabase.co" />
 
-    <!-- Perf: hero mockup is above-the-fold on desktop — start it immediately -->
+    <!-- Perf: hero mockups are above-the-fold on desktop only.
+         Mobile hides them entirely — don't waste bandwidth preloading. -->
     <link rel="preload" as="image" href="/dashboard-desktop.png" fetchpriority="high" media="(min-width: 721px)" />
-    <link rel="preload" as="image" href="/signup-mobile.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/signup-mobile.png" fetchpriority="high" media="(min-width: 721px)" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
