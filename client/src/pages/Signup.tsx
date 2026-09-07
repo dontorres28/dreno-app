@@ -186,15 +186,48 @@ export default function Signup() {
             </SocialButton>
           </div>
 
-          {/* Collapsible email option */}
+          {/* Collapsible email option — outline pill in the LanguagePicker family:
+              same weight as OAuth buttons above but one tier subtler (transparent
+              fill) so OAuth stays the preferred path. */}
           {!showEmail ? (
-            <button type="button" onClick={() => setShowEmail(true)} disabled={!role} style={{
-              width: '100%', padding: '10px', background: 'none', border: 'none',
-              fontSize: 13, color: 'var(--w60)', fontFamily: 'var(--font-body)',
-              cursor: role ? 'pointer' : 'not-allowed',
-            }}>
-              Use email instead
-            </button>
+            <>
+              <style>{`
+                .email-pill {
+                  width: 100%; height: 44px; padding: 0 16px; border-radius: 50px;
+                  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+                  background: transparent;
+                  border: 0.5px solid var(--surface-border-2);
+                  color: var(--w70);
+                  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+                  letter-spacing: -0.005em;
+                  cursor: pointer;
+                  -webkit-tap-highlight-color: transparent;
+                  transition:
+                    background 200ms cubic-bezier(0.23, 1, 0.32, 1),
+                    color 200ms cubic-bezier(0.23, 1, 0.32, 1),
+                    border-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
+                    transform 90ms cubic-bezier(0.4, 0, 1, 1);
+                  margin-top: 4px;
+                }
+                .email-pill:hover:not(:disabled) { background: var(--surface-2); color: var(--white); border-color: var(--line-2); }
+                .email-pill:active:not(:disabled) { transform: scale(0.98); }
+                .email-pill:disabled { opacity: 0.4; cursor: not-allowed; }
+                @media (prefers-reduced-motion: reduce) { .email-pill:active:not(:disabled) { transform: none; } }
+              `}</style>
+              <button
+                type="button"
+                onClick={() => setShowEmail(true)}
+                disabled={!role}
+                className="email-pill"
+                aria-label="Sign up with email instead"
+              >
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+                  <rect x="1.75" y="3.25" width="12.5" height="9.5" rx="1.75" stroke="currentColor" strokeWidth="1.2"/>
+                  <path d="M2.5 4.5l5.5 4 5.5-4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Use email instead
+              </button>
+            </>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
               <input
