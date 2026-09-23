@@ -75,9 +75,9 @@ export default function CoachProfile() {
   try { credObj = coach.credentials ? JSON.parse(coach.credentials) : null; } catch { /* raw string */ }
   const credTypes: string[] = credObj?.types ?? [];
 
-  function handleBook() {
+  function handleBook(intro = false) {
     if (!user) { navigate('/login'); return; }
-    navigate(`/book/${id}`);
+    navigate(intro ? `/book/${id}?intro=1` : `/book/${id}`);
   }
 
   // Consistent chip style — matches athlete pill/tag treatment
@@ -294,13 +294,30 @@ export default function CoachProfile() {
         padding: '1rem 1.5rem 1.5rem',
         background: 'linear-gradient(to top, var(--bg) 60%, transparent)',
       }}>
-        <div style={{ maxWidth: 520, margin: '0 auto', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ maxWidth: 520, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <button
             className="btn-primary"
             style={{ fontSize: 15, height: 52, width: '100%', padding: '0 32px' }}
-            onClick={handleBook}
+            onClick={() => handleBook(false)}
           >
             {t('coaches.bookSession')}
+          </button>
+          <button
+            onClick={() => handleBook(true)}
+            style={{
+              width: '100%', height: 44, padding: '0 24px', borderRadius: 50,
+              background: 'transparent',
+              border: '0.5px solid var(--surface-border-2)',
+              color: 'var(--w70)',
+              fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500,
+              letterSpacing: '-0.005em', cursor: 'pointer',
+              WebkitTapHighlightColor: 'transparent',
+              transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), color 200ms, border-color 200ms',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-2)'; e.currentTarget.style.color = 'var(--white)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent';       e.currentTarget.style.color = 'var(--w70)'; }}
+          >
+            Free 15-min intro call
           </button>
         </div>
       </div>

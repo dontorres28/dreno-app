@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import Stepper from '../components/Stepper';
 import ThemeToggle from '../components/ThemeToggle';
@@ -16,6 +16,7 @@ const DAY_LABEL: Record<string,string> = {
   friday:'Fri', saturday:'Sat', sunday:'Sun',
 };
 const ALL_DURATIONS = [30, 45, 60, 90, 120];
+const INTRO_DURATIONS = [15, 30];
 const TOTAL_STEPS = 3;
 
 function nextDateForDay(day: string): Date {
@@ -39,8 +40,13 @@ function fmt12(t: string) {
 export default function Book() {
   const { id: coachId } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // ?intro=1 (from the CoachProfile "Free intro call" button) pre-selects
+  // the free-intro flow. User can still toggle on the page.
+  const [isIntro, setIsIntro] = useState(searchParams.get('intro') === '1');
 
   const [coach, setCoach] = useState<any>(null);
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -80,9 +86,19 @@ export default function Book() {
   }, [coachId]);
 
   const hasSlots = slots.length > 0;
-  const allowedDurations = ALL_DURATIONS.filter(d =>
-    d >= (coach?.min_session_min ?? 30) && d <= (coach?.max_session_min ?? 120)
-  );
+  const allowedDurations = isIntro
+    ? INTRO_DURATIONS
+    : ALL_DURATIONS.filter(d =>
+        d >= (coach?.min_session_min ?? 30) && d <= (coach?.max_session_min ?? 120)
+      );
+
+  // When the user flips intro on/off, snap duration into a valid choice.
+  useEffect(() => {
+    if (!allowedDurations.includes(manualDuration) && allowedDurations.length > 0) {
+      setManualDuration(allowedDurations[0]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isIntro]);
   const slotsByDay: Record<string, Slot[]> = {};
   for (const s of slots) {
     const key = s.day_of_week.toLowerCase();
@@ -138,8 +154,9 @@ export default function Book() {
       }
       await apiPost('/api/bookings', {
         coachId, availabilityId, startsAt, durationMin,
-        priceCents: (coach.hourly_rate ?? 0) * 100,
-        notes: notes.trim() || undefined,
+        priceCents: isIntro ? 0 : (coach.hourly_rate ?? 0) * 100,
+        // Prefix so the coach immediately sees this is an intro call, not a paid session.
+        notes: [isIntro ? '[Free intro call]' : null, notes.trim() || null].filter(Boolean).join(' — ') || undefined,
       });
       navigate('/payment/success');
     } catch (err: any) {
@@ -158,7 +175,9 @@ export default function Book() {
 
   const coachName = coach?.profiles?.name ?? 'Coach';
   const dur = getDuration();
-  const price = coach?.hourly_rate ? (coach.hourly_rate * dur / 60).toFixed(0) : null;
+  const price = isIntro
+    ? 'Free'
+    : (coach?.hourly_rate ? `CHF ${(coach.hourly_rate * dur / 60).toFixed(0)}` : null);
 
   // Selection pill helper — matches onboarding
   const pill = (label: string, active: boolean, onClick: () => void, small = false) => (
@@ -242,6 +261,19 @@ export default function Book() {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {/* Free intro-call toggle — first booking with any coach can be a no-cost 15/30 min chat. */}
+                <div>
+                  <label className="label">Session type</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: 4 }}>
+                    {pill('Free intro call',   isIntro, () => setIsIntro(true),  true)}
+                    {pill('Paid session',     !isIntro, () => setIsIntro(false), true)}
+                  </div>
+                  {isIntro && (
+                    <p style={{ fontSize: 12, color: 'var(--w60)', marginTop: 8, lineHeight: 1.5 }}>
+                      A no-cost 15 or 30-minute call to see if you and the coach are a fit. No payment, no commitment.
+                    </p>
+                  )}
+                </div>
                 <div>
                   <label className="label">Date</label>
                   <input className="input" type="date" value={manualDate} min={todayStr} onChange={e => setManualDate(e.target.value)} style={{ fontSize: 15 }} />
@@ -304,7 +336,7 @@ export default function Book() {
                 { label: 'Coach', value: coachName },
                 { label: 'When', value: getDateTime() },
                 { label: 'Duration', value: `${dur} min` },
-                ...(price ? [{ label: 'Price', value: `CHF ${price}` }] : []),
+                ...(price ? [{ label: 'Price', value: price }] : []),
                 ...(notes.trim() ? [{ label: 'Note', value: notes.trim() }] : []),
               ].map((row, i, arr) => (
                 <div key={row.label} style={{
