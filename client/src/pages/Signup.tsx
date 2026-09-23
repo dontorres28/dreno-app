@@ -40,10 +40,12 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<'google' | 'apple' | null>(null);
   const [showEmail, setShowEmail] = useState(false);
+  const [agreed, setAgreed] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!role) { toast.error(t('signup.pickRole')); return; }
+    if (!agreed) { toast.error('Please accept the Terms and Privacy Policy to continue.'); return; }
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signUp({ email, password });
@@ -73,6 +75,7 @@ export default function Signup() {
 
   function requireRole(provider: 'google' | 'apple') {
     if (!role) { toast.error('Pick your role first, then continue with ' + (provider === 'google' ? 'Google' : 'Apple') + '.'); return false; }
+    if (!agreed) { toast.error('Please accept the Terms and Privacy Policy to continue.'); return false; }
     return true;
   }
 
@@ -162,9 +165,30 @@ export default function Signup() {
             })}
           </div>
 
-          {/* Auth buttons — only clickable once role selected */}
+          {/* Terms/Privacy consent — required before any auth method fires. */}
+          <label style={{
+            display: 'flex', alignItems: 'flex-start', gap: 10,
+            padding: '10px 2px', marginBottom: '1rem',
+            cursor: 'pointer', userSelect: 'none',
+          }}>
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={e => setAgreed(e.target.checked)}
+              style={{ marginTop: 2, width: 16, height: 16, accentColor: 'var(--red)', cursor: 'pointer' }}
+              aria-describedby="consent-desc"
+            />
+            <span id="consent-desc" style={{ fontSize: 13, color: 'var(--w70)', lineHeight: 1.5 }}>
+              I agree to Dreno's{' '}
+              <Link to="/legal/terms" style={{ color: 'var(--red)' }}>Terms of Service</Link>
+              {' '}and{' '}
+              <Link to="/legal/privacy" style={{ color: 'var(--red)' }}>Privacy Policy</Link>.
+            </span>
+          </label>
+
+          {/* Auth buttons — only clickable once role selected + terms agreed */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1rem' }}>
-            <SocialButton onClick={signUpWithGoogle} disabled={anyLoading || !role}>
+            <SocialButton onClick={signUpWithGoogle} disabled={anyLoading || !role || !agreed}>
               {oauthLoading === 'google' ? <Spinner size={16} /> : (
                 <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
                   <path d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z" fill="#FFC107"/>
@@ -176,7 +200,7 @@ export default function Signup() {
               Continue with Google
             </SocialButton>
 
-            <SocialButton onClick={signUpWithApple} disabled={anyLoading || !role}>
+            <SocialButton onClick={signUpWithApple} disabled={anyLoading || !role || !agreed}>
               {oauthLoading === 'apple' ? <Spinner size={16} /> : (
                 <svg width="18" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
@@ -217,7 +241,7 @@ export default function Signup() {
               <button
                 type="button"
                 onClick={() => setShowEmail(true)}
-                disabled={!role}
+                disabled={!role || !agreed}
                 className="email-pill"
                 aria-label="Sign up with email instead"
               >
@@ -240,7 +264,7 @@ export default function Signup() {
                 required placeholder="Password" autoComplete="new-password" minLength={8}
                 style={{ height: 46, fontSize: 15 }}
               />
-              <button type="submit" className="btn-primary" style={{ fontSize: 15, height: 48, padding: 0, marginTop: 2 }} disabled={anyLoading || !role}>
+              <button type="submit" className="btn-primary" style={{ fontSize: 15, height: 48, padding: 0, marginTop: 2 }} disabled={anyLoading || !role || !agreed}>
                 {loading ? <Spinner size={18} /> : 'Create account'}
               </button>
             </form>

@@ -5,6 +5,7 @@ import { motion, Variants, useReducedMotion } from 'framer-motion';
 import Layout from '../components/Layout';
 import { AnimatedGroup } from '../components/AnimatedGroup';
 import { Iphone15Pro } from '../components/Iphone15Pro';
+import Footer from '../components/Footer';
 
 // Dreno app screenshots served from /public
 const DESKTOP_SHOT = '/dashboard-desktop.png';
@@ -385,6 +386,8 @@ export default function Landing() {
           </Link>
         </div>
       </section>
+
+      <Footer />
 
     </Layout>
   );

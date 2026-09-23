@@ -44,6 +44,10 @@ const Settings          = lazy(() => import('./pages/Settings'));
 const SessionFeedback   = lazy(() => import('./pages/SessionFeedback'));
 const AdminFlags        = lazy(() => import('./pages/AdminFlags'));
 const Playbook          = lazy(() => import('./pages/Playbook'));
+const LegalTerms        = lazy(() => import('./pages/legal/Terms'));
+const LegalPrivacy      = lazy(() => import('./pages/legal/Privacy'));
+const LegalCookies      = lazy(() => import('./pages/legal/Cookies'));
+const LegalRefunds      = lazy(() => import('./pages/legal/Refunds'));
 
 function RouteFallback() {
   return (
@@ -124,6 +128,13 @@ export default function App() {
             <Route path="/playbook" element={<ProtectedRoute role="athlete"><Playbook /></ProtectedRoute>} />
             <Route path="/session/:bookingId/feedback" element={<ProtectedRoute role="athlete"><SessionFeedback /></ProtectedRoute>} />
             <Route path="/admin/flags" element={<AdminFlags />} />
+
+            {/* Legal — public, no auth required */}
+            <Route path="/legal/terms"    element={<LegalTerms />} />
+            <Route path="/legal/privacy"  element={<LegalPrivacy />} />
+            <Route path="/legal/cookies"  element={<LegalCookies />} />
+            <Route path="/legal/refunds"  element={<LegalRefunds />} />
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
