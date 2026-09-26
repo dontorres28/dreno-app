@@ -7,6 +7,7 @@ import { supabase } from '../lib/supabase';
 import { apiPost } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { humanizeError } from '../lib/humanizeError';
 
 interface Slot { id: string; day_of_week: string; start_time: string; end_time: string; }
 
@@ -79,7 +80,7 @@ export default function Book() {
         const max = coachRes.data?.max_session_min ?? 120;
         setManualDuration(ALL_DURATIONS.find(d => d >= min && d <= max) ?? min);
       } catch (err: any) {
-        toast.error(err.message ?? 'Could not load');
+        toast.error(humanizeError(err, 'Could not load'));
       } finally { setLoading(false); }
     }
     load();
@@ -160,7 +161,7 @@ export default function Book() {
       });
       navigate('/payment/success');
     } catch (err: any) {
-      toast.error(err.message ?? 'Booking failed');
+      toast.error(humanizeError(err, 'Booking failed'));
       setBooking(false);
     }
   }

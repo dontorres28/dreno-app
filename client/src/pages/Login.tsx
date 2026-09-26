@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Spinner from '../components/Spinner';
 import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
+import { humanizeError } from '../lib/humanizeError';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 import ThemeToggle from '../components/ThemeToggle';
 import LanguagePicker from '../components/LanguagePicker';
@@ -62,7 +63,7 @@ export default function Login() {
         navigate(dest);
       }
     } catch (err: any) {
-      toast.error(err.message ?? 'Sign in failed');
+      toast.error(humanizeError(err, 'Sign in failed'));
     } finally {
       setLoading(false);
     }
@@ -71,13 +72,13 @@ export default function Login() {
   async function signInWithGoogle() {
     setOauthLoading('google');
     const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: REDIRECT_URL } });
-    if (error) { toast.error(error.message); setOauthLoading(null); }
+    if (error) { toast.error(humanizeError(error)); setOauthLoading(null); }
   }
 
   async function signInWithApple() {
     setOauthLoading('apple');
     const { error } = await supabase.auth.signInWithOAuth({ provider: 'apple', options: { redirectTo: REDIRECT_URL } });
-    if (error) { toast.error(error.message); setOauthLoading(null); }
+    if (error) { toast.error(humanizeError(error)); setOauthLoading(null); }
   }
 
   async function signInWithPasskey() {
@@ -98,7 +99,7 @@ export default function Login() {
         navigate(dest);
       }
     } catch (err: any) {
-      if (err.name !== 'NotAllowedError') toast.error(err.message ?? 'Passkey sign in failed');
+      if (err.name !== 'NotAllowedError') toast.error(humanizeError(err, 'Passkey sign in failed'));
     } finally {
       setOauthLoading(null);
     }

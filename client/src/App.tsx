@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -57,6 +57,21 @@ function RouteFallback() {
   );
 }
 
+/**
+ * Wraps every rendered route in a .route-frame div keyed on pathname.
+ * The key forces React to remount the subtree on every navigation, which
+ * replays the CSS keyframe (see index.css .route-frame). Reads as a page
+ * pushing in rather than snapping. ~260ms fade+lift, reduced-motion opts out.
+ */
+function TransitionShell({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  return (
+    <div key={location.pathname} className="route-frame" style={{ minHeight: '100dvh' }}>
+      {children}
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -83,6 +98,7 @@ export default function App() {
           }}
         />
         <Suspense fallback={<RouteFallback />}>
+          <TransitionShell>
           <Routes>
             <Route path="/" element={<Landing />} />
             {/* Dev-only preview route for capturing the athlete dashboard screenshot; not exposed in prod builds. */}
@@ -137,6 +153,7 @@ export default function App() {
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          </TransitionShell>
         </Suspense>
       </BrowserRouter>
     </AuthProvider>

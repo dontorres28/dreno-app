@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { humanizeError } from '../lib/humanizeError';
 
 interface Goal {
   id: string;
@@ -72,8 +73,15 @@ export default function Goals() {
   }
 
   async function done(id: string) {
-    await supabase.from('goals').update({ status: 'archived' }).eq('id', id);
+    // Optimistic: remove from the list immediately so the tap feels instant.
+    // On server error, put it back and surface a human message.
+    const snapshot = goals;
     setGoals(p => p.filter(g => g.id !== id));
+    const { error } = await supabase.from('goals').update({ status: 'archived' }).eq('id', id);
+    if (error) {
+      setGoals(snapshot);
+      toast.error(humanizeError(error, "Couldn't complete that goal."));
+    }
   }
 
   const byHorizon = (h: string) => goals.filter(g => g.horizon === h);

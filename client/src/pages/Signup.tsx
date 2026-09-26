@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Spinner from '../components/Spinner';
 import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
+import { humanizeError } from '../lib/humanizeError';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 import ThemeToggle from '../components/ThemeToggle';
 import LanguagePicker from '../components/LanguagePicker';
@@ -67,7 +68,7 @@ export default function Signup() {
         navigate('/onboarding/admin');
       }
     } catch (err: any) {
-      toast.error(err.message ?? 'Sign up failed');
+      toast.error(humanizeError(err, 'Sign up failed'));
     } finally {
       setLoading(false);
     }
@@ -84,7 +85,7 @@ export default function Signup() {
     setOauthLoading('google');
     sessionStorage.setItem('dreno_pending_role', role!);
     const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: REDIRECT_URL } });
-    if (error) { toast.error(error.message); setOauthLoading(null); }
+    if (error) { toast.error(humanizeError(error)); setOauthLoading(null); }
   }
 
   async function signUpWithApple() {
@@ -92,7 +93,7 @@ export default function Signup() {
     setOauthLoading('apple');
     sessionStorage.setItem('dreno_pending_role', role!);
     const { error } = await supabase.auth.signInWithOAuth({ provider: 'apple', options: { redirectTo: REDIRECT_URL } });
-    if (error) { toast.error(error.message); setOauthLoading(null); }
+    if (error) { toast.error(humanizeError(error)); setOauthLoading(null); }
   }
 
   const anyLoading = loading || !!oauthLoading;
