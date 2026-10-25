@@ -9,7 +9,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-app.use(express.json());
+app.use(express.json({ limit: '1mb' })); // cap body size so nobody can flood us
 app.use(cors({ origin: process.env.APP_URL, credentials: true }));
 
 // ---- Auth middleware ----
@@ -1243,6 +1243,82 @@ app.post('/api/auth/passkey/login-verify', async (req, res) => {
     res.json({ session: tokenData?.session });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Your data rights (GDPR) ──────────────────────────────────────────────────
+// Every place we keep a person's data, and the column that says "this is yours".
+const PERSONAL_DATA = [
+  ['profiles',           ['id']],
+  ['athletes',           ['id']],
+  ['coaches',            ['id']],
+  ['goals',              ['athlete_id']],
+  ['journal_entries',    ['athlete_id']],
+  ['drill_results',      ['athlete_id']],
+  ['athlete_records',    ['athlete_id']],
+  ['athlete_challenges', ['athlete_id']],
+  ['messages',           ['sender_id']],
+  ['bookings',           ['athlete_id', 'coach_id']],
+  ['session_feedback',   ['athlete_id', 'coach_id']],
+  ['playbook_notes',     ['athlete_id', 'coach_id']],
+  ['org_members',        ['athlete_id']],
+  ['org_coaches',        ['coach_id']],
+];
+
+// Read every row that belongs to one person.
+async function readPersonalData(userId) {
+  const out = {};
+  for (const [table, cols] of PERSONAL_DATA) {
+    const q = supabase.from(table).select('*');
+    const rows = cols.length === 1
+      ? q.eq(cols[0], userId)
+      : q.or(cols.map(c => `${c}.eq.${userId}`).join(','));
+    const { data } = await rows;
+    out[table] = data ?? [];
+  }
+  return out;
+}
+
+// "Give me a copy of everything you know about me." (GDPR right to access)
+app.get('/api/me/export', requireAuth, async (req, res) => {
+  try {
+    const { data: { user } } = await supabase.auth.admin.getUserById(req.user.id);
+    res.setHeader('Content-Disposition', 'attachment; filename="my-dreno-data.json"');
+    res.json({
+      exported_at: new Date().toISOString(),
+      account: {
+        id: user?.id,
+        email: user?.email,
+        signed_up: user?.created_at,
+        details: user?.user_metadata ?? {},
+      },
+      data: await readPersonalData(req.user.id),
+    });
+  } catch {
+    res.status(500).json({ error: 'Could not build your data export' });
+  }
+});
+
+// "Delete me." (GDPR right to erasure)
+// Removing the login cascades through the database and wipes the tables above.
+// A few tables were made by hand and may not cascade, so we also clear them here.
+const EXTRA_WIPE = [
+  ['webauthn_credentials', 'user_id'],
+  ['webauthn_challenges',  'user_id'],
+  ['org_members',          'athlete_id'],
+  ['org_coaches',          'coach_id'],
+];
+app.delete('/api/me', requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    for (const [table, col] of EXTRA_WIPE) {
+      await supabase.from(table).delete().eq(col, userId);
+    }
+    const { error } = await supabase.auth.admin.deleteUser(userId);
+    if (error) return res.status(500).json({ error: 'Could not delete your account' });
+    res.json({ ok: true, deleted: true });
+  } catch {
+    res.status(500).json({ error: 'Could not delete your account' });
   }
 });
 
