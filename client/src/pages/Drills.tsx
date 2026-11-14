@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Flame, ArrowRight, TrendUp, TrendDown, Trophy } from '@phosphor-icons/react';
 import Layout from '../components/Layout';
 import Tooltip from '../components/Tooltip';
 import { supabase } from '../lib/supabase';
@@ -39,19 +40,14 @@ function Delta({ current, previous, unit, lowerIsBetter }: { current: number; pr
   }
   const better = lowerIsBetter ? diff < 0 : diff > 0;
   const abs = Math.abs(Math.round(diff));
+  const Arrow = diff < 0 ? TrendDown : TrendUp;
   return (
     <p style={{
       fontSize: 12, fontWeight: 600, letterSpacing: '0.01em',
-      color: better ? 'var(--red)' : 'var(--w60)',
-      display: 'inline-flex', alignItems: 'center', gap: 4,
+      color: better ? 'var(--accent-strong)' : 'var(--w60)',
+      display: 'inline-flex', alignItems: 'center', gap: 5,
     }}>
-      <span aria-hidden style={{
-        display: 'inline-block',
-        borderLeft: '3px solid transparent',
-        borderRight: '3px solid transparent',
-        borderTop: better === lowerIsBetter ? 'none' : `4px solid currentColor`,
-        borderBottom: better === lowerIsBetter ? `4px solid currentColor` : 'none',
-      }} />
+      <Arrow size={13} weight="bold" aria-hidden />
       {abs}{unit} {better ? 'better' : 'off'} than last
     </p>
   );
@@ -72,13 +68,14 @@ function DrillTile({ title, subtitle, to, visual, metric, done, isNew }: DrillPr
   return (
     <Link to={to} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
       <div
+        className="squircle"
         style={{
           position: 'relative',
           background: 'var(--surface-1)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22,
           padding: 24,
-          height: '100%', minHeight: 260,
+          height: '100%', minHeight: 256,
           display: 'flex', flexDirection: 'column',
           overflow: 'hidden',
           transition: `background 220ms ${EASE}, border-color 220ms ${EASE}, transform 200ms ${EASE}`,
@@ -97,18 +94,10 @@ function DrillTile({ title, subtitle, to, visual, metric, done, isNew }: DrillPr
           el.style.transform = 'translateY(0)';
         }}
       >
-        {/* Ambient glow */}
-        <div style={{
-          position: 'absolute', top: -60, right: -60,
-          width: 200, height: 200, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(77,166,255,0.16) 0%, transparent 65%)',
-          pointerEvents: 'none',
-        }} />
-
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 24, position: 'relative' }}>
           <div>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: 6 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: done ? 'var(--accent-strong)' : 'var(--w60)', marginBottom: 6 }}>
               {done ? 'Done today' : isNew ? 'New' : 'Practice'}
             </p>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: 24, lineHeight: 1.05, letterSpacing: '-0.03em', color: 'var(--white)' }}>
@@ -130,12 +119,10 @@ function DrillTile({ title, subtitle, to, visual, metric, done, isNew }: DrillPr
           </p>
           <div style={{
             display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 6,
-            color: 'var(--white)', fontSize: 13.5, fontWeight: 700, letterSpacing: '-0.005em',
+            color: 'var(--accent-strong)', fontSize: 13.5, fontWeight: 700, letterSpacing: '-0.005em',
           }}>
             {isNew ? 'Start now' : 'Run again'}
-            <svg width="13" height="13" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ArrowRight size={14} weight="bold" />
           </div>
         </div>
       </div>
@@ -272,12 +259,12 @@ export default function Drills() {
 
         {/* ── Today card — session progress ── */}
         {!loading && (
-          <div style={{
+          <div className="squircle" style={{
             position: 'relative',
-            background: 'linear-gradient(135deg, rgba(77,166,255,0.10) 0%, rgba(77,166,255,0.02) 100%)',
+            background: 'linear-gradient(145deg, rgba(77,166,255,0.13) 0%, rgba(77,166,255,0.03) 55%, transparent 100%)',
             border: '0.5px solid var(--surface-border-2)',
-            borderRadius: 22,
-            padding: 24,
+            borderRadius: 26,
+            padding: 'clamp(22px, 5vw, 28px)',
             marginBottom: 14,
             overflow: 'hidden',
           }}>
@@ -310,16 +297,14 @@ export default function Drills() {
                 {overallStreak > 0 && (
                   <Tooltip label={`${overallStreak} day${overallStreak !== 1 ? 's' : ''} in a row of training`} side="left">
                     <div style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                      padding: '6px 12px', borderRadius: 50,
-                      background: 'rgba(77,166,255,0.14)',
-                      border: '0.5px solid rgba(77,166,255,0.30)',
+                      display: 'inline-flex', alignItems: 'center', gap: 5,
+                      padding: '7px 13px', borderRadius: 50,
+                      background: 'rgba(77,166,255,0.16)',
+                      border: '0.5px solid rgba(77,166,255,0.32)',
                       cursor: 'help',
                     }}>
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="var(--red)">
-                        <path d="M6 1c1 2 3 3 3 5.5S7.5 11 6 11s-3-2-3-4.5C3 5 4 4 6 1z"/>
-                      </svg>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', letterSpacing: '0.02em' }}>
+                      <Flame size={14} weight="fill" color="var(--accent)" />
+                      <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--accent-strong)', letterSpacing: '0.01em' }}>
                         {overallStreak}-day streak
                       </span>
                     </div>
@@ -453,10 +438,9 @@ export default function Drills() {
               el.style.background = 'var(--surface-1)';
             }}
           >
+            <Trophy size={15} weight="fill" />
             Leaderboard
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-              <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ArrowRight size={13} weight="bold" />
           </Link>
         </div>
       </div>
