@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Flame, VideoCamera, Barbell, NotePencil, ArrowRight, Check } from '@phosphor-icons/react';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import Tooltip from '../components/Tooltip';
@@ -22,8 +23,8 @@ const HORIZON_COLOR: Record<string, string> = {
   long: 'rgba(77,166,255,0.28)',
 };
 
-function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
-  drillsThisWeek: number; streak: number; goalsCount: number;
+function WeekHero({ drillsThisWeek, streak, drillResults }: {
+  drillsThisWeek: number; streak: number;
   drillResults: DrillResult[];
 }) {
   const doneDays = new Set(drillResults.map(d => new Date(d.completed_at).toDateString()));
@@ -43,89 +44,73 @@ function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
     };
   });
 
+  const caption =
+    drillsThisWeek === 0 ? 'No sessions yet this week.' :
+    drillsThisWeek >= 5 ? 'Weekly target hit. Keep going.' :
+    `${drillsThisWeek} session${drillsThisWeek !== 1 ? 's' : ''} logged.`;
+
   return (
-    <div style={{
+    <div className="squircle" style={{
       position: 'relative',
-      background: 'linear-gradient(135deg, rgba(77,166,255,0.10) 0%, rgba(77,166,255,0.02) 100%)',
+      background: 'linear-gradient(145deg, rgba(77,166,255,0.14) 0%, rgba(77,166,255,0.03) 55%, transparent 100%)',
       border: '0.5px solid var(--surface-border-2)',
-      borderRadius: 22,
-      padding: 24,
+      borderRadius: 28,
+      padding: 'clamp(22px, 5vw, 32px)',
       overflow: 'hidden',
     }}>
-      {/* Ambient corner glow */}
+      {/* The single ambient glow of the whole page — the week is the anchor. */}
       <div style={{
-        position: 'absolute', top: -70, right: -70,
-        width: 260, height: 260, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(77,166,255,0.22) 0%, transparent 65%)',
+        position: 'absolute', top: -90, right: -90,
+        width: 300, height: 300, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(77,166,255,0.26) 0%, transparent 62%)',
         pointerEvents: 'none',
       }} />
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 24, marginBottom: 22, position: 'relative', flexWrap: 'wrap' }}>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
         <div>
-          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w70)', marginBottom: 10 }}>
-            This week
-          </p>
-          <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 7vw, 4.5rem)', lineHeight: 0.88, letterSpacing: '-0.045em' }}>
+          <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3.5rem, 11vw, 5.5rem)', lineHeight: 0.82, letterSpacing: '-0.05em' }}>
             {drillsThisWeek}<span style={{ color: 'var(--w40)' }}>/5</span>
           </p>
-          <p style={{ fontSize: 13.5, color: 'var(--w70)', marginTop: 8 }}>
-            {drillsThisWeek === 0 ? 'No sessions yet this week.' :
-             drillsThisWeek >= 5 ? 'Weekly target hit. Keep going.' :
-             `${drillsThisWeek} session${drillsThisWeek !== 1 ? 's' : ''} logged.`}
-          </p>
+          <p style={{ fontSize: 14, color: 'var(--w70)', marginTop: 10 }}>{caption}</p>
         </div>
 
         {streak > 0 && (
           <Tooltip label={`${streak} day${streak !== 1 ? 's' : ''} in a row of training`} side="left">
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '6px 12px', borderRadius: 50,
-              background: 'rgba(77,166,255,0.14)',
-              border: '0.5px solid rgba(77,166,255,0.30)',
+              display: 'inline-flex', alignItems: 'center', gap: 5,
+              padding: '7px 13px', borderRadius: 50,
+              background: 'rgba(77,166,255,0.16)',
+              border: '0.5px solid rgba(77,166,255,0.32)',
               cursor: 'help', flexShrink: 0,
             }}>
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="var(--red)">
-                <path d="M6 1c1 2 3 3 3 5.5S7.5 11 6 11s-3-2-3-4.5C3 5 4 4 6 1z"/>
-              </svg>
-              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', letterSpacing: '0.02em' }}>
-                {streak}-day streak
+              <Flame size={14} weight="fill" color="var(--accent)" />
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--accent-strong)', letterSpacing: '0.01em' }}>
+                {streak}
               </span>
             </div>
           </Tooltip>
         )}
       </div>
 
-      {/* Week — one round chip per day, richer visual */}
-      <div style={{ display: 'flex', gap: 8, position: 'relative', marginBottom: 4 }}>
+      {/* 7-day ring */}
+      <div style={{ display: 'flex', gap: 8, position: 'relative', marginTop: 26 }}>
         {days.map((d, i) => (
-          <Tooltip key={i} label={d.done ? `Trained — ${d.date}` : d.isToday ? "Today — nothing yet" : `Rest — ${d.date}`} side="top">
-            <div style={{
-              flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-              cursor: 'help',
-            }}>
-              {/* Day letter */}
-              <span style={{
-                fontSize: 11, letterSpacing: '0.08em', fontWeight: 700,
-                color: d.isToday ? 'var(--red)' : d.done ? 'var(--w70)' : 'var(--w50)',
-              }}>
+          <Tooltip key={i} label={d.done ? `Trained ${d.date}` : d.isToday ? 'Today, nothing yet' : `Rest ${d.date}`} side="top">
+            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, cursor: 'help' }}>
+              <span style={{ fontSize: 11, letterSpacing: '0.06em', fontWeight: 700, color: d.isToday ? 'var(--accent-strong)' : d.done ? 'var(--w70)' : 'var(--w45)' }}>
                 {d.label}
               </span>
-
-              {/* Circle chip with date inside */}
               <div style={{
-                position: 'relative',
-                width: '100%', aspectRatio: '1 / 1',
-                maxWidth: 44, minHeight: 32,
+                position: 'relative', width: '100%', aspectRatio: '1 / 1', maxWidth: 46, minHeight: 32,
                 borderRadius: '50%',
-                background: d.isToday ? 'var(--nav-active-bg)' : d.done ? 'var(--red)' : 'transparent',
-                border: d.isToday || d.done ? 'none' : '0.5px solid var(--surface-border-2)',
+                background: d.isToday ? 'var(--nav-active-bg)' : d.done ? 'var(--accent)' : 'transparent',
+                border: d.isToday || d.done ? 'none' : '1px solid var(--surface-border-2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: d.done && !d.isToday ? '0 2px 12px rgba(77,166,255,0.28)' : 'none',
-                transition: 'background 400ms cubic-bezier(0.23, 1, 0.32, 1), border-color 400ms, box-shadow 400ms',
+                boxShadow: d.done && !d.isToday ? '0 3px 14px rgba(77,166,255,0.32)' : 'none',
+                transition: 'background 400ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 400ms',
               }}>
                 <span style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1,
+                  fontFamily: 'var(--font-display)', fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1,
                   color: d.isToday ? 'var(--nav-active-color)' : d.done ? 'var(--btn-ink)' : 'var(--w60)',
                 }}>
                   {d.date}
@@ -135,17 +120,6 @@ function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
           </Tooltip>
         ))}
       </div>
-
-      {/* Goal count line */}
-      {goalsCount > 0 && (
-        <p style={{
-          marginTop: 18, paddingTop: 14, position: 'relative',
-          borderTop: '0.5px solid var(--surface-border)',
-          fontSize: 13, color: 'var(--w70)',
-        }}>
-          <span style={{ color: 'var(--white)', fontWeight: 700 }}>{goalsCount}</span> active goal{goalsCount !== 1 ? 's' : ''}
-        </p>
-      )}
     </div>
   );
 }
@@ -253,173 +227,143 @@ export default function Dashboard() {
           </h1>
         </div>
 
-        {/* ── Week hero ── */}
-        <div style={{ marginBottom: '1rem' }}>
-          <WeekHero
-            drillsThisWeek={drillsThisWeek}
-            streak={streak}
-            goalsCount={goals.length}
-            drillResults={drillResults}
-          />
+        {/* ── Week hero — the single accent moment of the page ── */}
+        <div style={{ marginBottom: 'clamp(2rem, 5vh, 3rem)' }}>
+          <WeekHero drillsThisWeek={drillsThisWeek} streak={streak} drillResults={drillResults} />
         </div>
 
-
-        {/* ── Next session ── */}
+        {/* ── Next session — the one actionable card. Solid, no competing glow. ── */}
         {nextBooking && sessionDate ? (
-          <div style={{
-            position: 'relative',
-            background: 'linear-gradient(135deg, rgba(77,166,255,0.10) 0%, rgba(77,166,255,0.02) 100%)',
+          <div className="squircle reveal" style={{
+            background: 'var(--surface-1)',
             border: '0.5px solid var(--surface-border-2)',
-            borderRadius: 22, padding: '1.5rem',
+            borderRadius: 24, padding: '1.5rem 1.625rem',
             marginBottom: '1rem',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
-            overflow: 'hidden',
           }}>
-            <div style={{
-              position: 'absolute', top: -60, right: -60,
-              width: 220, height: 220, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(77,166,255,0.20) 0%, transparent 65%)',
-              pointerEvents: 'none',
-            }} />
-            <div style={{ position: 'relative' }}>
-              <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w70)', marginBottom: '0.5rem' }}>
-                {t('dashboard.nextSession')}
-              </p>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 4vw, 2rem)', letterSpacing: '-0.035em', lineHeight: 1, marginBottom: '0.375rem', color: 'var(--white)' }}>
-                {nextBooking.coaches?.profiles?.name ?? 'Your coach'}
-              </p>
-              <p style={{ fontSize: 13, color: 'var(--w70)' }}>
-                {sessionDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
-                {' — '}
-                {sessionDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-              </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
+              <div style={{
+                width: 48, height: 48, borderRadius: 16, flexShrink: 0,
+                background: 'rgba(77,166,255,0.14)', border: '0.5px solid rgba(77,166,255,0.28)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <VideoCamera size={22} weight="fill" color="var(--accent)" />
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.25rem, 3.5vw, 1.625rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: 'var(--white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {nextBooking.coaches?.profiles?.name ?? 'Your coach'}
+                </p>
+                <p style={{ fontSize: 13, color: 'var(--w70)', marginTop: 3 }}>
+                  {sessionDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
+                  {', '}
+                  {sessionDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                </p>
+              </div>
             </div>
-            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10, flexShrink: 0 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', background: 'rgba(77,166,255,0.14)', border: '0.5px solid rgba(77,166,255,0.30)', padding: '5px 12px', borderRadius: 50, letterSpacing: '0.02em' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 9, flexShrink: 0 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-strong)', background: 'rgba(77,166,255,0.14)', border: '0.5px solid rgba(77,166,255,0.30)', padding: '4px 11px', borderRadius: 50 }}>
                 {countdown(nextBooking.starts_at, t('dashboard.now'))}
               </span>
-              <Link to={`/session/${nextBooking.id}`} className="btn-primary" style={{ fontSize: 13, minHeight: 40, padding: '0 22px', textDecoration: 'none' }}>
+              <Link to={`/session/${nextBooking.id}`} className="btn-primary" style={{ fontSize: 13.5, minHeight: 42, padding: '0 22px', textDecoration: 'none' }}>
                 {t('dashboard.join')}
               </Link>
             </div>
           </div>
         ) : (
-          <Link to="/coaches" style={{
-            display: 'block', textDecoration: 'none',
-            background: 'var(--surface-1)',
-            border: '0.5px solid var(--surface-border-2)',
-            borderRadius: 22, padding: '1.5rem',
-            marginBottom: '1rem',
+          <Link to="/coaches" className="squircle reveal" style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+            textDecoration: 'none',
+            background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
+            borderRadius: 24, padding: '1.5rem 1.625rem', marginBottom: '1rem',
           }}>
-            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)', marginBottom: '0.75rem' }}>
-              {t('dashboard.nextSession')}
-            </p>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-              <p style={{ fontSize: 15, color: 'var(--w70)' }}>{t('dashboard.noUpcoming')}</p>
-              <span className="btn-primary" style={{ fontSize: 13, minHeight: 40, padding: '0 20px' }}>
-                {t('dashboard.findCoach')}
-              </span>
-            </div>
+            <p style={{ fontSize: 15, color: 'var(--w70)' }}>{t('dashboard.noUpcoming')}</p>
+            <span className="btn-primary" style={{ fontSize: 13, minHeight: 40, padding: '0 20px' }}>
+              {t('dashboard.findCoach')}
+            </span>
           </Link>
         )}
 
-        {/* ── Today tasks ── */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2" style={{ marginBottom: '1rem' }}>
+        {/* ── Today — two large action tiles ── */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 reveal" style={{ marginBottom: 'clamp(1.5rem, 4vh, 2.25rem)' }}>
           {[
-            { to: '/drills', label: t('dashboard.drillLabel'), done: drillDoneToday, doneText: t('dashboard.doneTodayDrill'), todoText: t('dashboard.trainFocus') },
-            { to: '/journal', label: t('dashboard.journalLabel'), done: journalDoneToday, doneText: t('dashboard.entrySaved'), todoText: t('dashboard.writeToday') },
+            { to: '/drills', Icon: Barbell, label: t('dashboard.drillLabel'), done: drillDoneToday, doneText: t('dashboard.doneTodayDrill'), todoText: t('dashboard.trainFocus') },
+            { to: '/journal', Icon: NotePencil, label: t('dashboard.journalLabel'), done: journalDoneToday, doneText: t('dashboard.entrySaved'), todoText: t('dashboard.writeToday') },
           ].map(task => (
-            <Link key={task.to} to={task.to} style={{ textDecoration: 'none' }}>
-              <div style={{
-                background: 'var(--surface-1)',
-                border: '0.5px solid var(--surface-border-2)',
-                borderRadius: 18, padding: '1.25rem',
-                opacity: task.done ? 0.7 : 1,
-                transition: 'opacity 220ms cubic-bezier(0.23, 1, 0.32, 1), border-color 220ms, background 220ms',
-              }}
-              onMouseEnter={e => { if (!task.done) { (e.currentTarget as HTMLElement).style.background = 'var(--surface-hover)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--line-2)'; } }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-1)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--surface-border-2)'; }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                  <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: task.done ? 'var(--red)' : 'var(--w60)' }}>{task.label}</p>
-                  <span style={{
-                    width: 22, height: 22, borderRadius: '50%',
-                    background: task.done ? 'var(--red)' : 'transparent',
-                    border: task.done ? 'none' : '1.5px solid var(--w40)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'background 260ms cubic-bezier(0.4, 0, 0.2, 1), border-color 260ms',
-                  }}>
-                    {task.done && <svg width="11" height="11" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.2 2.2L8 2.6" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                  </span>
-                </div>
-                <p style={{ fontSize: 14, fontWeight: 500, color: task.done ? 'var(--w60)' : 'var(--white)', textDecoration: task.done ? 'line-through' : 'none', textDecorationColor: 'var(--w40)' }}>
-                  {task.done ? task.doneText : task.todoText}
-                </p>
+            <Link key={task.to} to={task.to} className="squircle" style={{
+              textDecoration: 'none',
+              background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
+              borderRadius: 20, padding: '1.375rem',
+              opacity: task.done ? 0.72 : 1,
+              transition: 'opacity 220ms cubic-bezier(0.23, 1, 0.32, 1), border-color 220ms, background 220ms',
+            }}
+            onMouseEnter={e => { if (!task.done) { (e.currentTarget as HTMLElement).style.background = 'var(--surface-hover)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--line-2)'; } }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-1)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--surface-border-2)'; }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <task.Icon size={24} weight="duotone" color={task.done ? 'var(--accent)' : 'var(--w70)'} />
+                <span style={{
+                  width: 24, height: 24, borderRadius: '50%',
+                  background: task.done ? 'var(--accent)' : 'transparent',
+                  border: task.done ? 'none' : '1.5px solid var(--w40)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'background 260ms cubic-bezier(0.4, 0, 0.2, 1), border-color 260ms',
+                }}>
+                  {task.done && <Check size={13} weight="bold" color="var(--btn-ink)" />}
+                </span>
               </div>
+              <p style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: task.done ? 'var(--accent-strong)' : 'var(--w60)', marginBottom: 5 }}>{task.label}</p>
+              <p style={{ fontSize: 14.5, fontWeight: 500, color: task.done ? 'var(--w60)' : 'var(--white)', textDecoration: task.done ? 'line-through' : 'none', textDecorationColor: 'var(--w40)' }}>
+                {task.done ? task.doneText : task.todoText}
+              </p>
             </Link>
           ))}
         </div>
 
-        {/* ── Goals ── */}
-        <div style={{
-          background: 'var(--surface-1)',
-          border: '0.5px solid var(--surface-border-2)',
-          borderRadius: 22, padding: '1.5rem 1.75rem', marginBottom: '1rem',
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.125rem' }}>
+        {/* ── Goals — quiet section, hairline not a box ── */}
+        <div className="reveal" style={{ marginBottom: 'clamp(1.5rem, 4vh, 2.25rem)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', paddingBottom: 14, borderBottom: '0.5px solid var(--surface-border)', marginBottom: 16 }}>
             <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{t('dashboard.goalsStat')}</p>
-            <Link to="/goals" style={{ fontSize: 13, color: 'var(--w70)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, transition: 'color 200ms cubic-bezier(0.23, 1, 0.32, 1)', fontWeight: 500 }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--white)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--w70)')}>
+            <Link to="/goals" style={{ fontSize: 13, color: 'var(--link)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
               {t('dashboard.all')}
-              <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><path d="M5 3l3.5 3.5L5 10" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <ArrowRight size={13} weight="bold" />
             </Link>
           </div>
 
           {goals.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {goals.slice(0, 3).map(g => (
                 <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <Tooltip label={`${g.horizon.charAt(0).toUpperCase() + g.horizon.slice(1)}-term goal`} side="right">
                     <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: HORIZON_COLOR[g.horizon] ?? 'var(--w40)', cursor: 'help' }} />
                   </Tooltip>
-                  <span style={{ fontSize: 14, color: 'var(--white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{g.title}</span>
+                  <span style={{ fontSize: 14.5, color: 'var(--white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{g.title}</span>
                   <span style={{ fontSize: 11, color: 'var(--w60)', flexShrink: 0, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>{g.horizon}</span>
                 </div>
               ))}
             </div>
           ) : (
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-              <p style={{ fontSize: 14, color: 'var(--w70)' }}>{t('dashboard.goalsEmpty')}</p>
+              <p style={{ fontSize: 14.5, color: 'var(--w70)' }}>{t('dashboard.goalsEmpty')}</p>
               <Link to="/goals" className="btn-primary" style={{ fontSize: 12, minHeight: 34, padding: '0 16px', textDecoration: 'none', flexShrink: 0 }}>{t('dashboard.add')}</Link>
             </div>
           )}
         </div>
 
-        {/* ── Last journal entry ── */}
+        {/* ── Recent reflection — quiet row ── */}
         {lastEntry && (
-          <Link to="/journal" style={{ textDecoration: 'none', display: 'block' }}>
-            <div style={{
-              background: 'var(--surface-1)',
-              border: '0.5px solid var(--surface-border-2)',
-              borderRadius: 22, padding: '1.5rem 1.75rem',
-              transition: 'background 220ms cubic-bezier(0.23, 1, 0.32, 1), border-color 220ms',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-hover)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--line-2)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-1)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--surface-border-2)'; }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.875rem' }}>
-                <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{t('dashboard.recent')}</p>
-                <p style={{ fontSize: 12, color: 'var(--w60)', letterSpacing: '0.02em' }}>
-                  {new Date(lastEntry.created_at).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
-                </p>
-              </div>
-              <p style={{
-                fontSize: 14, color: 'var(--w80)', lineHeight: 1.65,
-                overflow: 'hidden', display: '-webkit-box',
-                WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
-              }}>
-                {journalText(lastEntry.body)}
+          <Link to="/journal" className="reveal" style={{ textDecoration: 'none', display: 'block' }}>
+            <div style={{ paddingBottom: 14, borderBottom: '0.5px solid var(--surface-border)', marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{t('dashboard.recent')}</p>
+              <p style={{ fontSize: 12, color: 'var(--w60)', letterSpacing: '0.02em' }}>
+                {new Date(lastEntry.created_at).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
               </p>
             </div>
+            <p style={{
+              fontSize: 14.5, color: 'var(--w80)', lineHeight: 1.65,
+              overflow: 'hidden', display: '-webkit-box',
+              WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
+            }}>
+              {journalText(lastEntry.body)}
+            </p>
           </Link>
         )}
 
