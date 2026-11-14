@@ -44,6 +44,7 @@ const Settings          = lazy(() => import('./pages/Settings'));
 const SessionFeedback   = lazy(() => import('./pages/SessionFeedback'));
 const AdminFlags        = lazy(() => import('./pages/AdminFlags'));
 const Playbook          = lazy(() => import('./pages/Playbook'));
+const You               = lazy(() => import('./pages/You'));
 const LegalTerms        = lazy(() => import('./pages/legal/Terms'));
 const LegalPrivacy      = lazy(() => import('./pages/legal/Privacy'));
 const LegalCookies      = lazy(() => import('./pages/legal/Cookies'));
@@ -142,6 +143,7 @@ export default function App() {
             <Route path="/coach/athletes/:id"   element={<ProtectedRoute role="coach"><CoachAthleteHub /></ProtectedRoute>} />
 
             <Route path="/playbook" element={<ProtectedRoute role="athlete"><Playbook /></ProtectedRoute>} />
+            <Route path="/you" element={<ProtectedRoute role="athlete"><You /></ProtectedRoute>} />
             <Route path="/session/:bookingId/feedback" element={<ProtectedRoute role="athlete"><SessionFeedback /></ProtectedRoute>} />
             <Route path="/admin/flags" element={<AdminFlags />} />
 
