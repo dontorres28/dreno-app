@@ -91,7 +91,7 @@ export default function AdminOnboard() {
   }
 
   const shellStyle: React.CSSProperties = {
-    minHeight: '100dvh', background: 'var(--bg)',
+    minHeight: '100dvh',
     display: 'flex', flexDirection: 'column',
     fontFamily: 'var(--font-body)', color: 'var(--white)',
     WebkitFontSmoothing: 'antialiased',
@@ -180,7 +180,7 @@ export default function AdminOnboard() {
 
   // ── Step 0: Who you are ──────────────────────────────────────────
   if (step === 0) return (
-    <div style={containerStyle} ref={scrollRef}>
+    <div className="bg-wash" style={containerStyle} ref={scrollRef}>
 
       <div style={innerStyle}>
         {progressBar}
@@ -228,7 +228,7 @@ export default function AdminOnboard() {
 
   // ── Step 1: Program + pricing ────────────────────────────────────
   if (step === 1) return (
-    <div style={containerStyle} ref={scrollRef}>
+    <div className="bg-wash" style={containerStyle} ref={scrollRef}>
 
       <div style={innerStyle}>
         {progressBar}
@@ -398,7 +398,7 @@ export default function AdminOnboard() {
 
   // ── Step 2: Contact + summary ────────────────────────────────────
   return (
-    <div style={containerStyle} ref={scrollRef}>
+    <div className="bg-wash" style={containerStyle} ref={scrollRef}>
 
       <div style={innerStyle}>
         {progressBar}

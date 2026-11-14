@@ -52,7 +52,7 @@ const LegalRefunds      = lazy(() => import('./pages/legal/Refunds'));
 
 function RouteFallback() {
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="bg-wash" style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Spinner size={32} />
     </div>
   );

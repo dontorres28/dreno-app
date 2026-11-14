@@ -169,7 +169,7 @@ export default function Book() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+      <div className="bg-wash" style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Spinner size={28} />
       </div>
     );
@@ -201,7 +201,7 @@ export default function Book() {
   );
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased' }}>
+    <div className="bg-wash" style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased' }}>
       {/* Top bar, matches onboarding */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '18px 20px', flexShrink: 0 }}>
         <div style={{ width: 72, display: 'flex', justifyContent: 'flex-start' }}>

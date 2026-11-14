@@ -5,7 +5,7 @@ import BottomTabs from './BottomTabs';
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
+    <div className="bg-wash min-h-screen flex flex-col">
       <Navbar />
       <main
         key={pathname}

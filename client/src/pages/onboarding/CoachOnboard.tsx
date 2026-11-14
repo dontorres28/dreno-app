@@ -253,8 +253,8 @@ export default function CoachOnboard() {
   );
 
   return (
-    <div style={{
-      minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column',
+    <div className="bg-wash" style={{
+      minHeight: '100dvh', display: 'flex', flexDirection: 'column',
       fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased',
     }}>
       {/* Top bar */}

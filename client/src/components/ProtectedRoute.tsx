@@ -15,9 +15,8 @@ export default function ProtectedRoute({ children, role }: ProtectedRouteProps) 
   // profile=null (role checks silently pass, data hooks read undefined).
   if (loading || (user && !profile)) {
     return (
-      <div style={{
+      <div className="bg-wash" style={{
         minHeight: '100dvh',
-        background: 'var(--bg)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <Spinner size={32} />

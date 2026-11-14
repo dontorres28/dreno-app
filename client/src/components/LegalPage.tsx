@@ -16,7 +16,7 @@ interface LegalPageProps {
  */
 export default function LegalPage({ title, children }: LegalPageProps) {
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--bg)', color: 'var(--white)', fontFamily: 'var(--font-body)' }}>
+    <div className="bg-wash" style={{ minHeight: '100dvh', color: 'var(--white)', fontFamily: 'var(--font-body)' }}>
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
         <Link
           to="/"

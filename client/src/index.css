@@ -259,6 +259,21 @@ body {
   letter-spacing: -0.005em;      /* Satoshi optical tightening at body sizes */
 }
 
+/* Premium background wash — a single brand-blue halo bleeding from the top,
+   dissolved well before mid-screen. Scoped to "chrome" surfaces (auth, landing,
+   dashboards, onboarding, profiles), never the drill fields which need a flat
+   background. Layered over --bg so it stays a drop-in for background: var(--bg). */
+.bg-wash {
+  background:
+    radial-gradient(130% 70% at 50% -12%, rgba(77, 166, 255, 0.10), transparent 58%),
+    var(--bg);
+}
+[data-theme="light"] .bg-wash {
+  background:
+    radial-gradient(130% 70% at 50% -12%, rgba(11, 95, 212, 0.06), transparent 60%),
+    var(--bg);
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-optical-sizing: auto;

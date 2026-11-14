@@ -110,7 +110,7 @@ export default function Login() {
   const anyLoading = loading || !!oauthLoading;
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+    <div className="bg-wash" style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
       {/* Top bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 2rem', flexShrink: 0 }}>
         <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', height: 32, textDecoration: 'none' }}>

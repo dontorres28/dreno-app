@@ -41,7 +41,7 @@ export default function AuthCallback() {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+    <div className="bg-wash" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Spinner size={32} />
     </div>
   );

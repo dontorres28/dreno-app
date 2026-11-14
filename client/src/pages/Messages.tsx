@@ -231,7 +231,7 @@ export default function Messages() {
   }, []);
 
   return (
-    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased' }}>
+    <div className="bg-wash" style={{ height: '100dvh', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased' }}>
       <Navbar />
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
