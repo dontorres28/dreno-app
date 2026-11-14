@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { haptics } from '../lib/haptics';
 import TestShell from '../components/test/TestShell';
+import { blueOrb } from '../components/test/orbStyles';
 
 // Simple 3-phase cycle: breathe in (4s) → hold (1s) → breathe out (8s). 3 rounds.
 const T_IN   = 4.0;
@@ -232,13 +233,11 @@ export default function DrillSigh() {
             willChange: 'transform',
           }} />
 
-          {/* Main orb — brand blue, matching the whole system */}
-          <div style={{
+          {/* Main orb — the shared lit-sphere material, breathing in scale */}
+          <div className="signal-orb" style={{
             position: 'absolute',
             width: '80%', height: '80%',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle at 32% 28%, #8CC5FF 0%, #4DA6FF 52%, #0B5FD4 100%)',
-            boxShadow: '0 0 50px rgba(77,166,255,0.42), inset 0 0 60px rgba(0,0,0,0.12)',
+            ...blueOrb,
             transform: `scale(${scale})`,
             transition: `transform 80ms linear`,
             willChange: 'transform',
@@ -281,11 +280,9 @@ export default function DrillSigh() {
   // ── Done ───────────────────────────────────────────────────────────────
   return (
     <TestShell title="Breathe">
-      <div style={{ textAlign: 'center', maxWidth: 460 }}>
-        <div style={{
-          width: 100, height: 100, borderRadius: '50%', margin: '0 auto 2rem',
-          background: 'radial-gradient(circle at 35% 30%, #8CC5FF 0%, #4DA6FF 55%, #0B5FD4 100%)',
-          boxShadow: '0 0 40px rgba(77,166,255,0.4)',
+      <div className="materialize" style={{ textAlign: 'center', maxWidth: 460 }}>
+        <div className="signal-orb" style={{
+          width: 100, height: 100, margin: '0 auto 2rem', ...blueOrb,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           <Check size={40} weight="bold" color="var(--btn-ink)" />

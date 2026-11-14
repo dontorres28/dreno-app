@@ -6,6 +6,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import { haptics } from '../lib/haptics'
 import TestShell from '../components/test/TestShell'
 import Readout from '../components/test/Readout'
+import { blueOrb, neutralOrb } from '../components/test/orbStyles'
 
 type Phase = 'intro' | 'running' | 'blank' | 'round_result' | 'done'
 
@@ -161,15 +162,12 @@ export default function DrillGoNoGo() {
             opacity: phase === 'blank' ? 1 : 0,
             transition: reduced ? 'none' : `opacity 200ms ${EASE}`,
           }} />
-          <div style={{
-            position: 'absolute', inset: 0, borderRadius: '50%',
-            background: isGo ? 'var(--white)' : 'var(--accent)',
-            boxShadow: isGo
-              ? '0 0 80px rgba(255,255,255,0.06), inset 0 0 30px rgba(255,255,255,0.12)'
-              : '0 0 80px rgba(77,166,255,0.45), inset 0 0 30px rgba(77,166,255,0.3)',
+          <div className="signal-orb" style={{
+            position: 'absolute', inset: 0,
+            ...(isGo ? neutralOrb : blueOrb),
             opacity: phase === 'running' ? 1 : 0,
-            transform: phase === 'running' ? 'scale(1)' : 'scale(0.94)',
-            transition: reduced ? 'none' : `opacity 200ms ${EASE}, transform 220ms ${EASE}, background 140ms ${EASE}`,
+            transform: phase === 'running' ? 'scale(1)' : 'scale(0.9)',
+            transition: reduced ? 'none' : `opacity 190ms ${EASE}, transform 240ms cubic-bezier(0.2,0.9,0.3,1.15)`,
             willChange: 'opacity, transform',
           }} />
         </div>
@@ -189,7 +187,7 @@ export default function DrillGoNoGo() {
     const isLastRound = completedRound === TOTAL_ROUNDS
     return (
       <TestShell title="Go / No-go" onBack={() => navigate('/drills')}>
-        <div style={{ textAlign: 'center', maxWidth: 420 }}>
+        <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 420 }}>
           <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-strong)', letterSpacing: '-0.005em', marginBottom: 12 }}>
             Round {completedRound} of {TOTAL_ROUNDS}
           </p>
@@ -219,7 +217,7 @@ export default function DrillGoNoGo() {
     const rating = acc >= 95 ? 'Elite' : acc >= 85 ? 'Sharp' : acc >= 70 ? 'Solid' : 'Warming up'
     return (
       <TestShell title="Go / No-go" onBack={() => navigate('/drills')}>
-        <div style={{ textAlign: 'center', maxWidth: 460 }}>
+        <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 460 }}>
           <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-strong)', letterSpacing: '-0.005em', marginBottom: 14 }}>
             {rating}
           </p>
@@ -245,17 +243,17 @@ export default function DrillGoNoGo() {
   // ── Intro ──
   return (
     <TestShell title="Go / No-go" onBack={() => navigate('/drills')}>
-      <div style={{ textAlign: 'center', maxWidth: 460 }}>
+      <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 460 }}>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 7vw, 4.25rem)', lineHeight: 0.98, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
           Tap fast.<br />Freeze on blue.
         </h1>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '2.5rem', marginBottom: '2rem' }}>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'var(--white)', boxShadow: '0 0 24px rgba(255,255,255,0.08)', margin: '0 auto 10px' }} />
+            <div className="signal-orb" style={{ width: 60, height: 60, ...neutralOrb, margin: '0 auto 10px' }} />
             <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em' }}>Tap</p>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 24px rgba(77,166,255,0.3)', margin: '0 auto 10px' }} />
+            <div className="signal-orb" style={{ width: 60, height: 60, ...blueOrb, margin: '0 auto 10px' }} />
             <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em' }}>Freeze</p>
           </div>
         </div>

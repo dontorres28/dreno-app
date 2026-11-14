@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import TestShell from '../components/test/TestShell'
 import Readout from '../components/test/Readout'
+import { blueOrb } from '../components/test/orbStyles'
 import { haptics } from '../lib/haptics'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
@@ -145,39 +146,30 @@ export default function DrillReaction() {
         }}
       >
         {phase === 'too_early' ? (
-          <div style={{ textAlign: 'center', maxWidth: 340, padding: '0 1.5rem' }}>
+          <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 340, padding: '0 1.5rem' }}>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 1, letterSpacing: '-0.035em', color: 'var(--white)', marginBottom: 14 }}>
               Too early
             </p>
             <p style={{ fontSize: 15, color: 'var(--w70)', lineHeight: 1.5 }}>
-              Wait for the circle to fill, then tap. Tap anywhere to try again.
+              Wait for the circle to light, then tap. Tap anywhere to try again.
             </p>
           </div>
+        ) : armed ? (
+          // The signal must appear crisply — a slow entrance would corrupt the
+          // reaction-time reading — so just the lit sphere, near-instant.
+          <div
+            className="signal-orb"
+            style={{
+              width: 224, height: 224, ...blueOrb,
+              animation: reduced ? 'none' : 'orb-pop 110ms ease-out both',
+            }}
+          />
         ) : (
-          <>
-            <div style={{ position: 'relative', width: 240, height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {/* Hairline rest ring, always present */}
-              <div style={{
-                position: 'absolute', inset: 0, borderRadius: '50%',
-                border: '0.5px solid var(--surface-border-2)',
-                opacity: armed ? 0 : 1,
-                transition: reduced ? 'none' : `opacity 160ms ${EASE}`,
-              }} />
-              {/* The signal */}
-              <div style={{
-                width: 216, height: 216, borderRadius: '50%',
-                background: 'var(--accent)',
-                boxShadow: '0 0 90px rgba(77,166,255,0.5), inset 0 0 36px rgba(77,166,255,0.35)',
-                opacity: armed ? 1 : 0,
-                transform: armed ? 'scale(1)' : 'scale(0.9)',
-                transition: reduced ? 'none' : `opacity 120ms ${EASE}, transform 160ms ${EASE}`,
-                willChange: 'opacity, transform',
-              }} />
-            </div>
-            <p style={{ position: 'absolute', bottom: 48, fontSize: 14, color: 'var(--w60)', letterSpacing: '-0.005em' }}>
-              {armed ? 'Tap' : 'Wait…'}
-            </p>
-          </>
+          // Waiting: a hairline ring with a slow, alive breathe.
+          <div
+            className={reduced ? '' : 'orb-breathe'}
+            style={{ width: 224, height: 224, borderRadius: '50%', border: '0.5px solid var(--surface-border-2)' }}
+          />
         )}
       </div>
     )
@@ -191,17 +183,19 @@ export default function DrillReaction() {
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         fontFamily: 'var(--font-body)', WebkitFontSmoothing: 'antialiased',
       }}>
-        {lastTime !== null && (
-          <Readout value={lastTime} unit="ms" size="clamp(3.5rem, 11vw, 6rem)" duration={500} />
-        )}
-        <div style={{ display: 'flex', gap: 7, marginTop: 36 }}>
-          {Array.from({ length: TRIALS }).map((_, i) => (
-            <span key={i} style={{
-              width: 26, height: 3, borderRadius: 3,
-              background: i < trial ? 'var(--accent)' : 'var(--surface-border-2)',
-              transition: `background 300ms ${EASE}`,
-            }} />
-          ))}
+        <div className={reduced ? '' : 'materialize'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {lastTime !== null && (
+            <Readout value={lastTime} unit="ms" size="clamp(3.5rem, 11vw, 6rem)" duration={500} />
+          )}
+          <div style={{ display: 'flex', gap: 7, marginTop: 36 }}>
+            {Array.from({ length: TRIALS }).map((_, i) => (
+              <span key={i} style={{
+                width: 26, height: 3, borderRadius: 3,
+                background: i < trial ? 'var(--accent)' : 'var(--surface-border-2)',
+                transition: `background 300ms ${EASE}`,
+              }} />
+            ))}
+          </div>
         </div>
       </div>
     )
@@ -211,7 +205,7 @@ export default function DrillReaction() {
   if (phase === 'intro') {
     return (
       <TestShell title="Reaction" onBack={() => navigate('/drills')}>
-        <div style={{ textAlign: 'center', maxWidth: 440 }}>
+        <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 440 }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 7vw, 4.25rem)', lineHeight: 0.98, letterSpacing: '-0.035em', marginBottom: '1.25rem' }}>
             Tap the moment<br />it lights up
           </h1>
@@ -236,7 +230,7 @@ export default function DrillReaction() {
   // ── Done ──
   return (
     <TestShell title="Reaction" onBack={() => navigate('/drills')}>
-      <div style={{ textAlign: 'center', maxWidth: 460 }}>
+      <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 460 }}>
         <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-strong)', letterSpacing: '-0.005em', marginBottom: 14 }}>
           {med !== null ? rating(med) : ''}
         </p>
