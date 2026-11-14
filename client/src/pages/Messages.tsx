@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, LayoutGroup } from 'framer-motion';
+import { ChatsCircle, CaretLeft, VideoCamera, PaperPlaneRight } from '@phosphor-icons/react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
@@ -329,8 +330,8 @@ export default function Messages() {
                     </div>
                     <p style={{ fontSize: 12, color: 'var(--w60)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {new Date(t.starts_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                      {t.duration_min ? ` — ${t.duration_min}min` : ''}
-                      {' — '}
+                      {t.duration_min ? `, ${t.duration_min}min` : ''}
+                      {', '}
                       {t.status === 'completed' ? 'Completed' : 'Confirmed'}
                     </p>
                   </div>
@@ -343,11 +344,8 @@ export default function Messages() {
         {/* ── Message area ── */}
         {!active ? (
           <div className={mobileShowThread ? 'flex flex-1' : 'hidden md:flex md:flex-1'} style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
-            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M17 10.5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="var(--w60)" strokeWidth="1.4"/>
-                <path d="M10 7v3.5l2.5 1.5" stroke="var(--w60)" strokeWidth="1.4" strokeLinecap="round"/>
-              </svg>
+            <div style={{ width: 52, height: 52, borderRadius: 18, background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ChatsCircle size={24} weight="duotone" color="var(--accent)" />
             </div>
             <p style={{ fontSize: 15, color: 'var(--w60)' }}>Select a conversation</p>
           </div>
@@ -369,9 +367,7 @@ export default function Messages() {
                 }}
                 aria-label="Back to conversations"
               >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M12 5l-5 5 5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <CaretLeft size={20} weight="bold" />
               </button>
               <Avatar name={active.other_name} size={36} />
               <div style={{ flex: 1 }}>
@@ -381,23 +377,20 @@ export default function Messages() {
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--w60)' }}>
                   {sessionLabel(active.starts_at)}
-                  {active.duration_min ? ` — ${active.duration_min} ${t('messages.min')}` : ''}
+                  {active.duration_min ? `, ${active.duration_min} ${t('messages.min')}` : ''}
                 </p>
               </div>
               {active.status === 'confirmed' && (
                 <a
                   href={`/session/${active.id}`}
                   style={{
-                    fontSize: 13, fontWeight: 600, color: '#fff',
+                    fontSize: 13, fontWeight: 700, color: 'var(--btn-ink)',
                     textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6,
-                    background: 'var(--red)', padding: '8px 16px', borderRadius: 50,
+                    background: 'var(--accent)', padding: '8px 16px', borderRadius: 50,
                     transition: 'transform 160ms cubic-bezier(0.23, 1, 0.32, 1), opacity 200ms',
                   }}
                 >
-                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                    <rect x="1" y="2" width="8" height="9" rx="1.5" stroke="white" strokeWidth="1.2"/>
-                    <path d="M9 5l3-2v7l-3-2" stroke="white" strokeWidth="1.2" strokeLinejoin="round"/>
-                  </svg>
+                  <VideoCamera size={15} weight="fill" />
                   {t('messages.joinSession')}
                 </a>
               )}
@@ -435,10 +428,7 @@ export default function Messages() {
                     borderTop: '0.5px solid var(--surface-border-2)', paddingTop: '0.875rem', marginTop: 2,
                     borderRadius: 50, display: 'inline-flex', alignItems: 'center', gap: 6,
                   }}>
-                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                      <rect x="1" y="2" width="8" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-                      <path d="M9 5l3-2v7l-3-2" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-                    </svg>
+                    <VideoCamera size={15} weight="fill" />
                     Join video session
                   </a>
                 )}
@@ -477,10 +467,10 @@ export default function Messages() {
                                 : mi === group.messages.length - 1
                                   ? isOwn ? '4px 18px 18px 18px' : '18px 4px 18px 18px'
                                   : isOwn ? '4px 18px 4px 18px' : '18px 4px 18px 4px',
-                              background: isOwn ? 'var(--red)' : 'var(--surface-hover)',
+                              background: isOwn ? 'var(--accent)' : 'var(--surface-hover)',
                               fontSize: 14,
                               lineHeight: 1.5,
-                              color: 'var(--white)',
+                              color: isOwn ? 'var(--btn-ink)' : 'var(--white)',
                               wordBreak: 'break-word',
                             }}>
                               {m.body}
@@ -540,9 +530,7 @@ export default function Messages() {
                   transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1)', flexShrink: 0,
                 }}
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7h10M8 3l4 4-4 4" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <PaperPlaneRight size={16} weight="fill" color={body.trim() ? 'var(--btn-ink)' : 'var(--w50)'} />
               </button>
             </form>
           </div>
