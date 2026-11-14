@@ -58,7 +58,7 @@ function WeekHero({ drillsThisWeek, streak, drillResults }: {
       padding: 'clamp(22px, 5vw, 32px)',
       overflow: 'hidden',
     }}>
-      {/* The single ambient glow of the whole page — the week is the anchor. */}
+      {/* The single ambient glow of the whole page, the week is the anchor. */}
       <div style={{
         position: 'absolute', top: -90, right: -90,
         width: 300, height: 300, borderRadius: '50%',
@@ -227,12 +227,12 @@ export default function Dashboard() {
           </h1>
         </div>
 
-        {/* ── Week hero — the single accent moment of the page ── */}
+        {/* ── Week hero, the single accent moment of the page ── */}
         <div style={{ marginBottom: 'clamp(2rem, 5vh, 3rem)' }}>
           <WeekHero drillsThisWeek={drillsThisWeek} streak={streak} drillResults={drillResults} />
         </div>
 
-        {/* ── Next session — the one actionable card. Solid, no competing glow. ── */}
+        {/* ── Next session, the one actionable card. Solid, no competing glow. ── */}
         {nextBooking && sessionDate ? (
           <div className="squircle reveal" style={{
             background: 'var(--surface-1)',
@@ -283,7 +283,7 @@ export default function Dashboard() {
           </Link>
         )}
 
-        {/* ── Today — two large action tiles ── */}
+        {/* ── Today, two large action tiles ── */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 reveal" style={{ marginBottom: 'clamp(1.5rem, 4vh, 2.25rem)' }}>
           {[
             { to: '/drills', Icon: Barbell, label: t('dashboard.drillLabel'), done: drillDoneToday, doneText: t('dashboard.doneTodayDrill'), todoText: t('dashboard.trainFocus') },
@@ -318,7 +318,7 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* ── Goals — quiet section, hairline not a box ── */}
+        {/* ── Goals, quiet section, hairline not a box ── */}
         <div className="reveal" style={{ marginBottom: 'clamp(1.5rem, 4vh, 2.25rem)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', paddingBottom: 14, borderBottom: '0.5px solid var(--surface-border)', marginBottom: 16 }}>
             <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{t('dashboard.goalsStat')}</p>
@@ -348,7 +348,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* ── Recent reflection — quiet row ── */}
+        {/* ── Recent reflection, quiet row ── */}
         {lastEntry && (
           <Link to="/journal" className="reveal" style={{ textDecoration: 'none', display: 'block' }}>
             <div style={{ paddingBottom: 14, borderBottom: '0.5px solid var(--surface-border)', marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>

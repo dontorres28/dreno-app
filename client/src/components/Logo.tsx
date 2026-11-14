@@ -4,8 +4,8 @@ interface LogoProps {
 }
 
 // Real DRENO SPORTS artwork (public/dreno-logo.png), painted as a mask so the
-// single transparent asset recolors per theme — navy on light, off-white on
-// dark — with no second file. Aspect is locked to the trimmed artwork.
+// single transparent asset recolors per theme, navy on light, off-white on
+// dark, with no second file. Aspect is locked to the trimmed artwork.
 const LOGO_ASPECT = 900 / 198;
 
 const heights = { sm: 18, md: 26, lg: 40 } as const;

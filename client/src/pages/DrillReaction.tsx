@@ -174,7 +174,7 @@ export default function DrillReaction() {
           </div>
         )}
 
-        {/* ── Active — the big red circle ── */}
+        {/* ── Active, the big red circle ── */}
         {phase === 'active' && (
           <div style={{
             width: 220, height: 220, borderRadius: '50%',

@@ -4,7 +4,7 @@ import { Target, NotePencil, BookOpen, Gear, SignOut, CaretRight } from '@phosph
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
 
-// Athlete "You" hub — the 5th tab. Homes the personal destinations that came
+// Athlete "You" hub, the 5th tab. Homes the personal destinations that came
 // off the main nav when it was consolidated to 5.
 export default function You() {
   const { t } = useTranslation();

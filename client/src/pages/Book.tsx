@@ -157,7 +157,7 @@ export default function Book() {
         coachId, availabilityId, startsAt, durationMin,
         priceCents: isIntro ? 0 : (coach.hourly_rate ?? 0) * 100,
         // Prefix so the coach immediately sees this is an intro call, not a paid session.
-        notes: [isIntro ? '[Free intro call]' : null, notes.trim() || null].filter(Boolean).join(' — ') || undefined,
+        notes: [isIntro ? '[Free intro call]' : null, notes.trim() || null].filter(Boolean).join(', ') || undefined,
       });
       navigate('/payment/success');
     } catch (err: any) {
@@ -180,7 +180,7 @@ export default function Book() {
     ? 'Free'
     : (coach?.hourly_rate ? `CHF ${(coach.hourly_rate * dur / 60).toFixed(0)}` : null);
 
-  // Selection pill helper — matches onboarding
+  // Selection pill helper, matches onboarding
   const pill = (label: string, active: boolean, onClick: () => void, small = false) => (
     <button
       key={label}
@@ -201,7 +201,7 @@ export default function Book() {
 
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-body)', color: 'var(--white)', WebkitFontSmoothing: 'antialiased' }}>
-      {/* Top bar — matches onboarding */}
+      {/* Top bar, matches onboarding */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '18px 20px', flexShrink: 0 }}>
         <div style={{ width: 72, display: 'flex', justifyContent: 'flex-start' }}>
           <button
@@ -221,7 +221,7 @@ export default function Book() {
         </div>
       </div>
 
-      {/* Content — centered like onboarding */}
+      {/* Content, centered like onboarding */}
       <div ref={scrollRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2.5rem 6vw 0', overflowY: 'auto' }}>
 
         {/* STEP 0: When */}
@@ -262,7 +262,7 @@ export default function Book() {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                {/* Free intro-call toggle — first booking with any coach can be a no-cost 15/30 min chat. */}
+                {/* Free intro-call toggle, first booking with any coach can be a no-cost 15/30 min chat. */}
                 <div>
                   <label className="label">Session type</label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: 4 }}>
@@ -353,7 +353,7 @@ export default function Book() {
         )}
       </div>
 
-      {/* Bottom CTA — centered, matches onboarding */}
+      {/* Bottom CTA, centered, matches onboarding */}
       <div style={{ padding: '1.5rem 6vw 2.5rem', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
         {step < TOTAL_STEPS - 1 ? (
           <button

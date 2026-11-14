@@ -167,7 +167,7 @@ export default function Signup() {
             })}
           </div>
 
-          {/* Terms/Privacy consent — required before any auth method fires. */}
+          {/* Terms/Privacy consent, required before any auth method fires. */}
           <label style={{
             display: 'flex', alignItems: 'flex-start', gap: 10,
             padding: '10px 2px', marginBottom: '1rem',
@@ -188,7 +188,7 @@ export default function Signup() {
             </span>
           </label>
 
-          {/* Auth buttons — only clickable once role selected + terms agreed */}
+          {/* Auth buttons, only clickable once role selected + terms agreed */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1rem' }}>
             <SocialButton onClick={signUpWithGoogle} disabled={anyLoading || !role || !agreed}>
               {oauthLoading === 'google' ? <Spinner size={16} /> : (
@@ -212,7 +212,7 @@ export default function Signup() {
             </SocialButton>
           </div>
 
-          {/* Collapsible email option — outline pill in the LanguagePicker family:
+          {/* Collapsible email option, outline pill in the LanguagePicker family:
               same weight as OAuth buttons above but one tier subtler (transparent
               fill) so OAuth stays the preferred path. */}
           {!showEmail ? (

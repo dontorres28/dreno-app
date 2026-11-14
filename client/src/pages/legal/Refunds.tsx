@@ -13,7 +13,7 @@ export default function Refunds() {
       </ul>
 
       <h2>Coach cancellations or no-shows</h2>
-      <p>Full refund, automatic — plus a credit toward your next booking as a good-faith gesture.</p>
+      <p>Full refund, automatic, plus a credit toward your next booking as a good-faith gesture.</p>
 
       <h2>Session did not happen for technical reasons</h2>
       <p>If a Dreno-side technical failure (video room down, payment glitch) prevented the session, contact support and we will refund or reschedule at your choice.</p>

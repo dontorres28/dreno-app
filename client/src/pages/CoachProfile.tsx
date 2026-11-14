@@ -80,7 +80,7 @@ export default function CoachProfile() {
     navigate(intro ? `/book/${id}?intro=1` : `/book/${id}`);
   }
 
-  // Consistent chip style — matches athlete pill/tag treatment
+  // Consistent chip style, matches athlete pill/tag treatment
   const tagStyle = (highlight = false): React.CSSProperties => ({
     fontSize: 12, fontWeight: 600, padding: '5px 12px', borderRadius: 50,
     background: highlight ? 'rgba(77,166,255,0.10)' : 'var(--surface-1)',
@@ -186,7 +186,7 @@ export default function CoachProfile() {
             {rebookStats?.rebook_rate !== null && rebookStats?.rebook_rate !== undefined ? (
               <Tooltip label="Athletes who came back after their first session" side="bottom">
                 <span style={{ fontSize: 12, color: 'var(--w70)', fontWeight: 500, cursor: 'help' }}>
-                  {rebookStats.sessions_total} {rebookStats.sessions_total !== 1 ? t('coaches.sessions') : t('coaches.session')} — {rebookStats.rebook_rate}% {t('coaches.rebookRate')}
+                  {rebookStats.sessions_total} {rebookStats.sessions_total !== 1 ? t('coaches.sessions') : t('coaches.session')}, {rebookStats.rebook_rate}% {t('coaches.rebookRate')}
                 </span>
               </Tooltip>
             ) : rebookStats !== null ? (

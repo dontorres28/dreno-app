@@ -62,7 +62,7 @@ export default function Landing() {
     <Layout>
 
       <style>{`
-        /* iPhone frame theme tokens — auto-adapt to dark/light */
+        /* iPhone frame theme tokens, auto-adapt to dark/light */
         :root {
           --iphone-frame: #404040;
           --iphone-body: #262626;
@@ -80,7 +80,7 @@ export default function Landing() {
           --iphone-camera: #D1D1D1;
         }
 
-        /* Step rows — editorial list, staggered enter */
+        /* Step rows, editorial list, staggered enter */
         .step-row {
           opacity: 0;
           transform: translateY(14px);
@@ -103,7 +103,7 @@ export default function Landing() {
           font-optical-sizing: auto;
         }
 
-        /* Mobile — the user is already on a phone, so a phone-inside-a-phone
+        /* Mobile, the user is already on a phone, so a phone-inside-a-phone
            mockup reads as goofy AND the desktop screenshot is illegible at
            375px. Drop the whole mockup row on mobile: hero is pure copy + CTAs.
            Saves ~230KB of image bandwidth on mobile too. */
@@ -111,7 +111,7 @@ export default function Landing() {
           .mockup-row { display: none !important; }
         }
 
-        /* §1 Response — CTAs respond on pointer-down, not release */
+        /* §1 Response, CTAs respond on pointer-down, not release */
         .cta-btn {
           -webkit-tap-highlight-color: transparent;
           touch-action: manipulation;
@@ -126,7 +126,7 @@ export default function Landing() {
         .cta-btn:active {
           transform: scale(0.97);
           transition-duration: 90ms;
-          /* Cut the lift-shadow when pressed — a real button loses shadow under load */
+          /* Cut the lift-shadow when pressed, a real button loses shadow under load */
           box-shadow: 0 4px 12px rgba(77,166,255, 0.18) !important;
         }
         @media (prefers-reduced-motion: reduce) {
@@ -136,14 +136,14 @@ export default function Landing() {
         }
       `}</style>
 
-      {/* ── Hero — full-viewport radial + phone mockup ── */}
+      {/* ── Hero, full-viewport radial + phone mockup ── */}
       <section
         style={{
           position: 'relative', width: '100%',
           overflow: 'hidden',
         }}
       >
-        {/* Layered ambient gradient — soft warmth behind the H1, fully dissipated before the section edge */}
+        {/* Layered ambient gradient, soft warmth behind the H1, fully dissipated before the section edge */}
         <div
           aria-hidden
           style={{
@@ -152,7 +152,7 @@ export default function Landing() {
               radial-gradient(ellipse 65% 45% at 50% 32%, rgba(77,166,255,0.20) 0%, transparent 70%),
               radial-gradient(ellipse 110% 70% at 50% 15%, rgba(77,166,255,0.06) 0%, transparent 70%)
             `,
-            /* Feather the bottom so the glow dissolves into var(--bg) before the section edge — kills the hard seam */
+            /* Feather the bottom so the glow dissolves into var(--bg) before the section edge, kills the hard seam */
             WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 65%, transparent 100%)',
             maskImage: 'linear-gradient(to bottom, black 0%, black 65%, transparent 100%)',
             zIndex: 0,
@@ -233,7 +233,7 @@ export default function Landing() {
             </div>
           </AnimatedGroup>
 
-          {/* Product mockup — single phone, centered. One device, Apple-style.
+          {/* Product mockup, single phone, centered. One device, Apple-style.
               Hidden on mobile (a phone-in-a-phone reads as goofy on a real phone). */}
           <div style={{ position: 'relative', width: '100%', maxWidth: 1200, margin: '0 auto', zIndex: 20 }}>
             <div className="mockup-row" style={{
@@ -255,7 +255,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── How it works — editorial rows, no boxes ── */}
+      {/* ── How it works, editorial rows, no boxes ── */}
       <section style={{ padding: 'clamp(2rem, 5vh, 3.5rem) 1.5rem clamp(4rem, 10vh, 8rem)' }}>
         <div style={{ maxWidth: 780, margin: '0 auto' }}>
           <div className="reveal" style={{ marginBottom: 'clamp(2.5rem, 6vh, 4rem)' }}>

@@ -165,7 +165,7 @@ function ScaleSlider({ label, value, onChange }: { label: string; value: number;
       >
         {/* Track */}
         <div style={{ position: 'absolute', inset: `0 0 0 0`, top: '50%', marginTop: -1.5, height: 3, borderRadius: 2, background: 'var(--surface-border)', overflow: 'hidden' }}>
-          {/* Fill — scaleX is GPU composited */}
+          {/* Fill, scaleX is GPU composited */}
           <div style={{
             width: '100%', height: '100%', background: 'var(--red)', borderRadius: 2,
             transformOrigin: 'left center',
@@ -174,7 +174,7 @@ function ScaleSlider({ label, value, onChange }: { label: string; value: number;
             willChange: 'transform',
           }} />
         </div>
-        {/* Thumb — translateX is GPU composited */}
+        {/* Thumb, translateX is GPU composited */}
         <div style={{
           position: 'absolute', left: 0, top: '50%', marginTop: -THUMB / 2,
           width: THUMB, height: THUMB, borderRadius: '50%',
@@ -298,7 +298,7 @@ export default function Journal() {
         {/* Compose card */}
         <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 20, overflow: 'hidden', marginBottom: '3.5rem' }}>
 
-          {/* Share toggle — top of card, always visible */}
+          {/* Share toggle, top of card, always visible */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem 1.25rem', borderBottom: '0.5px solid var(--surface-border)' }}>
             <span style={{ fontSize: 13, color: shared ? 'var(--w80)' : 'var(--w60)', transition: 'color 200ms cubic-bezier(0.23, 1, 0.32, 1)' }}>
               {shared ? 'Your coach will see this entry.' : 'Private. Only you see this.'}
@@ -309,7 +309,7 @@ export default function Journal() {
             </button>
           </div>
 
-          {/* Mode toggle — liquid pill */}
+          {/* Mode toggle, liquid pill */}
           <div style={{ display: 'flex', gap: 4, padding: '0.875rem 1.25rem 0' }}>
             <LayoutGroup id="journal-mode">
               {(['prompted', 'freeform'] as const).map(m => {
@@ -404,7 +404,7 @@ export default function Journal() {
                 <circle cx="4.5" cy="5.5" r="0.75" fill="currentColor"/>
                 <circle cx="8.5" cy="5.5" r="0.75" fill="currentColor"/>
               </svg>
-              {showScales ? `Mood ${mood}  —  Energy ${energy}` : 'Add mood + energy'}
+              {showScales ? `Mood ${mood}, Energy ${energy}` : 'Add mood + energy'}
             </button>
             <div style={{
               overflow: 'hidden',

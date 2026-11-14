@@ -12,7 +12,7 @@ const TOTAL = 15;
 const GO_COUNT = 11;
 const ROUND_SIZE = 5;
 const TOTAL_ROUNDS = TOTAL / ROUND_SIZE;
-const SHOW_MS = 1300;   // stimulus visible — long enough to read + decide, still tests inhibition
+const SHOW_MS = 1300;   // stimulus visible, long enough to read + decide, still tests inhibition
 const BLANK_MS = 700;   // clean pause between stimuli
 
 const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
@@ -133,20 +133,20 @@ export default function DrillGoNoGo() {
           Round {Math.floor(results.length / ROUND_SIZE) + 1} of {TOTAL_ROUNDS}
         </p>
 
-        {/* Stimulus — single persistent div, animated between filled ↔ empty rest state
+        {/* Stimulus, single persistent div, animated between filled ↔ empty rest state
              so React can never rip the DOM node out mid-frame (kills the glitch). */}
         <div style={{
           position: 'relative',
           width: 180, height: 180,
         }}>
-          {/* Rest ring — always mounted, shown when phase === 'blank' */}
+          {/* Rest ring, always mounted, shown when phase === 'blank' */}
           <div style={{
             position: 'absolute', inset: 0, borderRadius: '50%',
             border: '0.5px solid var(--surface-border-2)',
             opacity: phase === 'blank' ? 1 : 0,
             transition: `opacity 220ms ${EASE_OUT}`,
           }} />
-          {/* Live stimulus — always mounted, cross-fades in when running */}
+          {/* Live stimulus, always mounted, cross-fades in when running */}
           <div style={{
             position: 'absolute', inset: 0, borderRadius: '50%',
             background: isGo ? 'var(--white)' : 'var(--red)',

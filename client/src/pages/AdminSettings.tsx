@@ -220,7 +220,7 @@ export default function AdminSettings() {
           Settings
         </h1>
 
-        {/* Profile hero — gradient card matching athlete Settings */}
+        {/* Profile hero, gradient card matching athlete Settings */}
         <div style={{
           position: 'relative',
           background: 'linear-gradient(135deg, rgba(77,166,255,0.08) 0%, rgba(77,166,255,0.02) 100%)',
@@ -364,7 +364,7 @@ export default function AdminSettings() {
           </Row>
         </Section>
 
-        {/* Program — sport selector */}
+        {/* Program, sport selector */}
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{
             fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',

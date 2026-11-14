@@ -38,7 +38,7 @@ export default function SessionFeedback() {
         });
       }
     } catch {
-      // silent — don't block navigation on feedback error
+      // silent, don't block navigation on feedback error
     } finally {
       navigate('/dashboard');
     }

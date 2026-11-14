@@ -3,7 +3,7 @@ import i18n, { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 
 const LANGUAGES = Object.keys(LANGUAGE_CODES);
 
-// Autonyms — each language shown in its OWN language, so a user always
+// Autonyms, each language shown in its OWN language, so a user always
 // recognises their native language regardless of what the app currently is.
 const AUTONYM: Record<string, string> = {
   English:    'English',

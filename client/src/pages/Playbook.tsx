@@ -177,7 +177,7 @@ export default function Playbook() {
           </p>
         </div>
 
-        {/* Section tabs — sliding liquid pill */}
+        {/* Section tabs, sliding liquid pill */}
         <div style={{
           display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: '1.75rem',
           paddingBottom: '1.25rem', borderBottom: '0.5px solid var(--line)',

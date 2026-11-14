@@ -21,7 +21,7 @@ export default function AuthCallback() {
         return;
       }
 
-      // New OAuth user — pick up role stored before redirect
+      // New OAuth user, pick up role stored before redirect
       const role = (sessionStorage.getItem('dreno_pending_role') as 'athlete' | 'coach' | 'administrator') ?? 'athlete';
       sessionStorage.removeItem('dreno_pending_role');
 

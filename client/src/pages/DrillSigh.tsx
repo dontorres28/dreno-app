@@ -202,7 +202,7 @@ export default function DrillSigh() {
     );
   }
 
-  // ── Running — big obvious circle ──────────────────────────────────────
+  // ── Running, big obvious circle ──────────────────────────────────────
   if (screen === 'running') {
     return (
       <div

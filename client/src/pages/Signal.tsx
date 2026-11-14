@@ -165,7 +165,7 @@ export default function Signal() {
           </div>
         </div>
 
-        {/* Legend — no explanations, just instrument labels */}
+        {/* Legend, no explanations, just instrument labels */}
         <div style={{
           marginTop: '3rem',
           display: 'grid', gridTemplateColumns: '1fr 1fr',

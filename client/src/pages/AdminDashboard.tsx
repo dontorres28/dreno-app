@@ -63,7 +63,7 @@ export default function AdminDashboard() {
           </p>
         </div>
 
-        {/* Plan hero — red gradient */}
+        {/* Plan hero, red gradient */}
         {tier && (
           <div style={{
             position: 'relative',
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Athletes — rich hero-style card */}
+        {/* Athletes, rich hero-style card */}
         <Link to="/admin/athletes" style={{ textDecoration: 'none', display: 'block', marginBottom: '1.25rem' }}>
           <div style={{
             position: 'relative',
@@ -196,7 +196,7 @@ export default function AdminDashboard() {
                   {stats.active}
                 </p>
                 <p style={{ fontSize: 13, color: 'var(--w60)', letterSpacing: '-0.005em' }}>
-                  active{stats.pending > 0 ? ` — ${stats.pending} pending` : ''}
+                  active{stats.pending > 0 ? `, ${stats.pending} pending` : ''}
                 </p>
               </div>
               <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em' }}>

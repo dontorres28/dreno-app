@@ -6,7 +6,7 @@ interface Props {
 }
 
 const CONSENT_TEXT =
-  'Your camera stays on your device. MediaPipe analyzes your facial signals locally — no video or landmarks are transmitted. Only three summary values (attention, focus, energy) are shared with your coach during this session and discarded when you leave.'
+  'Your camera stays on your device. MediaPipe analyzes your facial signals locally, no video or landmarks are transmitted. Only three summary values (attention, focus, energy) are shared with your coach during this session and discarded when you leave.'
 
 export default function LiveRead({ bookingId }: Props) {
   const [consented, setConsented] = useState(false)
@@ -78,7 +78,7 @@ export default function LiveRead({ bookingId }: Props) {
     const smileR = score('mouthSmileRight')
     const jawOpen = score('jawOpen')
 
-    // Coarse signals — higher is more of that quality
+    // Coarse signals, higher is more of that quality
     const attention = Math.round((1 - (blinkL + blinkR) / 2) * 100)
     const focus = Math.round(((browDownL + browDownR) / 2) * 100)
     const energy = Math.round(((smileL + smileR + jawOpen) / 3) * 100)
@@ -89,7 +89,7 @@ export default function LiveRead({ bookingId }: Props) {
       payload: { attention, focus, energy },
     })
 
-    // Sample at ~4fps — no need to hammer this
+    // Sample at ~4fps, no need to hammer this
     setTimeout(() => { animRef.current = requestAnimationFrame(tick) }, 250)
   }
 
@@ -131,7 +131,7 @@ export default function LiveRead({ bookingId }: Props) {
             style={{ background: 'rgba(232,25,44,0.15)', border: '1px solid rgba(232,25,44,0.4)', color: 'var(--red)' }}
           >
             <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--red)' }} />
-            Live Read on — stop
+            Live Read on, stop
           </button>
         )}
         {error && (

@@ -1,7 +1,7 @@
 import { useState, useRef, ReactNode, useEffect, cloneElement, isValidElement } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Shared "recently opened" state — moving between tooltips skips the delay
+// Shared "recently opened" state, moving between tooltips skips the delay
 let recentlyOpen = false;
 let recentTimer: ReturnType<typeof setTimeout> | null = null;
 const markOpen = () => {

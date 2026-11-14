@@ -34,7 +34,7 @@ export default function Terms() {
       <p>You keep ownership of journal entries, goals, messages, and other content you upload. You grant Dreno a limited licence to store and process that content solely to operate the Service for you. See the <a href="/legal/privacy">Privacy Policy</a> for details.</p>
 
       <h2>7. Disclaimers</h2>
-      <p>The Service is provided <strong>"as is"</strong>. Dreno does not guarantee any specific athletic, mental health, or performance outcome. Coaches are independent — Dreno is not liable for the advice, methods, or conduct of any Coach, though we take verification seriously and act on reported misconduct.</p>
+      <p>The Service is provided <strong>"as is"</strong>. Dreno does not guarantee any specific athletic, mental health, or performance outcome. Coaches are independent, Dreno is not liable for the advice, methods, or conduct of any Coach, though we take verification seriously and act on reported misconduct.</p>
 
       <h2>8. Limitation of liability</h2>
       <p>To the fullest extent permitted by law, Dreno's aggregate liability for any claim arising out of the Service is limited to the amount you paid to Dreno in the six months before the claim arose. Dreno is not liable for indirect, consequential, or incidental damages.</p>
@@ -49,7 +49,7 @@ export default function Terms() {
       <p>These Terms are governed by the law of <strong><L v={LEGAL.jurisdiction} /></strong>, and disputes fall under the exclusive jurisdiction of its competent courts, subject to any mandatory consumer-protection rights in your country of residence.</p>
 
       <h2>12. Contact</h2>
-      <p>{LEGAL.companyName ? <L v={LEGAL.companyName} /> : null} — <L v={LEGAL.companyAddress} /> — <L v={LEGAL.registryInfo} /> — <a href={`mailto:${LEGAL.contactEmail}`}>{LEGAL.contactEmail}</a></p>
+      <p>{LEGAL.companyName ? <L v={LEGAL.companyName} /> : null}, <L v={LEGAL.companyAddress} />, <L v={LEGAL.registryInfo} />, <a href={`mailto:${LEGAL.contactEmail}`}>{LEGAL.contactEmail}</a></p>
     </LegalPage>
   );
 }

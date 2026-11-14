@@ -270,7 +270,7 @@ export default function Settings() {
           {t('settings.title')}
         </h1>
 
-        {/* Profile hero — gradient card matching Dashboard next session / Coach profile */}
+        {/* Profile hero, gradient card matching Dashboard next session / Coach profile */}
         <div style={{
           position: 'relative',
           background: 'linear-gradient(135deg, rgba(77,166,255,0.08) 0%, rgba(77,166,255,0.02) 100%)',

@@ -34,11 +34,11 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
     setSending(true);
 
     const tier = TIERS.find(t => t.key === targetTier);
-    const subject = `Plan change request${orgName ? ` — ${orgName}` : ''}`;
+    const subject = `Plan change request${orgName ? `, ${orgName}` : ''}`;
     const body = [
       `Organization: ${orgName ?? '(unnamed)'}`,
       `Current plan: ${currentTier.charAt(0).toUpperCase() + currentTier.slice(1)}`,
-      `Requested plan: ${tier?.label ?? targetTier} — ${tier?.desc ?? ''}`,
+      `Requested plan: ${tier?.label ?? targetTier}, ${tier?.desc ?? ''}`,
       `Billing: ${billing === 'annual' ? 'Annual (15% off)' : 'Monthly'}`,
       '',
       note.trim() ? `Note:\n${note.trim()}` : '',
@@ -203,14 +203,14 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
           </div>
         </div>
 
-        {/* Billing toggle — sliding red pill */}
+        {/* Billing toggle, sliding red pill */}
         <div>
           <p className="label" style={{ margin: 0, marginBottom: 8 }}>Billing</p>
           <div style={{ display: 'flex', gap: 4 }}>
             <LayoutGroup id="plan-billing">
               {[
                 { key: 'monthly' as const, label: 'Monthly' },
-                { key: 'annual' as const,  label: 'Annual — 15% off' },
+                { key: 'annual' as const,  label: 'Annual, 15% off' },
               ].map(b => {
                 const on = billing === b.key;
                 return (
@@ -266,7 +266,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
         {/* Recipient hint */}
         <p style={{ fontSize: 12, color: 'var(--w60)', letterSpacing: '-0.005em', textAlign: 'center', lineHeight: 1.5 }}>
           Sent to <span style={{ color: 'var(--w70)', fontWeight: 600 }}>hello@dreno.app</span>
-          {contactEmail ? <> — we'll reply to <span style={{ color: 'var(--w70)', fontWeight: 600 }}>{contactEmail}</span></> : null}
+          {contactEmail ? <>, we'll reply to <span style={{ color: 'var(--w70)', fontWeight: 600 }}>{contactEmail}</span></> : null}
         </p>
 
         {/* Actions */}

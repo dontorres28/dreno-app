@@ -2,7 +2,7 @@ import React from 'react';
 
 /**
  * Loading placeholder shaped like the content that's coming. Replaces
- * spinners on list-like screens — reads as "content is being drawn"
+ * spinners on list-like screens, reads as "content is being drawn"
  * instead of "server is thinking".
  *
  * Uses a single shimmer keyframe defined once, globally, on first mount.
@@ -58,7 +58,7 @@ export function Skeleton({ width = '100%', height = 16, radius, style, ...rest }
   );
 }
 
-/** Rectangular block — e.g. card, section header, media placeholder. */
+/** Rectangular block, e.g. card, section header, media placeholder. */
 export function SkeletonBlock({ height = 120, style, ...rest }: SkeletonProps) {
   return <Skeleton height={height} radius={12} style={{ marginBottom: 12, ...style }} {...rest} />;
 }
@@ -88,7 +88,7 @@ export function SkeletonCard() {
   );
 }
 
-/** Default list-page skeleton — header + a few card rows. Drop-in replacement for a full-page <Spinner />. */
+/** Default list-page skeleton, header + a few card rows. Drop-in replacement for a full-page <Spinner />. */
 export function SkeletonList({ rows = 4 }: { rows?: number }) {
   return (
     <div style={{ maxWidth: 620, margin: '0 auto', padding: '2.5rem 1.5rem' }}>

@@ -12,7 +12,7 @@ export interface NavItem {
 type Role = 'athlete' | 'coach' | 'administrator' | undefined;
 
 // One source of truth for both the desktop top bar and the mobile bottom tabs.
-// Capped at 5 — iOS tab-bar discipline. Athlete's Goals/Journal/Playbook/Settings
+// Capped at 5, iOS tab-bar discipline. Athlete's Goals/Journal/Playbook/Settings
 // live under the "You" hub (/you).
 export function navItemsFor(role: Role, t: (k: string) => string): NavItem[] {
   if (role === 'administrator') {

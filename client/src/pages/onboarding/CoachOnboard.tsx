@@ -94,7 +94,7 @@ export default function CoachOnboard() {
   const [sports, setSports] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
 
-  // Step 3 — Framework
+  // Step 3, Framework
   const [frameworkText, setFrameworkText] = useState('');
   const [frameworkBullets, setFrameworkBullets] = useState<string[] | null>(null);
   const [frameworkGenerating, setFrameworkGenerating] = useState(false);

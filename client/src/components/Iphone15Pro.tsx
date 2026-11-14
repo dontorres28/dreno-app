@@ -73,7 +73,7 @@ export const Iphone15Pro: React.FC<Iphone15ProProps> = ({
               background: '#F6FAFF',
               display: 'flex', flexDirection: 'column',
             }}>
-              {/* Notch safe-area — pushes the screenshot below the Dynamic Island */}
+              {/* Notch safe-area, pushes the screenshot below the Dynamic Island */}
               <div style={{ height: 68, flexShrink: 0, background: '#F6FAFF' }} />
               <img
                 src={src}

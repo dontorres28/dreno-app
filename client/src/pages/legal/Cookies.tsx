@@ -7,9 +7,9 @@ export default function Cookies() {
 
       <h2>What we store, and why</h2>
       <ul>
-        <li><strong>Authentication (Supabase, <code>sb-*</code>)</strong> — keeps you signed in. Strictly necessary. Cleared when you sign out.</li>
-        <li><strong>Theme (<code>dreno-theme</code>)</strong> — remembers whether you chose light or dark. Preference set by you.</li>
-        <li><strong>Language (<code>dreno-lang</code>)</strong> — remembers your language pick. Preference set by you.</li>
+        <li><strong>Authentication (Supabase, <code>sb-*</code>)</strong>, keeps you signed in. Strictly necessary. Cleared when you sign out.</li>
+        <li><strong>Theme (<code>dreno-theme</code>)</strong>, remembers whether you chose light or dark. Preference set by you.</li>
+        <li><strong>Language (<code>dreno-lang</code>)</strong>, remembers your language pick. Preference set by you.</li>
       </ul>
 
       <h2>What we do not use</h2>

@@ -20,17 +20,17 @@ export default function Privacy() {
       <ul>
         <li><strong>Contract (Art. 6(1)(b) GDPR):</strong> to run your account, deliver sessions, and process payments.</li>
         <li><strong>Legal obligation (Art. 6(1)(c)):</strong> tax, accounting, and record-keeping.</li>
-        <li><strong>Legitimate interest (Art. 6(1)(f)):</strong> to secure the Service, prevent fraud, and improve product quality — balanced against your rights.</li>
+        <li><strong>Legitimate interest (Art. 6(1)(f)):</strong> to secure the Service, prevent fraud, and improve product quality, balanced against your rights.</li>
         <li><strong>Consent (Art. 6(1)(a)):</strong> for anything explicitly optional (e.g. future marketing emails). You can withdraw consent any time.</li>
       </ul>
 
       <h2>3. Who we share it with</h2>
       <p>We share the minimum required data with these processors, all under a Data Processing Agreement:</p>
       <ul>
-        <li><strong>Supabase</strong> — authentication, database, storage (EU region).</li>
-        <li><strong>Vercel</strong> — hosting, CDN.</li>
-        <li><strong>Google / Apple</strong> — only if you sign in with those providers.</li>
-        <li><strong>Coaches you book</strong> — receive your name, session goals, and messages you send them.</li>
+        <li><strong>Supabase</strong>, authentication, database, storage (EU region).</li>
+        <li><strong>Vercel</strong>, hosting, CDN.</li>
+        <li><strong>Google / Apple</strong>, only if you sign in with those providers.</li>
+        <li><strong>Coaches you book</strong>, receive your name, session goals, and messages you send them.</li>
         <li>Payment processor (activated when payments launch).</li>
       </ul>
       <p>We do <strong>not</strong> sell your data. We do not use it to train third-party AI models.</p>
@@ -46,7 +46,7 @@ export default function Privacy() {
       </ul>
 
       <h2>6. Your rights</h2>
-      <p>Under GDPR/FADP you can: access your data; correct it; delete it; export it; restrict or object to processing; withdraw consent; and lodge a complaint with a supervisory authority. Contact <a href={`mailto:${LEGAL.contactEmail}`}>{LEGAL.contactEmail}</a> — we respond within 30 days.</p>
+      <p>Under GDPR/FADP you can: access your data; correct it; delete it; export it; restrict or object to processing; withdraw consent; and lodge a complaint with a supervisory authority. Contact <a href={`mailto:${LEGAL.contactEmail}`}>{LEGAL.contactEmail}</a>, we respond within 30 days.</p>
 
       <h2>7. Security</h2>
       <p>Data is encrypted in transit (TLS) and at rest. Access is restricted to staff who need it. We use hashed passwords via Supabase's built-in auth.</p>
@@ -58,7 +58,7 @@ export default function Privacy() {
       <p>We notify you of material changes at least 14 days before they take effect.</p>
 
       <h2>10. Controller & contact</h2>
-      <p><L v={LEGAL.companyName} /> — <L v={LEGAL.companyAddress} /> — <a href={`mailto:${LEGAL.contactEmail}`}>{LEGAL.contactEmail}</a></p>
+      <p><L v={LEGAL.companyName} />, <L v={LEGAL.companyAddress} />, <a href={`mailto:${LEGAL.contactEmail}`}>{LEGAL.contactEmail}</a></p>
     </LegalPage>
   );
 }

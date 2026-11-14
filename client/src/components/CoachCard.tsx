@@ -62,7 +62,7 @@ export default function CoachCard({ coach, sportMatch, matchedTags = [] }: Props
           <CaretRight size={16} weight="bold" color="var(--w40)" style={{ flexShrink: 0 }} />
         </div>
 
-        {/* Match badge — surfaces the sort that already happened */}
+        {/* Match badge, surfaces the sort that already happened */}
         {matched && (
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, alignSelf: 'flex-start', padding: '4px 10px', borderRadius: 50, background: 'rgba(77,166,255,0.14)', border: '0.5px solid rgba(77,166,255,0.3)' }}>
             <SealCheck size={13} weight="fill" color="var(--accent)" />

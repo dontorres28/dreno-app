@@ -84,7 +84,7 @@ export default function Coaches() {
           Coaches
         </h1>
 
-        {/* Filters — sliding pill with liquid feel */}
+        {/* Filters, sliding pill with liquid feel */}
         {allSports.length > 1 && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: '1.75rem' }}>
             <LayoutGroup id="sport-filters">

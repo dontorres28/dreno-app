@@ -179,7 +179,7 @@ export default function CoachAthleteHub() {
           Roster
         </Link>
 
-        {/* Hero — gradient card with avatar */}
+        {/* Hero, gradient card with avatar */}
         <div style={{
           position: 'relative',
           borderRadius: 24,
@@ -214,7 +214,7 @@ export default function CoachAthleteHub() {
               </h1>
               {metaBits.length > 0 && (
                 <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em' }}>
-                  {metaBits.join(' — ')}
+                  {metaBits.join(', ')}
                 </p>
               )}
             </div>
@@ -244,7 +244,7 @@ export default function CoachAthleteHub() {
           ))}
         </div>
 
-        {/* Next session — red gradient hero action */}
+        {/* Next session, red gradient hero action */}
         {upcomingSession && (
           <div style={{
             position: 'relative',
@@ -269,7 +269,7 @@ export default function CoachAthleteHub() {
                 letterSpacing: '-0.02em', color: '#fff', lineHeight: 1.1,
               }}>
                 {new Date(upcomingSession.starts_at).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' })}
-                {' — '}
+                {', '}
                 {new Date(upcomingSession.starts_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
@@ -404,7 +404,7 @@ export default function CoachAthleteHub() {
             )}
           </SectionCard>
 
-          {/* Session log — coach's private notes */}
+          {/* Session log, coach's private notes */}
           {coachNotes.length > 0 && (
             <SectionCard
               title="Session log"
@@ -478,7 +478,7 @@ export default function CoachAthleteHub() {
           )}
         </div>
 
-        {/* Sticky composer — add a note to the athlete's playbook */}
+        {/* Sticky composer, add a note to the athlete's playbook */}
         <div style={{
           position: 'fixed', left: 0, right: 0, bottom: 0,
           background: 'linear-gradient(to top, var(--bg) 55%, transparent)',
