@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Spinner from '../components/Spinner';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { humanizeError } from '../lib/humanizeError';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
@@ -40,6 +41,7 @@ function SocialButton({ onClick, disabled, children }: { onClick: () => void; di
 export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { applySession } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -62,6 +64,7 @@ export default function Login() {
         }
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', uid).single();
         const dest = profile?.role === 'coach' ? '/coach-dashboard' : profile?.role === 'administrator' ? '/admin-dashboard' : '/dashboard';
+        await applySession(data.session);
         navigate(dest);
       }
     } catch (err: any) {

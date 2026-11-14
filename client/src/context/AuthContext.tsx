@@ -17,6 +17,7 @@ interface AuthContextValue {
   loading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  applySession: (session: Session | null) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextValue>({
@@ -26,6 +27,7 @@ export const AuthContext = createContext<AuthContextValue>({
   loading: true,
   signOut: async () => {},
   refreshProfile: async () => {},
+  applySession: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -52,6 +54,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function refreshProfile() {
     if (user) await loadProfile(user.id);
+  }
+
+  // Push a freshly-minted session (from signUp / signInWithPassword) into the
+  // provider synchronously, so a page can navigate into a guarded route without
+  // racing the async onAuthStateChange listener. Without this, a just-signed-up
+  // user hits ProtectedRoute while user is still null and bounces to /login.
+  async function applySession(sess: Session | null) {
+    setSession(sess);
+    setUser(sess?.user ?? null);
+    if (sess?.user) {
+      setProfile(null);
+      setLoading(true);
+      await loadProfile(sess.user.id);
+      setLoading(false);
+    } else {
+      setProfile(null);
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -89,7 +109,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signOut, refreshProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, signOut, refreshProfile, applySession }}>
       {children}
     </AuthContext.Provider>
   );

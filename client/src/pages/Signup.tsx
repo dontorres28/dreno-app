@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Spinner from '../components/Spinner';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { humanizeError } from '../lib/humanizeError';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
@@ -37,6 +38,7 @@ function SocialButton({ onClick, disabled, children }: { onClick: () => void; di
 export default function Signup() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { applySession } = useAuth();
   const [role, setRole] = useState<'athlete' | 'coach' | 'administrator' | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -58,6 +60,11 @@ export default function Signup() {
 
       const { error: profErr } = await supabase.from('profiles').insert({ id: uid, role, email });
       if (profErr) throw profErr;
+
+      // Hydrate the auth context with the new session before entering a guarded
+      // onboarding route, so it doesn't bounce to /login while the listener lags.
+      const sess = data.session ?? (await supabase.auth.getSession()).data.session;
+      await applySession(sess);
 
       if (role === 'athlete') {
         await supabase.from('athletes').insert({ id: uid });

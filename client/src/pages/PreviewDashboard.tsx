@@ -32,6 +32,7 @@ export default function PreviewDashboard() {
         loading: false,
         signOut: async () => {},
         refreshProfile: async () => {},
+        applySession: async () => {},
       }}
     >
       <Dashboard />
