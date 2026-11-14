@@ -131,7 +131,7 @@ export default function Landing() {
           transform: scale(0.97);
           transition-duration: 90ms;
           /* Cut the lift-shadow when pressed — a real button loses shadow under load */
-          box-shadow: 0 4px 12px rgba(255, 48, 64, 0.18) !important;
+          box-shadow: 0 4px 12px rgba(155,135,245, 0.18) !important;
         }
         @media (prefers-reduced-motion: reduce) {
           .step-row { transition: opacity 200ms ease; transform: none !important; }
@@ -153,8 +153,8 @@ export default function Landing() {
           style={{
             position: 'absolute', inset: 0,
             background: `
-              radial-gradient(ellipse 65% 45% at 50% 32%, rgba(255,48,64,0.20) 0%, transparent 70%),
-              radial-gradient(ellipse 110% 70% at 50% 15%, rgba(255,48,64,0.06) 0%, transparent 70%)
+              radial-gradient(ellipse 65% 45% at 50% 32%, rgba(155,135,245,0.20) 0%, transparent 70%),
+              radial-gradient(ellipse 110% 70% at 50% 15%, rgba(155,135,245,0.06) 0%, transparent 70%)
             `,
             /* Feather the bottom so the glow dissolves into var(--bg) before the section edge — kills the hard seam */
             WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 65%, transparent 100%)',
@@ -212,7 +212,7 @@ export default function Landing() {
                   fontFamily: 'var(--font-body)',
                   background: 'var(--red)', color: '#fff',
                   border: '0.5px solid var(--red)', textDecoration: 'none',
-                  boxShadow: '0 10px 32px rgba(255,48,64,0.28)',
+                  boxShadow: '0 10px 32px rgba(155,135,245,0.28)',
                 }}
               >
                 {t('landing.signUpFree')}
@@ -349,7 +349,7 @@ export default function Landing() {
             position: 'absolute', top: '50%', left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 'min(700px, 90%)', height: 400,
-            background: 'radial-gradient(50% 50% at 50% 50%, rgba(255,48,64,0.14) 0%, transparent 70%)',
+            background: 'radial-gradient(50% 50% at 50% 50%, rgba(155,135,245,0.14) 0%, transparent 70%)',
             filter: 'blur(50px)',
             pointerEvents: 'none',
           }}

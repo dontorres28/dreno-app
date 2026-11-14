@@ -504,8 +504,8 @@ export default function CoachOnboard() {
               disabled={!frameworkText.trim() || frameworkGenerating || frameworkGenerateCount >= 3}
               style={{
                 fontSize: 15, fontWeight: 600, padding: '14px 28px', borderRadius: 50,
-                background: frameworkText.trim() && !frameworkGenerating && frameworkGenerateCount < 3 ? 'rgba(255,48,64,0.12)' : 'var(--surface-1)',
-                border: frameworkText.trim() && frameworkGenerateCount < 3 ? '0.5px solid rgba(255,48,64,0.4)' : '0.5px solid var(--surface-border)',
+                background: frameworkText.trim() && !frameworkGenerating && frameworkGenerateCount < 3 ? 'rgba(155,135,245,0.12)' : 'var(--surface-1)',
+                border: frameworkText.trim() && frameworkGenerateCount < 3 ? '0.5px solid rgba(155,135,245,0.4)' : '0.5px solid var(--surface-border)',
                 color: frameworkText.trim() && frameworkGenerateCount < 3 ? 'var(--white)' : 'var(--w40)',
                 cursor: frameworkText.trim() && !frameworkGenerating && frameworkGenerateCount < 3 ? 'pointer' : 'not-allowed',
                 fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 8,
@@ -521,7 +521,7 @@ export default function CoachOnboard() {
             </button>
 
             {frameworkError && (
-              <p style={{ fontSize: 13, color: 'rgba(255,48,64,0.8)', marginBottom: '1.25rem' }}>{frameworkError}</p>
+              <p style={{ fontSize: 13, color: 'rgba(155,135,245,0.8)', marginBottom: '1.25rem' }}>{frameworkError}</p>
             )}
 
             {frameworkBullets && (
@@ -549,7 +549,7 @@ export default function CoachOnboard() {
                     onClick={approveFramework}
                     style={{
                       fontSize: 15, fontWeight: 600, padding: '13px 32px', borderRadius: 50,
-                      background: 'rgba(255,48,64,0.12)', border: '0.5px solid rgba(255,48,64,0.4)',
+                      background: 'rgba(155,135,245,0.12)', border: '0.5px solid rgba(155,135,245,0.4)',
                       color: 'var(--white)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
                     }}
                   >
@@ -651,7 +651,7 @@ export default function CoachOnboard() {
         {/* ── Step 5: Done ── */}
         {step === 5 && (
           <div style={{ textAlign: 'center', maxWidth: 440, margin: '0 auto', paddingTop: '8vh' }}>
-            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,48,64,0.12)', border: '0.5px solid rgba(255,48,64,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(155,135,245,0.12)', border: '0.5px solid rgba(155,135,245,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                 <path d="M8 18l7 7L28 11" stroke="var(--red)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

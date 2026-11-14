@@ -273,7 +273,7 @@ export default function Settings() {
         {/* Profile hero — gradient card matching Dashboard next session / Coach profile */}
         <div style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(255,48,64,0.08) 0%, rgba(255,48,64,0.02) 100%)',
+          background: 'linear-gradient(135deg, rgba(155,135,245,0.08) 0%, rgba(155,135,245,0.02) 100%)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22,
           padding: '1.5rem',
@@ -284,7 +284,7 @@ export default function Settings() {
           <div style={{
             position: 'absolute', top: -50, right: -50,
             width: 180, height: 180, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,48,64,0.18) 0%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(155,135,245,0.18) 0%, transparent 65%)',
             pointerEvents: 'none',
           }} />
 
@@ -292,11 +292,11 @@ export default function Settings() {
             <input type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: 'none' }} />
             <div style={{
               width: 72, height: 72, borderRadius: '50%',
-              background: avatarUrl ? 'transparent' : 'linear-gradient(135deg, #ff5566 0%, #FF3040 60%, #cc1e2c 100%)',
+              background: avatarUrl ? 'transparent' : 'linear-gradient(135deg, #B9ACF9 0%, #9B87F5 60%, #7A64E8 100%)',
               overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0, color: '#fff', fontWeight: 700, fontSize: 26,
               fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', userSelect: 'none',
-              boxShadow: avatarUrl ? 'none' : '0 4px 16px rgba(255,48,64,0.35)',
+              boxShadow: avatarUrl ? 'none' : '0 4px 16px rgba(155,135,245,0.35)',
             }}>
               {avatarUrl
                 ? <img src={avatarUrl} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

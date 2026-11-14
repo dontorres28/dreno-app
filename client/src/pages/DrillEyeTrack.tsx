@@ -31,7 +31,7 @@ const LEVELS: LevelDef[] = [
 const UNLOCK_AT = 5;
 const DOT_R = 14;
 const MARGIN = 0.12;
-const RED = '#FF3040';
+const RED = '#9B87F5';
 
 function lcg(seed: number) {
   let s = seed;
@@ -197,10 +197,10 @@ export default function DrillEyeTrack() {
       if (r <= 0) return;
       const color = colorIdx === 0 ? RED : text;
       ctx.beginPath(); ctx.arc(x, y, r * 2.8, 0, Math.PI * 2);
-      ctx.fillStyle = colorIdx === 0 ? 'rgba(255,48,64,0.10)' : `rgba(${hexToRgb(text)},0.08)`; ctx.fill();
+      ctx.fillStyle = colorIdx === 0 ? 'rgba(155,135,245,0.10)' : `rgba(${hexToRgb(text)},0.08)`; ctx.fill();
       ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fillStyle = color;
-      ctx.shadowColor = colorIdx === 0 ? 'rgba(255,48,64,0.7)' : `rgba(${hexToRgb(text)},0.5)`;
+      ctx.shadowColor = colorIdx === 0 ? 'rgba(155,135,245,0.7)' : `rgba(${hexToRgb(text)},0.5)`;
       ctx.shadowBlur = 20; ctx.fill(); ctx.shadowBlur = 0;
     }
 
@@ -358,7 +358,7 @@ export default function DrillEyeTrack() {
               position: 'absolute', top: '50%', left: 0,
               width: 20, height: 20, borderRadius: '50%',
               background: 'var(--red)',
-              boxShadow: '0 0 24px rgba(255,48,64,0.5)',
+              boxShadow: '0 0 24px rgba(155,135,245,0.5)',
               transform: 'translateY(-50%)',
               animation: `eyePreview ${level.holdMs * 2}ms cubic-bezier(0.4, 0, 0.2, 1) infinite`,
             }} />

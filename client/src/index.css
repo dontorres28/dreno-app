@@ -37,7 +37,7 @@
   --line:     rgba(255,255,255,0.08);
   --line-2:   rgba(255,255,255,0.14);
   --white:    #ffffff;
-  --red:      #FF3040;
+  --red:      #9B87F5;
   --w85:      rgba(255,255,255,0.94);
   --w80:      rgba(255,255,255,0.88);
   --w70:      rgba(255,255,255,0.82);
@@ -353,7 +353,7 @@ time,
   .input:focus {
     background: var(--input-focus-bg);
     border-color: var(--input-focus-bdr);
-    box-shadow: 0 0 0 3px rgba(255,48,64,0.12);
+    box-shadow: 0 0 0 3px rgba(155,135,245,0.12);
   }
 
   .label {
@@ -381,8 +381,8 @@ time,
   }
 
   .tag-red {
-    background: rgba(255,48,64,0.12);
-    border-color: rgba(255,48,64,0.24);
+    background: rgba(155,135,245,0.12);
+    border-color: rgba(155,135,245,0.24);
     color: var(--red);
   }
 

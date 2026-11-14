@@ -303,8 +303,8 @@ export default function AdminOnboard() {
               </span>
               <span style={{
                 fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 50,
-                background: 'rgba(255,48,64,0.12)', color: 'var(--red)',
-                border: '0.5px solid rgba(255,48,64,0.25)',
+                background: 'rgba(155,135,245,0.12)', color: 'var(--red)',
+                border: '0.5px solid rgba(155,135,245,0.25)',
                 letterSpacing: '0.04em',
               }}>
                 -15%

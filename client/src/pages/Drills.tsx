@@ -101,7 +101,7 @@ function DrillTile({ title, subtitle, to, visual, metric, done, isNew }: DrillPr
         <div style={{
           position: 'absolute', top: -60, right: -60,
           width: 200, height: 200, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,48,64,0.16) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(155,135,245,0.16) 0%, transparent 65%)',
           pointerEvents: 'none',
         }} />
 
@@ -146,14 +146,14 @@ function DrillTile({ title, subtitle, to, visual, metric, done, isNew }: DrillPr
 // ── Signature visuals per drill ─────────────────────────────────────────
 function ReactionVisual() {
   return (
-    <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%, #ff5566 0%, #FF3040 55%, #cc1e2c 100%)', boxShadow: '0 0 24px rgba(255,48,64,0.35)' }} />
+    <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%, #B9ACF9 0%, #9B87F5 55%, #7A64E8 100%)', boxShadow: '0 0 24px rgba(155,135,245,0.35)' }} />
   );
 }
 function GoNoGoVisual() {
   return (
     <svg viewBox="0 0 56 56" style={{ display: 'block' }}>
       <circle cx="20" cy="28" r="14" fill="var(--white)" opacity="0.9"/>
-      <circle cx="42" cy="28" r="14" fill="#FF3040"/>
+      <circle cx="42" cy="28" r="14" fill="#9B87F5"/>
     </svg>
   );
 }
@@ -161,7 +161,7 @@ function FocusVisual() {
   return (
     <svg viewBox="0 0 56 56" style={{ display: 'block' }}>
       <circle cx="28" cy="28" r="22" fill="none" stroke="var(--w40)" strokeWidth="1" strokeDasharray="2 3"/>
-      <circle cx="28" cy="28" r="6" fill="#FF3040">
+      <circle cx="28" cy="28" r="6" fill="#9B87F5">
         <animate attributeName="cx" values="12;44;28;12" dur="4s" repeatCount="indefinite"/>
         <animate attributeName="cy" values="28;28;44;28" dur="4s" repeatCount="indefinite"/>
       </circle>
@@ -173,11 +173,11 @@ function BreathingVisual() {
     <div style={{ position: 'relative', width: 56, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{
         position: 'absolute', width: 56, height: 56, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,48,64,0.25) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(155,135,245,0.25) 0%, transparent 70%)',
       }} />
       <div style={{
         width: 36, height: 36, borderRadius: '50%',
-        background: 'radial-gradient(circle at 35% 30%, #ff5566 0%, #FF3040 55%, #cc1e2c 100%)',
+        background: 'radial-gradient(circle at 35% 30%, #B9ACF9 0%, #9B87F5 55%, #7A64E8 100%)',
         animation: 'trainBreathe 3.5s ease-in-out infinite',
       }} />
       <style>{`@keyframes trainBreathe { 0%,100% { transform: scale(0.7); } 50% { transform: scale(1); } }`}</style>
@@ -274,7 +274,7 @@ export default function Drills() {
         {!loading && (
           <div style={{
             position: 'relative',
-            background: 'linear-gradient(135deg, rgba(255,48,64,0.10) 0%, rgba(255,48,64,0.02) 100%)',
+            background: 'linear-gradient(135deg, rgba(155,135,245,0.10) 0%, rgba(155,135,245,0.02) 100%)',
             border: '0.5px solid var(--surface-border-2)',
             borderRadius: 22,
             padding: 24,
@@ -285,7 +285,7 @@ export default function Drills() {
             <div style={{
               position: 'absolute', top: -60, right: -60,
               width: 240, height: 240, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255,48,64,0.22) 0%, transparent 65%)',
+              background: 'radial-gradient(circle, rgba(155,135,245,0.22) 0%, transparent 65%)',
               pointerEvents: 'none',
             }} />
 
@@ -312,8 +312,8 @@ export default function Drills() {
                     <div style={{
                       display: 'inline-flex', alignItems: 'center', gap: 6,
                       padding: '6px 12px', borderRadius: 50,
-                      background: 'rgba(255,48,64,0.14)',
-                      border: '0.5px solid rgba(255,48,64,0.30)',
+                      background: 'rgba(155,135,245,0.14)',
+                      border: '0.5px solid rgba(155,135,245,0.30)',
                       cursor: 'help',
                     }}>
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="var(--red)">

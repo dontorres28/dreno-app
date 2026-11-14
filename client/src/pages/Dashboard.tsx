@@ -18,8 +18,8 @@ interface JournalEntry { id: string; body: string; created_at: string }
 
 const HORIZON_COLOR: Record<string, string> = {
   short: 'var(--red)',
-  mid: 'rgba(255,48,64,0.55)',
-  long: 'rgba(255,48,64,0.28)',
+  mid: 'rgba(155,135,245,0.55)',
+  long: 'rgba(155,135,245,0.28)',
 };
 
 function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
@@ -46,7 +46,7 @@ function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
   return (
     <div style={{
       position: 'relative',
-      background: 'linear-gradient(135deg, rgba(255,48,64,0.10) 0%, rgba(255,48,64,0.02) 100%)',
+      background: 'linear-gradient(135deg, rgba(155,135,245,0.10) 0%, rgba(155,135,245,0.02) 100%)',
       border: '0.5px solid var(--surface-border-2)',
       borderRadius: 22,
       padding: 24,
@@ -56,7 +56,7 @@ function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
       <div style={{
         position: 'absolute', top: -70, right: -70,
         width: 260, height: 260, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,48,64,0.22) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, rgba(155,135,245,0.22) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
@@ -80,8 +80,8 @@ function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: '6px 12px', borderRadius: 50,
-              background: 'rgba(255,48,64,0.14)',
-              border: '0.5px solid rgba(255,48,64,0.30)',
+              background: 'rgba(155,135,245,0.14)',
+              border: '0.5px solid rgba(155,135,245,0.30)',
               cursor: 'help', flexShrink: 0,
             }}>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="var(--red)">
@@ -120,7 +120,7 @@ function WeekHero({ drillsThisWeek, streak, goalsCount, drillResults }: {
                 background: d.isToday ? 'var(--nav-active-bg)' : d.done ? 'var(--red)' : 'transparent',
                 border: d.isToday || d.done ? 'none' : '0.5px solid var(--surface-border-2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: d.done && !d.isToday ? '0 2px 12px rgba(255,48,64,0.28)' : 'none',
+                boxShadow: d.done && !d.isToday ? '0 2px 12px rgba(155,135,245,0.28)' : 'none',
                 transition: 'background 400ms cubic-bezier(0.23, 1, 0.32, 1), border-color 400ms, box-shadow 400ms',
               }}>
                 <span style={{
@@ -268,7 +268,7 @@ export default function Dashboard() {
         {nextBooking && sessionDate ? (
           <div style={{
             position: 'relative',
-            background: 'linear-gradient(135deg, rgba(255,48,64,0.10) 0%, rgba(255,48,64,0.02) 100%)',
+            background: 'linear-gradient(135deg, rgba(155,135,245,0.10) 0%, rgba(155,135,245,0.02) 100%)',
             border: '0.5px solid var(--surface-border-2)',
             borderRadius: 22, padding: '1.5rem',
             marginBottom: '1rem',
@@ -278,7 +278,7 @@ export default function Dashboard() {
             <div style={{
               position: 'absolute', top: -60, right: -60,
               width: 220, height: 220, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255,48,64,0.20) 0%, transparent 65%)',
+              background: 'radial-gradient(circle, rgba(155,135,245,0.20) 0%, transparent 65%)',
               pointerEvents: 'none',
             }} />
             <div style={{ position: 'relative' }}>
@@ -295,7 +295,7 @@ export default function Dashboard() {
               </p>
             </div>
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10, flexShrink: 0 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', background: 'rgba(255,48,64,0.14)', border: '0.5px solid rgba(255,48,64,0.30)', padding: '5px 12px', borderRadius: 50, letterSpacing: '0.02em' }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', background: 'rgba(155,135,245,0.14)', border: '0.5px solid rgba(155,135,245,0.30)', padding: '5px 12px', borderRadius: 50, letterSpacing: '0.02em' }}>
                 {countdown(nextBooking.starts_at, t('dashboard.now'))}
               </span>
               <Link to={`/session/${nextBooking.id}`} className="btn-primary" style={{ fontSize: 13, minHeight: 40, padding: '0 22px', textDecoration: 'none' }}>

@@ -444,7 +444,7 @@ export default function Journal() {
                       </span>
                     )}
                     {parsed.cat && parsed.cat !== 'freeform' && isCategoryKey(parsed.cat) && (
-                      <span style={{ fontSize: 12, color: 'rgba(255,48,64,0.75)' }}>{CATEGORIES[parsed.cat].label}</span>
+                      <span style={{ fontSize: 12, color: 'rgba(155,135,245,0.75)' }}>{CATEGORIES[parsed.cat].label}</span>
                     )}
                   </div>
 
@@ -473,10 +473,10 @@ export default function Journal() {
                     </div>
                     <button type="button" onClick={() => toggleShare(entry.id, entry.shared_with_coach)} aria-label="Share with coach" className="toggle-btn"
                       style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'var(--font-body)' }}>
-                      <span style={{ fontSize: 12, color: entry.shared_with_coach ? 'rgba(255,48,64,0.75)' : 'var(--w50)', transition: 'color 0.2s ease' }}>
+                      <span style={{ fontSize: 12, color: entry.shared_with_coach ? 'rgba(155,135,245,0.75)' : 'var(--w50)', transition: 'color 0.2s ease' }}>
                         Share with coach
                       </span>
-                      <span style={{ width: 40, height: 23, borderRadius: 12, border: 'none', padding: 0, background: entry.shared_with_coach ? 'rgba(255,48,64,0.65)' : 'var(--surface-border)', position: 'relative', transition: 'background 0.2s ease', flexShrink: 0, display: 'inline-block' }}>
+                      <span style={{ width: 40, height: 23, borderRadius: 12, border: 'none', padding: 0, background: entry.shared_with_coach ? 'rgba(155,135,245,0.65)' : 'var(--surface-border)', position: 'relative', transition: 'background 0.2s ease', flexShrink: 0, display: 'inline-block' }}>
                         <span style={{ width: 17, height: 17, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: 3, transform: `translateX(${entry.shared_with_coach ? 17 : 0}px)`, transition: 'transform 0.2s ease', display: 'block', willChange: 'transform' }} />
                       </span>
                     </button>

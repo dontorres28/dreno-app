@@ -164,13 +164,13 @@ export default function DrillSigh() {
           }}>
             <div style={{
               position: 'absolute', width: 200, height: 200, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255,48,64,0.35) 0%, rgba(255,48,64,0.08) 45%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(155,135,245,0.35) 0%, rgba(155,135,245,0.08) 45%, transparent 70%)',
               animation: 'sighDemoGlow 6s ease-in-out infinite',
             }} />
             <div style={{
               width: 140, height: 140, borderRadius: '50%',
-              background: 'radial-gradient(circle at 35% 30%, #ff5566 0%, #FF3040 55%, #cc1e2c 100%)',
-              boxShadow: '0 0 40px rgba(255,48,64,0.35)',
+              background: 'radial-gradient(circle at 35% 30%, #B9ACF9 0%, #9B87F5 55%, #7A64E8 100%)',
+              boxShadow: '0 0 40px rgba(155,135,245,0.35)',
               animation: 'sighDemo 6s ease-in-out infinite',
             }} />
           </div>
@@ -222,7 +222,7 @@ export default function DrillSigh() {
         {/* Ambient red bloom that grows with the circle */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: `radial-gradient(60% 60% at 50% 50%, rgba(255,48,64,${0.08 + scale * 0.20}), transparent 75%)`,
+          background: `radial-gradient(60% 60% at 50% 50%, rgba(155,135,245,${0.08 + scale * 0.20}), transparent 75%)`,
         }} />
 
         {/* Top: big instruction text */}
@@ -253,7 +253,7 @@ export default function DrillSigh() {
           {/* Outer glow */}
           <div style={{
             position: 'absolute', inset: 0, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,48,64,0.35) 0%, rgba(255,48,64,0.05) 50%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(155,135,245,0.35) 0%, rgba(155,135,245,0.05) 50%, transparent 70%)',
             transform: `scale(${scale * 1.15})`,
             transition: `transform 80ms linear`,
             filter: 'blur(8px)',
@@ -265,8 +265,8 @@ export default function DrillSigh() {
             position: 'absolute',
             width: '80%', height: '80%',
             borderRadius: '50%',
-            background: 'radial-gradient(circle at 32% 28%, #ff667a 0%, #FF3040 50%, #c81f2b 100%)',
-            boxShadow: '0 0 50px rgba(255,48,64,0.4), inset 0 0 60px rgba(0,0,0,0.12)',
+            background: 'radial-gradient(circle at 32% 28%, #ff667a 0%, #9B87F5 50%, #c81f2b 100%)',
+            boxShadow: '0 0 50px rgba(155,135,245,0.4), inset 0 0 60px rgba(0,0,0,0.12)',
             transform: `scale(${scale})`,
             transition: `transform 80ms linear`,
             willChange: 'transform',
@@ -315,8 +315,8 @@ export default function DrillSigh() {
       <div style={{ textAlign: 'center', maxWidth: 460 }}>
         <div style={{
           width: 100, height: 100, borderRadius: '50%', margin: '0 auto 2rem',
-          background: 'radial-gradient(circle at 35% 30%, #ff5566 0%, #FF3040 55%, #cc1e2c 100%)',
-          boxShadow: '0 0 40px rgba(255,48,64,0.4)',
+          background: 'radial-gradient(circle at 35% 30%, #B9ACF9 0%, #9B87F5 55%, #7A64E8 100%)',
+          boxShadow: '0 0 40px rgba(155,135,245,0.4)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           <svg width="42" height="42" viewBox="0 0 42 42" fill="none">

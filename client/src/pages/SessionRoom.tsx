@@ -176,7 +176,7 @@ export default function SessionRoom() {
             {isCompleted && (
               <span style={{
                 fontSize: 12, fontWeight: 600, padding: '5px 14px', borderRadius: 50,
-                background: 'rgba(255,48,64,0.12)', color: 'var(--white)',
+                background: 'rgba(155,135,245,0.12)', color: 'var(--white)',
               }}>
                 {t('session.completed')}
               </span>
@@ -186,11 +186,11 @@ export default function SessionRoom() {
                 onClick={endSession}
                 style={{
                   fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 50,
-                  background: 'rgba(255,48,64,0.1)', border: '0.5px solid rgba(255,48,64,0.3)',
+                  background: 'rgba(155,135,245,0.1)', border: '0.5px solid rgba(155,135,245,0.3)',
                   color: 'var(--red)', cursor: 'pointer', transition: 'background 0.15s',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,48,64,0.18)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,48,64,0.1)')}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(155,135,245,0.18)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(155,135,245,0.1)')}
               >
                 {t('session.endSession')}
               </button>

@@ -264,7 +264,7 @@ export default function AthleteOnboard() {
         {/* Step 3: Done */}
         {step === 3 && (
           <div style={{ textAlign: 'center', maxWidth: 440, margin: '0 auto', paddingTop: '6vh' }}>
-            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,48,64,0.12)', border: '0.5px solid rgba(255,48,64,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(155,135,245,0.12)', border: '0.5px solid rgba(155,135,245,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M8 18l7 7L28 11" stroke="var(--red)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
             <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(3rem, 9vw, 5.5rem)', lineHeight: 0.92, letterSpacing: '-0.035em', marginBottom: '1.5rem' }}>You're in</h1>

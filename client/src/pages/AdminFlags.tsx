@@ -108,7 +108,7 @@ export default function AdminFlags() {
               <div
                 key={f.coach_id}
                 style={{
-                  background: 'var(--surface-1)', border: `0.5px solid ${f.count >= 3 ? 'rgba(255,48,64,0.35)' : 'var(--surface-border-2)'}`,
+                  background: 'var(--surface-1)', border: `0.5px solid ${f.count >= 3 ? 'rgba(155,135,245,0.35)' : 'var(--surface-border-2)'}`,
                   borderRadius: 16, overflow: 'hidden',
                 }}
               >
@@ -119,7 +119,7 @@ export default function AdminFlags() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{
                       width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
-                      background: f.count >= 3 ? 'rgba(255,48,64,0.12)' : 'var(--surface-2)',
+                      background: f.count >= 3 ? 'rgba(155,135,245,0.12)' : 'var(--surface-2)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: 13, fontWeight: 700,
                     }}>

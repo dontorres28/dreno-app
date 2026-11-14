@@ -36,8 +36,8 @@ export default function Goals() {
 
   const HORIZONS = [
     { key: 'short' as const, label: t('goals.shortTerm'), timeframe: t('goals.shortTimeframe'), accent: 'var(--red)' },
-    { key: 'mid' as const, label: t('goals.midTerm'), timeframe: t('goals.midTimeframe'), accent: 'rgba(255,48,64,0.55)' },
-    { key: 'long' as const, label: t('goals.longTerm'), timeframe: t('goals.longTimeframe'), accent: 'rgba(255,48,64,0.28)' },
+    { key: 'mid' as const, label: t('goals.midTerm'), timeframe: t('goals.midTimeframe'), accent: 'rgba(155,135,245,0.55)' },
+    { key: 'long' as const, label: t('goals.longTerm'), timeframe: t('goals.longTimeframe'), accent: 'rgba(155,135,245,0.28)' },
   ];
 
   async function load() {

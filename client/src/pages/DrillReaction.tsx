@@ -179,7 +179,7 @@ export default function DrillReaction() {
           <div style={{
             width: 220, height: 220, borderRadius: '50%',
             background: 'var(--red)',
-            boxShadow: '0 0 80px rgba(255,48,64,0.5), 0 0 30px rgba(255,48,64,0.35) inset',
+            boxShadow: '0 0 80px rgba(155,135,245,0.5), 0 0 30px rgba(155,135,245,0.35) inset',
           }} />
         )}
 

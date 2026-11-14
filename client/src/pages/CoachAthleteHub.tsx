@@ -185,13 +185,13 @@ export default function CoachAthleteHub() {
           borderRadius: 24,
           padding: '2rem 1.75rem',
           marginBottom: '1.25rem',
-          background: 'linear-gradient(135deg, rgba(255,48,64,0.14) 0%, rgba(255,48,64,0.04) 60%, transparent 100%)',
+          background: 'linear-gradient(135deg, rgba(155,135,245,0.14) 0%, rgba(155,135,245,0.04) 60%, transparent 100%)',
           border: '0.5px solid var(--surface-border-2)',
           overflow: 'hidden',
         }}>
           <div style={{
             position: 'absolute', top: -60, right: -40, width: 240, height: 240,
-            background: 'radial-gradient(circle, rgba(255,48,64,0.18) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(155,135,245,0.18) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}/>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>

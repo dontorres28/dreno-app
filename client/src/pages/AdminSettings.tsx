@@ -223,7 +223,7 @@ export default function AdminSettings() {
         {/* Profile hero — gradient card matching athlete Settings */}
         <div style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(255,48,64,0.08) 0%, rgba(255,48,64,0.02) 100%)',
+          background: 'linear-gradient(135deg, rgba(155,135,245,0.08) 0%, rgba(155,135,245,0.02) 100%)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22,
           padding: '1.5rem',
@@ -234,17 +234,17 @@ export default function AdminSettings() {
           <div style={{
             position: 'absolute', top: -50, right: -50,
             width: 180, height: 180, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,48,64,0.18) 0%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(155,135,245,0.18) 0%, transparent 65%)',
             pointerEvents: 'none',
           }} />
 
           <div style={{
             width: 72, height: 72, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #ff5566 0%, #FF3040 60%, #cc1e2c 100%)',
+            background: 'linear-gradient(135deg, #B9ACF9 0%, #9B87F5 60%, #7A64E8 100%)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0, color: '#fff', fontWeight: 700, fontSize: 26,
             fontFamily: 'var(--font-display)', letterSpacing: '-0.02em',
-            boxShadow: '0 4px 16px rgba(255,48,64,0.35)',
+            boxShadow: '0 4px 16px rgba(155,135,245,0.35)',
             position: 'relative',
           }}>
             {(name || email || '?').trim()[0]?.toUpperCase()}
