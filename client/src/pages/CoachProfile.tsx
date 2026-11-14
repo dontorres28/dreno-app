@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CaretLeft, SealCheck } from '@phosphor-icons/react';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import Tooltip from '../components/Tooltip';
@@ -107,9 +108,7 @@ export default function CoachProfile() {
           onMouseEnter={e => (e.currentTarget.style.color = 'var(--white)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'var(--w70)')}
         >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <CaretLeft size={16} weight="bold" />
           Coaches
         </button>
 
@@ -174,11 +173,9 @@ export default function CoachProfile() {
                   padding: '5px 11px', borderRadius: 50,
                   background: 'rgba(77,166,255,0.12)',
                   border: '0.5px solid rgba(77,166,255,0.28)',
-                  color: 'var(--red)', cursor: 'help',
+                  color: 'var(--accent-strong)', cursor: 'help',
                 }}>
-                  <svg width="11" height="11" viewBox="0 0 13 13" fill="none">
-                    <path d="M2 7l3 3 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <SealCheck size={13} weight="fill" />
                   {t('coaches.verified')}
                 </span>
               </Tooltip>

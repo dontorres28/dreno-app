@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, LayoutGroup } from 'framer-motion';
+import { Smiley } from '@phosphor-icons/react';
 import Layout from '../components/Layout';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -398,12 +399,7 @@ export default function Journal() {
           {/* Mood + energy */}
           <div style={{ borderTop: '0.5px solid var(--surface-1)', padding: '0 1.25rem' }}>
             <button onClick={() => setShowScales(s => !s)} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'none', border: 'none', cursor: 'pointer', color: showScales ? 'var(--w60)' : 'var(--w50)', fontSize: 13, fontFamily: 'var(--font-body)', padding: '0.75rem 0', transition: 'color 0.3s cubic-bezier(0.4,0,0.2,1)' }}>
-              <svg width="14" height="14" viewBox="0 0 13 13" fill="none">
-                <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.2"/>
-                <path d="M4 8s.8 1.5 2.5 1.5S9 8 9 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                <circle cx="4.5" cy="5.5" r="0.75" fill="currentColor"/>
-                <circle cx="8.5" cy="5.5" r="0.75" fill="currentColor"/>
-              </svg>
+              <Smiley size={15} weight="regular" />
               {showScales ? `Mood ${mood}, Energy ${energy}` : 'Add mood + energy'}
             </button>
             <div style={{
