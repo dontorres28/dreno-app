@@ -9,6 +9,7 @@ import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 import ThemeToggle from '../components/ThemeToggle';
 import LanguagePicker from '../components/LanguagePicker';
 import Logo from '../components/Logo';
+import FloatingField from '../components/FloatingField';
 import { startAuthentication } from '@simplewebauthn/browser';
 
 const LANGUAGES = Object.keys(LANGUAGE_CODES);
@@ -153,15 +154,13 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
-            <input
-              className="input" type="email" value={email} onChange={e => setEmail(e.target.value)}
-              required placeholder="Email" autoComplete="email"
-              style={{ height: 46, fontSize: 15 }}
+            <FloatingField
+              label="Email" type="email" value={email} onChange={e => setEmail(e.target.value)}
+              required autoComplete="email" style={{ fontSize: 15 }}
             />
-            <input
-              className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
-              required placeholder="Password" autoComplete="current-password"
-              style={{ height: 46, fontSize: 15 }}
+            <FloatingField
+              label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)}
+              required autoComplete="current-password" style={{ fontSize: 15 }}
             />
 
             <button type="submit" className="btn-primary" style={{ fontSize: 15, height: 48, padding: 0, marginTop: 4 }} disabled={anyLoading}>

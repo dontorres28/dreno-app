@@ -9,6 +9,7 @@ import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 import ThemeToggle from '../components/ThemeToggle';
 import LanguagePicker from '../components/LanguagePicker';
 import Logo from '../components/Logo';
+import FloatingField from '../components/FloatingField';
 
 const REDIRECT_URL = `${window.location.origin}/auth/callback`;
 
@@ -256,15 +257,13 @@ export default function Signup() {
             </>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
-              <input
-                className="input" type="email" value={email} onChange={e => setEmail(e.target.value)}
-                required placeholder="Email" autoComplete="email"
-                style={{ height: 46, fontSize: 15 }} autoFocus
+              <FloatingField
+                label="Email" type="email" value={email} onChange={e => setEmail(e.target.value)}
+                required autoComplete="email" style={{ fontSize: 15 }} autoFocus
               />
-              <input
-                className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
-                required placeholder="Password" autoComplete="new-password" minLength={8}
-                style={{ height: 46, fontSize: 15 }}
+              <FloatingField
+                label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)}
+                required autoComplete="new-password" minLength={8} style={{ fontSize: 15 }}
               />
               <button type="submit" className="btn-primary" style={{ fontSize: 15, height: 48, padding: 0, marginTop: 2 }} disabled={anyLoading || !role || !agreed}>
                 {loading ? <Spinner size={18} /> : 'Create account'}
