@@ -97,7 +97,7 @@ function DrillTile({ title, subtitle, to, visual, metric, done, isNew }: DrillPr
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 24, position: 'relative' }}>
           <div>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: done ? 'var(--accent-strong)' : 'var(--w60)', marginBottom: 6 }}>
+            <p style={{ fontSize: 13, fontWeight: done ? 600 : 500, letterSpacing: '-0.005em', color: done ? 'var(--accent-strong)' : 'var(--w60)', marginBottom: 6 }}>
               {done ? 'Done today' : isNew ? 'New' : 'Practice'}
             </p>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: 24, lineHeight: 1.05, letterSpacing: '-0.03em', color: 'var(--white)' }}>
@@ -278,7 +278,7 @@ export default function Drills() {
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, position: 'relative', flexWrap: 'wrap' }}>
               <div style={{ minWidth: 200 }}>
-                <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w70)', marginBottom: 10 }}>
+                <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '-0.005em', color: 'var(--w70)', marginBottom: 10 }}>
                   Today
                 </p>
                 <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 6vw, 4rem)', lineHeight: 0.9, letterSpacing: '-0.045em' }}>

@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { CaretLeft, CaretRight } from '@phosphor-icons/react';
+import { CaretRight } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
-import ThemeToggle from '../components/ThemeToggle';
+import { haptics } from '../lib/haptics';
+import TestShell from '../components/test/TestShell';
+import Readout from '../components/test/Readout';
 
 type Pattern = 'horizontal' | 'cross' | 'random' | 'dual' | 'rapid';
 type Phase = 'select' | 'brief' | 'session' | 'done';
@@ -89,36 +91,6 @@ function themeText() {
   return getComputedStyle(document.documentElement).getPropertyValue('--white').trim() || '#fff';
 }
 
-// Shared shell for select/done
-const Shell = ({ children, showBack = true, title, onBack }: { children: React.ReactNode; showBack?: boolean; title: string; onBack?: () => void }) => (
-  <div style={{
-    minHeight: '100dvh', background: 'var(--bg)', color: 'var(--white)',
-    fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column',
-    WebkitFontSmoothing: 'antialiased',
-  }}>
-    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
-      {showBack && (
-        <button
-          onClick={onBack}
-          style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
-        >
-          <CaretLeft size={18} weight="bold" />
-          Back
-        </button>
-      )}
-      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>
-        {title}
-      </p>
-      <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
-        <ThemeToggle />
-      </div>
-    </div>
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem 1.5rem 3rem' }}>
-      {children}
-    </div>
-  </div>
-);
-
 export default function DrillEyeTrack() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -167,6 +139,7 @@ export default function DrillEyeTrack() {
 
     escapedRef.current = false;
     saveQueuedRef.current = false;
+    haptics.go();
     startRef.current = performance.now();
     seedRef.current = Math.floor(performance.now()) % 100000;
 
@@ -236,7 +209,7 @@ export default function DrillEyeTrack() {
       }
 
       if (elapsed >= level.totalDuration * 1000) {
-        save().then(() => { if (!escapedRef.current) setPhase('done'); });
+        save().then(() => { if (!escapedRef.current) { haptics.ok(); setPhase('done'); } });
         return;
       }
       animRef.current = requestAnimationFrame(tick);
@@ -262,7 +235,7 @@ export default function DrillEyeTrack() {
   // ── Select screen ─────────────────────────────────────────────────────────
   if (phase === 'select') {
     return (
-      <Shell title="Eye training" onBack={() => navigate('/drills')}>
+      <TestShell title="Focus" onBack={() => navigate("/drills")} align="top">
         <div style={{ width: '100%', maxWidth: 480 }}>
           <h1 style={{
             fontFamily: 'var(--font-display)',
@@ -328,14 +301,14 @@ export default function DrillEyeTrack() {
             })}
           </div>
         </div>
-      </Shell>
+      </TestShell>
     );
   }
 
   // ── Brief (per-level explanation before start) ────────────────────────────
   if (phase === 'brief') {
     return (
-      <Shell title={`Level ${level.n}, ${level.name}`} onBack={() => setPhase('select')}>
+      <TestShell title={`Level ${level.n}, ${level.name}`} onBack={() => setPhase('select')}>
         <div style={{ textAlign: 'center', maxWidth: 460 }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
             Follow the dot with your eyes
@@ -366,13 +339,13 @@ export default function DrillEyeTrack() {
               <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', lineHeight: 1, letterSpacing: '-0.04em', color: 'var(--white)', marginBottom: 6 }}>
                 {level.totalDuration}<span style={{ fontSize: '0.5em', color: 'var(--w60)', marginLeft: 2 }}>s</span>
               </p>
-              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>duration</p>
+              <p style={{ fontSize: 13, color: 'var(--w60)', letterSpacing: '-0.005em' }}>Duration</p>
             </div>
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', lineHeight: 1, letterSpacing: '-0.04em', color: 'var(--white)', marginBottom: 6 }}>
                 {level.dotCount}
               </p>
-              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{level.dotCount === 1 ? 'target' : 'targets'}</p>
+              <p style={{ fontSize: 13, color: 'var(--w60)', letterSpacing: '-0.005em' }}>{level.dotCount === 1 ? 'Target' : 'Targets'}</p>
             </div>
           </div>
 
@@ -395,7 +368,7 @@ export default function DrillEyeTrack() {
             }
           `}</style>
         </div>
-      </Shell>
+      </TestShell>
     );
   }
 
@@ -412,16 +385,16 @@ export default function DrillEyeTrack() {
         <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
 
         <div style={{ position: 'absolute', top: 20, left: 24, right: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', pointerEvents: 'none' }}>
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--w60)' }}>
+          <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--w60)', letterSpacing: '-0.005em' }}>
             {level.name}
           </span>
-          <span style={{ fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums', color: timeLeft <= 10 ? 'var(--red)' : 'var(--w60)' }}>
+          <span style={{ fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums', color: timeLeft <= 10 ? 'var(--accent)' : 'var(--w60)' }}>
             {fmt(timeLeft)}
           </span>
         </div>
 
         <div style={{ position: 'absolute', bottom: 24, left: 0, right: 0, textAlign: 'center', pointerEvents: 'none' }}>
-          <p style={{ fontSize: 11, color: 'var(--w50)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600 }}>Hold to exit</p>
+          <p style={{ fontSize: 13, color: 'var(--w50)', letterSpacing: '-0.005em' }}>Hold to exit</p>
         </div>
       </div>
     );
@@ -431,16 +404,13 @@ export default function DrillEyeTrack() {
   const nextN = activeN + 1;
   const rem = nextN <= 5 ? needed(nextN) : 0;
   return (
-    <Shell title="Eye training" showBack={false}>
+    <TestShell title="Focus">
       <div style={{ textAlign: 'center', maxWidth: 460 }}>
-        <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--red)', marginBottom: '0.75rem' }}>
+        <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-strong)', letterSpacing: '-0.005em', marginBottom: 14 }}>
           Level {activeN} complete
         </p>
-        <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(4.5rem, 14vw, 8rem)', lineHeight: 1, letterSpacing: '-0.045em', color: 'var(--white)', marginBottom: '0.25rem' }}>
-          {LEVELS[activeN - 1].totalDuration}
-          <span style={{ fontSize: '0.28em', color: 'var(--w60)', marginLeft: 10, letterSpacing: '0.02em' }}>s</span>
-        </p>
-        <p style={{ fontSize: 14, color: 'var(--w70)', marginBottom: '2rem' }}>{LEVELS[activeN - 1].name}</p>
+        <Readout value={LEVELS[activeN - 1].totalDuration} unit="s" />
+        <p style={{ fontSize: 14, color: 'var(--w70)', margin: '14px 0 2rem' }}>{LEVELS[activeN - 1].name} held</p>
 
         {nextN <= 5 && (
           <p style={{ fontSize: 13, color: 'var(--w60)', marginBottom: '2rem' }}>
@@ -453,7 +423,7 @@ export default function DrillEyeTrack() {
           <button className="btn-primary" onClick={() => setPhase('brief')}>Run again</button>
         </div>
       </div>
-    </Shell>
+    </TestShell>
   );
 }
 

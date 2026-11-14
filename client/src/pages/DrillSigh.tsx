@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { CaretLeft, Check } from '@phosphor-icons/react';
+import { Check } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
-import ThemeToggle from '../components/ThemeToggle';
+import { haptics } from '../lib/haptics';
+import TestShell from '../components/test/TestShell';
 
 // Simple 3-phase cycle: breathe in (4s) → hold (1s) → breathe out (8s). 3 rounds.
 const T_IN   = 4.0;
@@ -36,35 +37,6 @@ function phaseAt(t: number): Phase {
 }
 
 type Screen = 'intro' | 'running' | 'done';
-
-const Shell = ({ children, title, onBack }: { children: React.ReactNode; title: string; onBack?: () => void }) => (
-  <div style={{
-    minHeight: '100dvh', background: 'var(--bg)', color: 'var(--white)',
-    fontFamily: 'var(--font-body)', display: 'flex', flexDirection: 'column',
-    WebkitFontSmoothing: 'antialiased',
-  }}>
-    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 28px', flexShrink: 0 }}>
-      {onBack && (
-        <button
-          onClick={onBack}
-          style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
-        >
-          <CaretLeft size={18} weight="bold" />
-          Back
-        </button>
-      )}
-      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>
-        {title}
-      </p>
-      <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)' }}>
-        <ThemeToggle />
-      </div>
-    </div>
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem 1.5rem 3rem' }}>
-      {children}
-    </div>
-  </div>
-);
 
 export default function DrillSigh() {
   const { user } = useAuth();
@@ -114,6 +86,7 @@ export default function DrillSigh() {
   async function complete() {
     if (savedRef.current) return;
     savedRef.current = true;
+    haptics.ok();
     setSaving(true);
     setScreen('done');
     try {
@@ -147,7 +120,7 @@ export default function DrillSigh() {
   // ── Intro ──────────────────────────────────────────────────────────────
   if (screen === 'intro') {
     return (
-      <Shell title="Breathe" onBack={() => navigate('/drills')}>
+      <TestShell title="Breathe" onBack={() => navigate("/drills")}>
         <div style={{ textAlign: 'center', maxWidth: 460 }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 8vw, 4.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1rem' }}>
             Breathe with the circle
@@ -197,7 +170,7 @@ export default function DrillSigh() {
             }
           `}</style>
         </div>
-      </Shell>
+      </TestShell>
     );
   }
 
@@ -259,13 +232,13 @@ export default function DrillSigh() {
             willChange: 'transform',
           }} />
 
-          {/* Main red orb */}
+          {/* Main orb — brand blue, matching the whole system */}
           <div style={{
             position: 'absolute',
             width: '80%', height: '80%',
             borderRadius: '50%',
-            background: 'radial-gradient(circle at 32% 28%, #ff667a 0%, #4DA6FF 50%, #c81f2b 100%)',
-            boxShadow: '0 0 50px rgba(77,166,255,0.4), inset 0 0 60px rgba(0,0,0,0.12)',
+            background: 'radial-gradient(circle at 32% 28%, #8CC5FF 0%, #4DA6FF 52%, #0B5FD4 100%)',
+            boxShadow: '0 0 50px rgba(77,166,255,0.42), inset 0 0 60px rgba(0,0,0,0.12)',
             transform: `scale(${scale})`,
             transition: `transform 80ms linear`,
             willChange: 'transform',
@@ -297,10 +270,7 @@ export default function DrillSigh() {
               }} />
             ))}
           </div>
-          <p style={{
-            fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase',
-            color: 'var(--w40)', fontWeight: 600,
-          }}>
+          <p style={{ fontSize: 13, color: 'var(--w40)', letterSpacing: '-0.005em' }}>
             Hold anywhere to exit
           </p>
         </div>
@@ -310,7 +280,7 @@ export default function DrillSigh() {
 
   // ── Done ───────────────────────────────────────────────────────────────
   return (
-    <Shell title="Breathe">
+    <TestShell title="Breathe">
       <div style={{ textAlign: 'center', maxWidth: 460 }}>
         <div style={{
           width: 100, height: 100, borderRadius: '50%', margin: '0 auto 2rem',
@@ -337,6 +307,6 @@ export default function DrillSigh() {
           </button>
         </div>
       </div>
-    </Shell>
+    </TestShell>
   );
 }
