@@ -242,7 +242,7 @@ export default function AdminSettings() {
             width: 72, height: 72, borderRadius: '50%',
             background: 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, color: '#fff', fontWeight: 700, fontSize: 26,
+            flexShrink: 0, color: 'var(--btn-ink)', fontWeight: 700, fontSize: 26,
             fontFamily: 'var(--font-display)', letterSpacing: '-0.02em',
             boxShadow: '0 4px 16px rgba(77,166,255,0.35)',
             position: 'relative',
@@ -273,7 +273,7 @@ export default function AdminSettings() {
             position: 'relative',
             borderRadius: 22, padding: '1.5rem',
             marginBottom: '1.5rem',
-            background: 'linear-gradient(135deg, var(--red) 0%, #d92535 100%)',
+            background: 'linear-gradient(135deg, #0B5FD4 0%, #083C86 100%)',
             overflow: 'hidden',
           }}>
             <div style={{

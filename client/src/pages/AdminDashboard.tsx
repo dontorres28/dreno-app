@@ -70,7 +70,7 @@ export default function AdminDashboard() {
             borderRadius: 24,
             padding: '1.75rem',
             marginBottom: '1.25rem',
-            background: 'linear-gradient(135deg, var(--red) 0%, #d92535 100%)',
+            background: 'linear-gradient(135deg, #0B5FD4 0%, #083C86 100%)',
             overflow: 'hidden',
           }}>
             <div style={{

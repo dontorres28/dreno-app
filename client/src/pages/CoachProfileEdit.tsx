@@ -265,7 +265,7 @@ export default function CoachProfileEdit() {
                 : 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
               overflow: 'hidden', border: 'none', padding: 0, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', fontFamily: 'var(--font-display)', fontSize: 26,
+              color: 'var(--btn-ink)', fontFamily: 'var(--font-display)', fontSize: 26,
               fontWeight: 700, letterSpacing: '-0.02em',
               boxShadow: photoPreview ? 'none' : '0 4px 16px rgba(77,166,255,0.35)',
             }}

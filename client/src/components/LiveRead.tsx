@@ -128,7 +128,7 @@ export default function LiveRead({ bookingId }: Props) {
           <button
             onClick={stop}
             className="text-xs px-3 py-2 rounded-full flex items-center gap-2 transition-colors"
-            style={{ background: 'rgba(232,25,44,0.15)', border: '1px solid rgba(232,25,44,0.4)', color: 'var(--red)' }}
+            style={{ background: 'rgba(77,166,255,0.15)', border: '1px solid rgba(77,166,255,0.4)', color: 'var(--red)' }}
           >
             <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--red)' }} />
             Live Read on, stop

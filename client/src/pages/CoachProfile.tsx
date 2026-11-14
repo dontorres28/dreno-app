@@ -141,7 +141,7 @@ export default function CoachProfile() {
                 width: 80, height: 80, borderRadius: '50%', flexShrink: 0,
                 background: 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 30, fontWeight: 700, color: '#fff',
+                fontSize: 30, fontWeight: 700, color: 'var(--btn-ink)',
                 fontFamily: 'var(--font-display)', letterSpacing: '-0.03em',
                 boxShadow: '0 4px 16px rgba(77,166,255,0.35)',
               }}>

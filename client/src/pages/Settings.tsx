@@ -294,7 +294,7 @@ export default function Settings() {
               width: 72, height: 72, borderRadius: '50%',
               background: avatarUrl ? 'transparent' : 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
               overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0, color: '#fff', fontWeight: 700, fontSize: 26,
+              flexShrink: 0, color: 'var(--btn-ink)', fontWeight: 700, fontSize: 26,
               fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', userSelect: 'none',
               boxShadow: avatarUrl ? 'none' : '0 4px 16px rgba(77,166,255,0.35)',
             }}>

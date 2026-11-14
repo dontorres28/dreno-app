@@ -251,7 +251,7 @@ export default function CoachAthleteHub() {
             borderRadius: 20,
             padding: '1.25rem 1.5rem',
             marginBottom: '1.25rem',
-            background: 'linear-gradient(135deg, var(--red) 0%, #d92535 100%)',
+            background: 'linear-gradient(135deg, #0B5FD4 0%, #083C86 100%)',
             overflow: 'hidden',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
           }}>

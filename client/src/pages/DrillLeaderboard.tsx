@@ -85,7 +85,7 @@ export default function DrillLeaderboard() {
             }}
           >
             <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.85)', letterSpacing: '-0.005em' }}>{t('drillLeaderboard.rank')}</p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: 26, letterSpacing: '-0.02em', color: '#fff', lineHeight: 1 }}>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: 26, letterSpacing: '-0.02em', color: 'var(--btn-ink)', lineHeight: 1 }}>
               #{myRank}
             </p>
           </div>
