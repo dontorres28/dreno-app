@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { LEGAL } from '../legal/config';
+import Logo from './Logo';
 
 /**
  * Minimal footer with legal links + business details. Rendered under the
@@ -16,9 +17,7 @@ export default function Footer() {
     }}>
       <div style={{ maxWidth: 1120, margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '1.5rem 2.5rem', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div style={{ minWidth: 220 }}>
-          <p style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 16, color: 'var(--white)', marginBottom: 6 }}>
-            DRENO<span style={{ color: 'var(--red)' }}>/</span>
-          </p>
+          <div style={{ marginBottom: 10 }}><Logo size="sm" /></div>
           <p>{LEGAL.companyName}</p>
           <p>{LEGAL.companyAddress}</p>
           <p>{LEGAL.registryInfo}</p>

@@ -60,7 +60,7 @@ function WeekHero({ confirmedThisWeek, uniqueAthletes, profilePct, bookings }: {
   return (
     <div style={{
       position: 'relative',
-      background: 'linear-gradient(135deg, rgba(155,135,245,0.10) 0%, rgba(155,135,245,0.02) 100%)',
+      background: 'linear-gradient(135deg, rgba(77,166,255,0.10) 0%, rgba(77,166,255,0.02) 100%)',
       border: '0.5px solid var(--surface-border-2)',
       borderRadius: 22, padding: 24,
       overflow: 'hidden',
@@ -68,7 +68,7 @@ function WeekHero({ confirmedThisWeek, uniqueAthletes, profilePct, bookings }: {
       <div style={{
         position: 'absolute', top: -70, right: -70,
         width: 260, height: 260, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(155,135,245,0.22) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, rgba(77,166,255,0.22) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
@@ -91,8 +91,8 @@ function WeekHero({ confirmedThisWeek, uniqueAthletes, profilePct, bookings }: {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: '6px 12px', borderRadius: 50,
-              background: 'rgba(155,135,245,0.14)',
-              border: '0.5px solid rgba(155,135,245,0.30)',
+              background: 'rgba(77,166,255,0.14)',
+              border: '0.5px solid rgba(77,166,255,0.30)',
               cursor: 'help', flexShrink: 0,
             }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -131,12 +131,12 @@ function WeekHero({ confirmedThisWeek, uniqueAthletes, profilePct, bookings }: {
                 background: d.isToday ? 'var(--nav-active-bg)' : d.booked ? 'var(--red)' : 'transparent',
                 border: d.isToday || d.booked ? 'none' : '0.5px solid var(--surface-border-2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: d.booked && !d.isToday ? '0 2px 12px rgba(155,135,245,0.28)' : 'none',
+                boxShadow: d.booked && !d.isToday ? '0 2px 12px rgba(77,166,255,0.28)' : 'none',
               }}>
                 <span style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1,
-                  color: d.isToday ? 'var(--nav-active-color)' : d.booked ? '#fff' : 'var(--w60)',
+                  color: d.isToday ? 'var(--nav-active-color)' : d.booked ? 'var(--btn-ink)' : 'var(--w60)',
                 }}>
                   {d.date}
                 </span>
@@ -271,7 +271,7 @@ export default function CoachDashboard() {
         {nextSession && sessionDate ? (
           <div style={{
             position: 'relative',
-            background: 'linear-gradient(135deg, rgba(155,135,245,0.10) 0%, rgba(155,135,245,0.02) 100%)',
+            background: 'linear-gradient(135deg, rgba(77,166,255,0.10) 0%, rgba(77,166,255,0.02) 100%)',
             border: '0.5px solid var(--surface-border-2)',
             borderRadius: 22, padding: '1.5rem',
             marginBottom: '1rem',
@@ -281,7 +281,7 @@ export default function CoachDashboard() {
             <div style={{
               position: 'absolute', top: -60, right: -60,
               width: 220, height: 220, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(155,135,245,0.20) 0%, transparent 65%)',
+              background: 'radial-gradient(circle, rgba(77,166,255,0.20) 0%, transparent 65%)',
               pointerEvents: 'none',
             }} />
             <div style={{ position: 'relative' }}>
@@ -298,7 +298,7 @@ export default function CoachDashboard() {
               </p>
             </div>
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10, flexShrink: 0 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', background: 'rgba(155,135,245,0.14)', border: '0.5px solid rgba(155,135,245,0.30)', padding: '5px 12px', borderRadius: 50, letterSpacing: '0.02em' }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', background: 'rgba(77,166,255,0.14)', border: '0.5px solid rgba(77,166,255,0.30)', padding: '5px 12px', borderRadius: 50, letterSpacing: '0.02em' }}>
                 {countdown(nextSession.starts_at)}
               </span>
               <Link to={`/session/${nextSession.id}`} className="btn-primary" style={{ fontSize: 13, minHeight: 40, padding: '0 22px', textDecoration: 'none' }}>
@@ -375,7 +375,7 @@ export default function CoachDashboard() {
               Upcoming
             </p>
             {pendingBookings.length > 0 && (
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.02em', padding: '3px 10px', borderRadius: 50, background: 'rgba(155,135,245,0.14)', border: '0.5px solid rgba(155,135,245,0.28)', color: 'var(--red)' }}>
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.02em', padding: '3px 10px', borderRadius: 50, background: 'rgba(77,166,255,0.14)', border: '0.5px solid rgba(77,166,255,0.28)', color: 'var(--red)' }}>
                 {pendingBookings.length} pending
               </span>
             )}
@@ -400,8 +400,8 @@ export default function CoachDashboard() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: 0 }}>
                     <div style={{
                       width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
-                      background: 'linear-gradient(135deg, rgba(155,135,245,0.20) 0%, rgba(155,135,245,0.08) 100%)',
-                      border: '0.5px solid rgba(155,135,245,0.28)',
+                      background: 'linear-gradient(135deg, rgba(77,166,255,0.20) 0%, rgba(77,166,255,0.08) 100%)',
+                      border: '0.5px solid rgba(77,166,255,0.28)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--red)',
                       letterSpacing: '-0.02em',

@@ -8,6 +8,7 @@ import { humanizeError } from '../lib/humanizeError';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 import ThemeToggle from '../components/ThemeToggle';
 import LanguagePicker from '../components/LanguagePicker';
+import Logo from '../components/Logo';
 
 const REDIRECT_URL = `${window.location.origin}/auth/callback`;
 
@@ -110,7 +111,7 @@ export default function Signup() {
             letterSpacing: '-0.02em', lineHeight: 1, textDecoration: 'none',
           }}
         >
-          <span style={{ color: 'var(--white)' }}>DRENO</span><span style={{ color: 'var(--red)' }}>/</span>
+          <Logo size="md" />
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: 32 }}>
           <LanguagePicker />
@@ -156,11 +157,11 @@ export default function Signup() {
                   transition: 'background 0.15s, border-color 0.15s, color 0.15s',
                   background: on ? 'var(--red)' : 'var(--surface-1)',
                   border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                  color: on ? '#fff' : 'var(--w80)',
+                  color: on ? 'var(--btn-ink)' : 'var(--w80)',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
                 }}>
                   {r.icon}
-                  <span style={{ fontSize: 14, fontWeight: 600, color: on ? '#fff' : 'var(--white)' }}>{r.label}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: on ? 'var(--btn-ink)' : 'var(--white)' }}>{r.label}</span>
                 </button>
               );
             })}

@@ -244,7 +244,7 @@ export default function CoachOnboard() {
         fontFamily: 'var(--font-body)',
         background: active ? 'var(--red)' : 'var(--surface-1)',
         border: active ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-        color: active ? '#fff' : 'var(--w80)',
+        color: active ? 'var(--btn-ink)' : 'var(--w80)',
       }}
     >
       {label}
@@ -353,7 +353,7 @@ export default function CoachOnboard() {
                       transition: 'background 0.15s, border-color 0.15s, color 0.15s', fontFamily: 'var(--font-body)', textAlign: 'left',
                     }}
                   >
-                    <p style={{ fontSize: 14, fontWeight: 600, color: approach === a.key ? '#fff' : 'var(--white)', marginBottom: 3 }}>{a.label}</p>
+                    <p style={{ fontSize: 14, fontWeight: 600, color: approach === a.key ? 'var(--btn-ink)' : 'var(--white)', marginBottom: 3 }}>{a.label}</p>
                     <p style={{ fontSize: 12, color: approach === a.key ? 'rgba(255,255,255,0.85)' : 'var(--w60)' }}>{a.desc}</p>
                   </button>
                 ))}
@@ -504,8 +504,8 @@ export default function CoachOnboard() {
               disabled={!frameworkText.trim() || frameworkGenerating || frameworkGenerateCount >= 3}
               style={{
                 fontSize: 15, fontWeight: 600, padding: '14px 28px', borderRadius: 50,
-                background: frameworkText.trim() && !frameworkGenerating && frameworkGenerateCount < 3 ? 'rgba(155,135,245,0.12)' : 'var(--surface-1)',
-                border: frameworkText.trim() && frameworkGenerateCount < 3 ? '0.5px solid rgba(155,135,245,0.4)' : '0.5px solid var(--surface-border)',
+                background: frameworkText.trim() && !frameworkGenerating && frameworkGenerateCount < 3 ? 'rgba(77,166,255,0.12)' : 'var(--surface-1)',
+                border: frameworkText.trim() && frameworkGenerateCount < 3 ? '0.5px solid rgba(77,166,255,0.4)' : '0.5px solid var(--surface-border)',
                 color: frameworkText.trim() && frameworkGenerateCount < 3 ? 'var(--white)' : 'var(--w40)',
                 cursor: frameworkText.trim() && !frameworkGenerating && frameworkGenerateCount < 3 ? 'pointer' : 'not-allowed',
                 fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 8,
@@ -521,7 +521,7 @@ export default function CoachOnboard() {
             </button>
 
             {frameworkError && (
-              <p style={{ fontSize: 13, color: 'rgba(155,135,245,0.8)', marginBottom: '1.25rem' }}>{frameworkError}</p>
+              <p style={{ fontSize: 13, color: 'rgba(77,166,255,0.8)', marginBottom: '1.25rem' }}>{frameworkError}</p>
             )}
 
             {frameworkBullets && (
@@ -549,7 +549,7 @@ export default function CoachOnboard() {
                     onClick={approveFramework}
                     style={{
                       fontSize: 15, fontWeight: 600, padding: '13px 32px', borderRadius: 50,
-                      background: 'rgba(155,135,245,0.12)', border: '0.5px solid rgba(155,135,245,0.4)',
+                      background: 'rgba(77,166,255,0.12)', border: '0.5px solid rgba(77,166,255,0.4)',
                       color: 'var(--white)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
                     }}
                   >
@@ -596,7 +596,7 @@ export default function CoachOnboard() {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {[30, 45, 60].map(m => (
                         <button key={m} type="button" onClick={() => { setMinSession(m); if (maxSession < m) setMaxSession(m); }}
-                          style={{ padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', border: minSession === m ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', background: minSession === m ? 'var(--red)' : 'var(--surface-1)', color: minSession === m ? '#fff' : 'var(--w80)' }}>
+                          style={{ padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', border: minSession === m ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', background: minSession === m ? 'var(--red)' : 'var(--surface-1)', color: minSession === m ? 'var(--btn-ink)' : 'var(--w80)' }}>
                           {m}m
                         </button>
                       ))}
@@ -607,7 +607,7 @@ export default function CoachOnboard() {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {[60, 90, 120].map(m => (
                         <button key={m} type="button" onClick={() => { setMaxSession(m); if (minSession > m) setMinSession(m); }}
-                          style={{ padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', border: maxSession === m ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', background: maxSession === m ? 'var(--red)' : 'var(--surface-1)', color: maxSession === m ? '#fff' : 'var(--w80)' }}>
+                          style={{ padding: '8px 14px', borderRadius: 50, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', border: maxSession === m ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', background: maxSession === m ? 'var(--red)' : 'var(--surface-1)', color: maxSession === m ? 'var(--btn-ink)' : 'var(--w80)' }}>
                           {m}m
                         </button>
                       ))}
@@ -651,7 +651,7 @@ export default function CoachOnboard() {
         {/* ── Step 5: Done ── */}
         {step === 5 && (
           <div style={{ textAlign: 'center', maxWidth: 440, margin: '0 auto', paddingTop: '8vh' }}>
-            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(155,135,245,0.12)', border: '0.5px solid rgba(155,135,245,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(77,166,255,0.12)', border: '0.5px solid rgba(77,166,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                 <path d="M8 18l7 7L28 11" stroke="var(--red)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

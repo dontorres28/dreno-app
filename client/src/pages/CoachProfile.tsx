@@ -83,8 +83,8 @@ export default function CoachProfile() {
   // Consistent chip style — matches athlete pill/tag treatment
   const tagStyle = (highlight = false): React.CSSProperties => ({
     fontSize: 12, fontWeight: 600, padding: '5px 12px', borderRadius: 50,
-    background: highlight ? 'rgba(155,135,245,0.10)' : 'var(--surface-1)',
-    border: highlight ? '0.5px solid rgba(155,135,245,0.28)' : '0.5px solid var(--surface-border-2)',
+    background: highlight ? 'rgba(77,166,255,0.10)' : 'var(--surface-1)',
+    border: highlight ? '0.5px solid rgba(77,166,255,0.28)' : '0.5px solid var(--surface-border-2)',
     color: highlight ? 'var(--red)' : 'var(--w80)',
     letterSpacing: '-0.005em',
   });
@@ -116,7 +116,7 @@ export default function CoachProfile() {
         {/* ── Hero header ── */}
         <div style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(155,135,245,0.08) 0%, rgba(155,135,245,0.02) 100%)',
+          background: 'linear-gradient(135deg, rgba(77,166,255,0.08) 0%, rgba(77,166,255,0.02) 100%)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22, padding: '1.75rem',
           marginBottom: 12,
@@ -125,7 +125,7 @@ export default function CoachProfile() {
           <div style={{
             position: 'absolute', top: -60, right: -60,
             width: 240, height: 240, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(155,135,245,0.18) 0%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(77,166,255,0.18) 0%, transparent 65%)',
             pointerEvents: 'none',
           }} />
 
@@ -139,11 +139,11 @@ export default function CoachProfile() {
             ) : (
               <div style={{
                 width: 80, height: 80, borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg, #B9ACF9 0%, #9B87F5 60%, #7A64E8 100%)',
+                background: 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 30, fontWeight: 700, color: '#fff',
                 fontFamily: 'var(--font-display)', letterSpacing: '-0.03em',
-                boxShadow: '0 4px 16px rgba(155,135,245,0.35)',
+                boxShadow: '0 4px 16px rgba(77,166,255,0.35)',
               }}>
                 {name.charAt(0)}
               </div>
@@ -172,8 +172,8 @@ export default function CoachProfile() {
                   display: 'inline-flex', alignItems: 'center', gap: 5,
                   fontSize: 12, fontWeight: 700, letterSpacing: '0.03em',
                   padding: '5px 11px', borderRadius: 50,
-                  background: 'rgba(155,135,245,0.12)',
-                  border: '0.5px solid rgba(155,135,245,0.28)',
+                  background: 'rgba(77,166,255,0.12)',
+                  border: '0.5px solid rgba(77,166,255,0.28)',
                   color: 'var(--red)', cursor: 'help',
                 }}>
                   <svg width="11" height="11" viewBox="0 0 13 13" fill="none">

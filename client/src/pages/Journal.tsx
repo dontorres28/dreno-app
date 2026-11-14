@@ -319,7 +319,7 @@ export default function Journal() {
                     position: 'relative',
                     padding: '6px 16px', borderRadius: 50, fontSize: 13, fontWeight: active ? 700 : 500,
                     background: 'transparent', border: 'none',
-                    color: active ? '#fff' : 'var(--w70)',
+                    color: active ? 'var(--btn-ink)' : 'var(--w70)',
                     cursor: 'pointer', fontFamily: 'var(--font-body)',
                     transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
                   }}>
@@ -342,7 +342,7 @@ export default function Journal() {
             <div style={{ padding: '0.875rem 1.25rem 1.25rem' }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '1.25rem' }}>
                 {CATEGORY_KEYS.map(k => (
-                  <button key={k} onClick={() => setCategory(k)} style={{ padding: '5px 13px', borderRadius: 50, fontSize: 12, fontWeight: 600, background: category === k ? 'var(--red)' : 'var(--surface-1)', border: category === k ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', color: category === k ? '#fff' : 'var(--w70)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms' }}>
+                  <button key={k} onClick={() => setCategory(k)} style={{ padding: '5px 13px', borderRadius: 50, fontSize: 12, fontWeight: 600, background: category === k ? 'var(--red)' : 'var(--surface-1)', border: category === k ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', color: category === k ? 'var(--btn-ink)' : 'var(--w70)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms' }}>
                     {CATEGORIES[k].label}
                   </button>
                 ))}
@@ -444,7 +444,7 @@ export default function Journal() {
                       </span>
                     )}
                     {parsed.cat && parsed.cat !== 'freeform' && isCategoryKey(parsed.cat) && (
-                      <span style={{ fontSize: 12, color: 'rgba(155,135,245,0.75)' }}>{CATEGORIES[parsed.cat].label}</span>
+                      <span style={{ fontSize: 12, color: 'rgba(77,166,255,0.75)' }}>{CATEGORIES[parsed.cat].label}</span>
                     )}
                   </div>
 
@@ -473,10 +473,10 @@ export default function Journal() {
                     </div>
                     <button type="button" onClick={() => toggleShare(entry.id, entry.shared_with_coach)} aria-label="Share with coach" className="toggle-btn"
                       style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'var(--font-body)' }}>
-                      <span style={{ fontSize: 12, color: entry.shared_with_coach ? 'rgba(155,135,245,0.75)' : 'var(--w50)', transition: 'color 0.2s ease' }}>
+                      <span style={{ fontSize: 12, color: entry.shared_with_coach ? 'rgba(77,166,255,0.75)' : 'var(--w50)', transition: 'color 0.2s ease' }}>
                         Share with coach
                       </span>
-                      <span style={{ width: 40, height: 23, borderRadius: 12, border: 'none', padding: 0, background: entry.shared_with_coach ? 'rgba(155,135,245,0.65)' : 'var(--surface-border)', position: 'relative', transition: 'background 0.2s ease', flexShrink: 0, display: 'inline-block' }}>
+                      <span style={{ width: 40, height: 23, borderRadius: 12, border: 'none', padding: 0, background: entry.shared_with_coach ? 'rgba(77,166,255,0.65)' : 'var(--surface-border)', position: 'relative', transition: 'background 0.2s ease', flexShrink: 0, display: 'inline-block' }}>
                         <span style={{ width: 17, height: 17, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: 3, transform: `translateX(${entry.shared_with_coach ? 17 : 0}px)`, transition: 'transform 0.2s ease', display: 'block', willChange: 'transform' }} />
                       </span>
                     </button>

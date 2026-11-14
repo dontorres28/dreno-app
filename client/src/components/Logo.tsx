@@ -3,31 +3,43 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-const sizeMap = {
-  sm: { text: '18px', slash: '20px' },
-  md: { text: '24px', slash: '26px' },
-  lg: { text: '36px', slash: '40px' },
-};
+// Real DRENO SPORTS artwork (public/dreno-logo.png), painted as a mask so the
+// single transparent asset recolors per theme — navy on light, off-white on
+// dark — with no second file. Aspect is locked to the trimmed artwork.
+const LOGO_ASPECT = 900 / 198;
+
+const heights = { sm: 18, md: 26, lg: 40 } as const;
 
 export default function Logo({ variant, size = 'md' }: LogoProps) {
-  const { text: fontSize, slash: slashSize } = sizeMap[size];
+  const h = heights[size];
+  const color =
+    variant === 'inverted' ? '#0A1A2F' :
+    variant === 'primary' || variant === 'mono' ? '#EEF4FF' :
+    'var(--logo-text)';
 
-  // When variant is explicitly forced (e.g. always-white on a dark panel), use hardcoded colors.
-  // Otherwise use CSS variables so the theme transition animates smoothly.
-  const forcedText = variant === 'inverted' ? '#0D1B2A' : variant === 'primary' ? '#ffffff' : variant === 'mono' ? '#ffffff' : null;
-
-  if (variant === 'icon') {
-    return (
-      <span style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: slashSize, color: '#E8192C', letterSpacing: '-0.02em', lineHeight: 1 }}>
-        /
-      </span>
-    );
-  }
+  // Icon variant: show just the "DRENO" band cropped square-ish isn't clean
+  // from a wordmark, so the icon falls back to the full mark at sm height.
+  const height = variant === 'icon' ? heights.sm : h;
 
   return (
-    <span style={{ fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize, letterSpacing: '-0.02em', lineHeight: 1, display: 'inline-flex', alignItems: 'baseline', gap: '1px' }}>
-      <span style={{ color: forcedText ?? 'var(--logo-text)' }}>DRENO</span>
-      <span style={{ color: '#E8192C', fontSize: slashSize }}>/</span>
-    </span>
+    <span
+      role="img"
+      aria-label="Dreno Sports"
+      style={{
+        display: 'inline-block',
+        width: height * LOGO_ASPECT,
+        height,
+        background: color,
+        WebkitMaskImage: 'url(/dreno-logo.png)',
+        maskImage: 'url(/dreno-logo.png)',
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
+        flexShrink: 0,
+      }}
+    />
   );
 }

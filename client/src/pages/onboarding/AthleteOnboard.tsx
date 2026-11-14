@@ -124,7 +124,7 @@ export default function AthleteOnboard() {
         fontFamily: 'var(--font-body)',
         background: active ? 'var(--red)' : 'var(--surface-1)',
         border: active ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-        color: active ? '#fff' : 'var(--w80)',
+        color: active ? 'var(--btn-ink)' : 'var(--w80)',
       }}
     >
       {label}
@@ -207,7 +207,7 @@ export default function AthleteOnboard() {
                 const idx = selected.indexOf(tag);
                 const on = idx !== -1;
                 return (
-                  <button key={tag} onClick={() => toggleChallenge(tag)} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 20px', borderRadius: 50, fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', background: on ? 'var(--red)' : 'var(--surface-1)', border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', color: on ? '#fff' : 'var(--w80)' }}>
+                  <button key={tag} onClick={() => toggleChallenge(tag)} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 20px', borderRadius: 50, fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', background: on ? 'var(--red)' : 'var(--surface-1)', border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', color: on ? 'var(--btn-ink)' : 'var(--w80)' }}>
                     {on && <span style={{ width: 18, height: 18, borderRadius: '50%', background: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: 'var(--red)', flexShrink: 0 }}>{idx + 1}</span>}
                     {tag}
                   </button>
@@ -234,7 +234,7 @@ export default function AthleteOnboard() {
                   const on = format === f.key;
                   return (
                     <button key={f.key} onClick={() => setFormat(f.key)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '16px 20px', borderRadius: 14, cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s, color 0.15s', background: on ? 'var(--red)' : 'var(--surface-1)', border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)', textAlign: 'left', fontFamily: 'var(--font-body)' }}>
-                      <p style={{ fontSize: 14, fontWeight: 600, color: on ? '#fff' : 'var(--white)', marginBottom: 3 }}>{f.label}</p>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: on ? 'var(--btn-ink)' : 'var(--white)', marginBottom: 3 }}>{f.label}</p>
                       <p style={{ fontSize: 12, color: on ? 'rgba(255,255,255,0.85)' : 'var(--w60)', lineHeight: 1.4 }}>{f.sub}</p>
                     </button>
                   );
@@ -264,7 +264,7 @@ export default function AthleteOnboard() {
         {/* Step 3: Done */}
         {step === 3 && (
           <div style={{ textAlign: 'center', maxWidth: 440, margin: '0 auto', paddingTop: '6vh' }}>
-            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(155,135,245,0.12)', border: '0.5px solid rgba(155,135,245,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(77,166,255,0.12)', border: '0.5px solid rgba(77,166,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M8 18l7 7L28 11" stroke="var(--red)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
             <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(3rem, 9vw, 5.5rem)', lineHeight: 0.92, letterSpacing: '-0.035em', marginBottom: '1.5rem' }}>You're in</h1>

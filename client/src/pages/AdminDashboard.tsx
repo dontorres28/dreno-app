@@ -145,12 +145,12 @@ export default function AdminDashboard() {
           <div style={{
             display: 'flex', alignItems: 'flex-start', gap: '0.875rem',
             padding: '1rem 1.25rem', borderRadius: 16, marginBottom: '1.25rem',
-            background: 'rgba(155,135,245,0.07)',
-            border: '0.5px solid rgba(155,135,245,0.22)',
+            background: 'rgba(77,166,255,0.07)',
+            border: '0.5px solid rgba(77,166,255,0.22)',
           }}>
             <div style={{
               width: 8, height: 8, borderRadius: '50%', background: 'var(--red)',
-              boxShadow: '0 0 8px rgba(155,135,245,0.6)',
+              boxShadow: '0 0 8px rgba(77,166,255,0.6)',
               flexShrink: 0, marginTop: 6,
             }} />
             <div>
@@ -177,8 +177,8 @@ export default function AdminDashboard() {
           }}>
             <div style={{
               width: 56, height: 56, borderRadius: 16, flexShrink: 0,
-              background: 'rgba(155,135,245,0.1)',
-              border: '0.5px solid rgba(155,135,245,0.22)',
+              background: 'rgba(77,166,255,0.1)',
+              border: '0.5px solid rgba(77,166,255,0.22)',
               color: 'var(--red)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>

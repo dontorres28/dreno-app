@@ -192,7 +192,7 @@ export default function Book() {
         fontFamily: 'var(--font-body)',
         background: active ? 'var(--red)' : 'var(--surface-1)',
         border: active ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-        color: active ? '#fff' : 'var(--w80)',
+        color: active ? 'var(--btn-ink)' : 'var(--w80)',
       }}
     >
       {label}

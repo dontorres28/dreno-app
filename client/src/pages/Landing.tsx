@@ -8,7 +8,6 @@ import { Iphone15Pro } from '../components/Iphone15Pro';
 import Footer from '../components/Footer';
 
 // Dreno app screenshots served from /public
-const DESKTOP_SHOT = '/dashboard-desktop.png';
 const MOBILE_SHOT  = '/signup-mobile.png';
 
 export default function Landing() {
@@ -57,10 +56,7 @@ export default function Landing() {
   const mockupBase = { transition: { type: 'spring' as const, bounce: 0, duration: 0.5 } };
   const phoneEnter = reduced
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.2, delay: 0.15 } }
-    : { initial: { opacity: 0, x: -30, scale: 0.94 }, animate: { opacity: 1, x: 0, scale: 1 }, transition: { ...mockupBase.transition, delay: 0.35 } };
-  const desktopEnter = reduced
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.2 } }
-    : { initial: { opacity: 0, x: 30, scale: 0.98 }, animate: { opacity: 1, x: 0, scale: 1 }, transition: { ...mockupBase.transition, delay: 0.2 } };
+    : { initial: { opacity: 0, y: 24, scale: 0.96 }, animate: { opacity: 1, y: 0, scale: 1 }, transition: { ...mockupBase.transition, delay: 0.3 } };
 
   return (
     <Layout>
@@ -131,7 +127,7 @@ export default function Landing() {
           transform: scale(0.97);
           transition-duration: 90ms;
           /* Cut the lift-shadow when pressed — a real button loses shadow under load */
-          box-shadow: 0 4px 12px rgba(155,135,245, 0.18) !important;
+          box-shadow: 0 4px 12px rgba(77,166,255, 0.18) !important;
         }
         @media (prefers-reduced-motion: reduce) {
           .step-row { transition: opacity 200ms ease; transform: none !important; }
@@ -153,8 +149,8 @@ export default function Landing() {
           style={{
             position: 'absolute', inset: 0,
             background: `
-              radial-gradient(ellipse 65% 45% at 50% 32%, rgba(155,135,245,0.20) 0%, transparent 70%),
-              radial-gradient(ellipse 110% 70% at 50% 15%, rgba(155,135,245,0.06) 0%, transparent 70%)
+              radial-gradient(ellipse 65% 45% at 50% 32%, rgba(77,166,255,0.20) 0%, transparent 70%),
+              radial-gradient(ellipse 110% 70% at 50% 15%, rgba(77,166,255,0.06) 0%, transparent 70%)
             `,
             /* Feather the bottom so the glow dissolves into var(--bg) before the section edge — kills the hard seam */
             WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 65%, transparent 100%)',
@@ -210,9 +206,9 @@ export default function Landing() {
                   height: 44, padding: '0 22px', borderRadius: 50,
                   fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em',
                   fontFamily: 'var(--font-body)',
-                  background: 'var(--red)', color: '#fff',
+                  background: 'var(--red)', color: 'var(--btn-ink)',
                   border: '0.5px solid var(--red)', textDecoration: 'none',
-                  boxShadow: '0 10px 32px rgba(155,135,245,0.28)',
+                  boxShadow: '0 10px 32px rgba(77,166,255,0.28)',
                 }}
               >
                 {t('landing.signUpFree')}
@@ -237,51 +233,24 @@ export default function Landing() {
             </div>
           </AnimatedGroup>
 
-          {/* Product mockup — phone left of desktop, pair centered */}
+          {/* Product mockup — single phone, centered. One device, Apple-style.
+              Hidden on mobile (a phone-in-a-phone reads as goofy on a real phone). */}
           <div style={{ position: 'relative', width: '100%', maxWidth: 1200, margin: '0 auto', zIndex: 20 }}>
             <div className="mockup-row" style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              gap: 'clamp(1rem, 3vw, 2.5rem)',
             }}>
-              {/* Phone — left (and the ONLY mockup on mobile) */}
               <motion.div
                 {...phoneEnter}
                 className="mockup-phone"
                 style={{
                   flex: '0 0 auto',
-                  width: 'clamp(180px, 22vw, 300px)',
-                  filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.35))',
+                  width: 'clamp(240px, 26vw, 330px)',
+                  filter: 'drop-shadow(0 40px 80px rgba(10,40,90,0.28))',
                 }}
               >
                 <Iphone15Pro src={MOBILE_SHOT} />
               </motion.div>
-
-              {/* Desktop — right, hidden on mobile (illegible at 375px) */}
-              <motion.div
-                {...desktopEnter}
-                className="mockup-desktop"
-                style={{
-                  flex: '0 1 auto',
-                  width: 'min(820px, 70vw)',
-                  borderRadius: 12, overflow: 'hidden',
-                  border: '0.5px solid var(--surface-border-2)',
-                  boxShadow: '0 40px 120px rgba(0,0,0,0.5), 0 12px 40px rgba(0,0,0,0.35)',
-                  background: 'var(--surface-1)',
-                }}
-              >
-                <img
-                  src={DESKTOP_SHOT}
-                  alt="Dreno on desktop"
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                  width={1366}
-                  height={986}
-                  style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'cover' }}
-                />
-              </motion.div>
             </div>
-
           </div>
         </div>
       </section>
@@ -289,8 +258,7 @@ export default function Landing() {
       {/* ── How it works — editorial rows, no boxes ── */}
       <section style={{ padding: 'clamp(2rem, 5vh, 3.5rem) 1.5rem clamp(4rem, 10vh, 8rem)' }}>
         <div style={{ maxWidth: 780, margin: '0 auto' }}>
-          <div style={{ marginBottom: 'clamp(2.5rem, 6vh, 4rem)' }}>
-            <p className="label" style={{ margin: 0, marginBottom: 12 }}>{t('landing.howItWorks')}</p>
+          <div className="reveal" style={{ marginBottom: 'clamp(2.5rem, 6vh, 4rem)' }}>
             <h2 style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(3rem, 9vw, 6.5rem)',
@@ -349,12 +317,12 @@ export default function Landing() {
             position: 'absolute', top: '50%', left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 'min(700px, 90%)', height: 400,
-            background: 'radial-gradient(50% 50% at 50% 50%, rgba(155,135,245,0.14) 0%, transparent 70%)',
+            background: 'radial-gradient(50% 50% at 50% 50%, rgba(77,166,255,0.14) 0%, transparent 70%)',
             filter: 'blur(50px)',
             pointerEvents: 'none',
           }}
         />
-        <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+        <div className="reveal" style={{ position: 'relative', maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(3rem, 9vw, 6.5rem)',
@@ -378,7 +346,7 @@ export default function Landing() {
               height: 46, padding: '0 26px', borderRadius: 50,
               fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em',
               fontFamily: 'var(--font-body)',
-              background: 'var(--red)', color: '#fff',
+              background: 'var(--red)', color: 'var(--btn-ink)',
               border: '0.5px solid var(--red)', textDecoration: 'none',
             }}
           >

@@ -158,7 +158,7 @@ export default function AdminOnboard() {
         fontWeight: on ? 700 : 500,
         border: on ? 'none' : '0.5px solid var(--surface-border-2)',
         background: 'transparent', cursor: 'pointer',
-        color: on ? '#fff' : 'var(--w70)',
+        color: on ? 'var(--btn-ink)' : 'var(--w70)',
         fontFamily: 'var(--font-body)',
         letterSpacing: '-0.005em',
         transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
@@ -255,7 +255,7 @@ export default function AdminOnboard() {
                       letterSpacing: '-0.005em',
                       background: on ? 'var(--red)' : 'transparent',
                       border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                      color: on ? '#fff' : 'var(--w70)',
+                      color: on ? 'var(--btn-ink)' : 'var(--w70)',
                       transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
                     }}
                   >
@@ -303,8 +303,8 @@ export default function AdminOnboard() {
               </span>
               <span style={{
                 fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 50,
-                background: 'rgba(155,135,245,0.12)', color: 'var(--red)',
-                border: '0.5px solid rgba(155,135,245,0.25)',
+                background: 'rgba(77,166,255,0.12)', color: 'var(--red)',
+                border: '0.5px solid rgba(77,166,255,0.25)',
                 letterSpacing: '0.04em',
               }}>
                 -15%
@@ -330,7 +330,7 @@ export default function AdminOnboard() {
                     {/* Radio */}
                     <div style={{
                       width: 18, height: 18, borderRadius: '50%', flexShrink: 0,
-                      background: active ? '#fff' : 'transparent',
+                      background: active ? 'var(--btn-ink)' : 'transparent',
                       border: active ? 'none' : '1.5px solid var(--surface-border-2)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms',
@@ -339,7 +339,7 @@ export default function AdminOnboard() {
                     </div>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                        <p style={{ fontSize: 15, fontWeight: 700, color: active ? '#fff' : 'var(--white)' }}>{t.label}</p>
+                        <p style={{ fontSize: 15, fontWeight: 700, color: active ? 'var(--btn-ink)' : 'var(--white)' }}>{t.label}</p>
                         <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: active ? 'rgba(255,255,255,0.7)' : 'var(--w50)' }}>
                           {t.desc}
                         </span>
@@ -355,7 +355,7 @@ export default function AdminOnboard() {
                     </div>
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 22, lineHeight: 1, letterSpacing: '-0.035em', color: active ? '#fff' : 'var(--white)' }}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 22, lineHeight: 1, letterSpacing: '-0.035em', color: active ? 'var(--btn-ink)' : 'var(--white)' }}>
                       ${mPrice.toLocaleString()}
                     </p>
                     <p style={{ fontSize: 11, color: active ? 'rgba(255,255,255,0.7)' : 'var(--w60)', marginTop: 2 }}>/mo</p>

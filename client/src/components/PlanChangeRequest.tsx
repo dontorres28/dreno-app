@@ -149,7 +149,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
                 >
                   <div style={{
                     width: 18, height: 18, borderRadius: '50%', flexShrink: 0,
-                    background: on ? '#fff' : 'transparent',
+                    background: on ? 'var(--btn-ink)' : 'transparent',
                     border: on ? 'none' : '1.5px solid var(--surface-border-2)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
@@ -159,7 +159,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
                       <p style={{
                         fontSize: 15, fontWeight: 700, letterSpacing: '-0.005em',
-                        color: on ? '#fff' : 'var(--white)',
+                        color: on ? 'var(--btn-ink)' : 'var(--white)',
                       }}>
                         {t.label}
                       </p>
@@ -168,7 +168,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
                           fontSize: 9, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
                           padding: '2px 6px', borderRadius: 50,
                           background: on ? 'rgba(255,255,255,0.2)' : 'var(--surface-2)',
-                          color: on ? '#fff' : 'var(--w70)',
+                          color: on ? 'var(--btn-ink)' : 'var(--w70)',
                         }}>
                           Current
                         </span>
@@ -186,7 +186,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
                     <p style={{
                       fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700,
                       letterSpacing: '-0.03em', lineHeight: 1,
-                      color: on ? '#fff' : 'var(--white)',
+                      color: on ? 'var(--btn-ink)' : 'var(--white)',
                     }}>
                       ${t.price.toLocaleString()}
                     </p>
@@ -222,7 +222,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
                       padding: '10px 0', borderRadius: 50, fontSize: 13,
                       fontWeight: on ? 700 : 500, letterSpacing: '-0.005em',
                       border: 'none', background: 'transparent', cursor: 'pointer',
-                      color: on ? '#fff' : 'var(--w70)',
+                      color: on ? 'var(--btn-ink)' : 'var(--w70)',
                       fontFamily: 'var(--font-body)',
                       transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
                     }}
@@ -294,7 +294,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
               flex: 1, height: 46, borderRadius: 50,
               fontSize: 14, fontWeight: 700, letterSpacing: '-0.005em',
               fontFamily: 'var(--font-body)',
-              background: 'var(--red)', border: '0.5px solid var(--red)', color: '#fff',
+              background: 'var(--red)', border: '0.5px solid var(--red)', color: 'var(--btn-ink)',
               cursor: sending ? 'not-allowed' : 'pointer',
               opacity: sending ? 0.7 : 1,
               display: 'flex', alignItems: 'center', justifyContent: 'center',

@@ -152,7 +152,7 @@ export default function DrillGoNoGo() {
             background: isGo ? 'var(--white)' : 'var(--red)',
             boxShadow: isGo
               ? '0 0 80px rgba(255,255,255,0.08), 0 0 30px rgba(255,255,255,0.15) inset'
-              : '0 0 80px rgba(155,135,245,0.4), 0 0 30px rgba(155,135,245,0.3) inset',
+              : '0 0 80px rgba(77,166,255,0.4), 0 0 30px rgba(77,166,255,0.3) inset',
             opacity: phase === 'running' ? 1 : 0,
             transform: phase === 'running' ? 'scale(1)' : 'scale(0.94)',
             transition: `opacity 220ms ${EASE_OUT}, transform 240ms ${EASE_OUT}, background 160ms ${EASE_OUT}`,
@@ -321,7 +321,7 @@ export default function DrillGoNoGo() {
             <div style={{
               width: 60, height: 60, borderRadius: '50%',
               background: 'var(--red)',
-              boxShadow: '0 0 24px rgba(155,135,245,0.3)',
+              boxShadow: '0 0 24px rgba(77,166,255,0.3)',
               margin: '0 auto 10px',
             }} />
             <p style={{ fontSize: 11, color: 'var(--w70)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>Hold</p>

@@ -185,13 +185,13 @@ export default function CoachAthleteHub() {
           borderRadius: 24,
           padding: '2rem 1.75rem',
           marginBottom: '1.25rem',
-          background: 'linear-gradient(135deg, rgba(155,135,245,0.14) 0%, rgba(155,135,245,0.04) 60%, transparent 100%)',
+          background: 'linear-gradient(135deg, rgba(77,166,255,0.14) 0%, rgba(77,166,255,0.04) 60%, transparent 100%)',
           border: '0.5px solid var(--surface-border-2)',
           overflow: 'hidden',
         }}>
           <div style={{
             position: 'absolute', top: -60, right: -40, width: 240, height: 240,
-            background: 'radial-gradient(circle, rgba(155,135,245,0.18) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(77,166,255,0.18) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}/>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
@@ -507,7 +507,7 @@ export default function CoachAthleteHub() {
                         padding: '6px 12px', borderRadius: 50, fontSize: 12,
                         fontWeight: on ? 700 : 500,
                         border: 'none', background: 'transparent', cursor: 'pointer',
-                        color: on ? '#fff' : 'var(--w70)',
+                        color: on ? 'var(--btn-ink)' : 'var(--w70)',
                         fontFamily: 'var(--font-body)',
                         transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
                       }}
@@ -556,7 +556,7 @@ export default function CoachAthleteHub() {
                   cursor: noteBody.trim() && !noteSaving ? 'pointer' : 'not-allowed',
                   background: noteBody.trim() ? 'var(--red)' : 'transparent',
                   border: noteBody.trim() ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                  color: noteBody.trim() ? '#fff' : 'var(--w60)',
+                  color: noteBody.trim() ? 'var(--btn-ink)' : 'var(--w60)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
                 }}

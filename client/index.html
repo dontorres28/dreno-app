@@ -30,9 +30,7 @@
     <link rel="dns-prefetch" href="https://rsoncepevfkwthozudkx.supabase.co" />
 
     <!-- Perf: hero mockups are above-the-fold on desktop only.
-         Mobile hides them entirely — don't waste bandwidth preloading. -->
-    <link rel="preload" as="image" href="/dashboard-desktop.png" fetchpriority="high" media="(min-width: 721px)" />
-    <link rel="preload" as="image" href="/signup-mobile.png" fetchpriority="high" media="(min-width: 721px)" />
+         Mobile hides them entirely — don't waste bandwidth preloading. -->    <link rel="preload" as="image" href="/signup-mobile.png" fetchpriority="high" media="(min-width: 721px)" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
@@ -49,7 +47,8 @@
     <meta name="apple-mobile-web-app-title" content="Dreno" />
 
     <!-- Theme color for Android Chrome address bar -->
-    <meta name="theme-color" content="#F7F5F1" />
+    <meta name="theme-color" content="#F6FAFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#070D18" media="(prefers-color-scheme: dark)" />
 
     <!-- Structured data — Organization + WebSite for search results -->
     <script type="application/ld+json">

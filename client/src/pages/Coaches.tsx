@@ -99,7 +99,7 @@ export default function Coaches() {
                       position: 'relative',
                       fontSize: 13, fontWeight: active ? 700 : 500, padding: '7px 14px', borderRadius: 50,
                       border: 'none', background: 'transparent',
-                      color: active ? '#fff' : 'var(--w70)',
+                      color: active ? 'var(--btn-ink)' : 'var(--w70)',
                       cursor: 'pointer', fontFamily: 'var(--font-body)',
                       transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
                     }}

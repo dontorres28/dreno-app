@@ -115,7 +115,7 @@ export default function DrillLeaderboard() {
                 <div
                   key={e.athlete_id}
                   style={{
-                    background: isMe ? 'rgba(155,135,245,0.08)' : 'transparent',
+                    background: isMe ? 'rgba(77,166,255,0.08)' : 'transparent',
                     padding: '14px 18px',
                     display: 'flex',
                     alignItems: 'center',

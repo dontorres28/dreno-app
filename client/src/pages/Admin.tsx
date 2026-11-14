@@ -13,7 +13,7 @@ interface Coach {
 }
 
 const STATUS_META: Record<string, { label: string; color: string; bg: string; border: string }> = {
-  verified: { label: 'Verified', color: '#fff', bg: 'var(--red)', border: 'var(--red)' },
+  verified: { label: 'Verified', color: 'var(--btn-ink)', bg: 'var(--red)', border: 'var(--red)' },
   rejected: { label: 'Rejected', color: 'var(--w60)', bg: 'transparent', border: 'var(--surface-border-2)' },
   pending:  { label: 'Pending',  color: 'var(--w70)', bg: 'transparent', border: 'var(--surface-border-2)' },
 };
@@ -112,7 +112,7 @@ export default function Admin() {
                 fontFamily: 'var(--font-body)', letterSpacing: '-0.005em',
                 background: password ? 'var(--red)' : 'transparent',
                 border: password ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                color: password ? '#fff' : 'var(--w60)',
+                color: password ? 'var(--btn-ink)' : 'var(--w60)',
                 cursor: password && !loading ? 'pointer' : 'not-allowed',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',

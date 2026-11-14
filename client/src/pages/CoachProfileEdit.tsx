@@ -205,7 +205,7 @@ export default function CoachProfileEdit() {
         transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
         background: active ? 'var(--red)' : 'var(--surface-1)',
         border: active ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-        color: active ? '#fff' : 'var(--w80)',
+        color: active ? 'var(--btn-ink)' : 'var(--w80)',
       }}
     >
       {label}
@@ -240,7 +240,7 @@ export default function CoachProfileEdit() {
         {/* ── Hero header, mirrors CoachProfile / Settings hero ── */}
         <div style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(155,135,245,0.08) 0%, rgba(155,135,245,0.02) 100%)',
+          background: 'linear-gradient(135deg, rgba(77,166,255,0.08) 0%, rgba(77,166,255,0.02) 100%)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22,
           padding: '1.5rem',
@@ -251,7 +251,7 @@ export default function CoachProfileEdit() {
           <div style={{
             position: 'absolute', top: -50, right: -50,
             width: 200, height: 200, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(155,135,245,0.20) 0%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(77,166,255,0.20) 0%, transparent 65%)',
             pointerEvents: 'none',
           }} />
 
@@ -262,12 +262,12 @@ export default function CoachProfileEdit() {
               width: 76, height: 76, borderRadius: '50%',
               background: photoPreview
                 ? 'transparent'
-                : 'linear-gradient(135deg, #B9ACF9 0%, #9B87F5 60%, #7A64E8 100%)',
+                : 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
               overflow: 'hidden', border: 'none', padding: 0, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: '#fff', fontFamily: 'var(--font-display)', fontSize: 26,
               fontWeight: 700, letterSpacing: '-0.02em',
-              boxShadow: photoPreview ? 'none' : '0 4px 16px rgba(155,135,245,0.35)',
+              boxShadow: photoPreview ? 'none' : '0 4px 16px rgba(77,166,255,0.35)',
             }}
           >
             {photoPreview
@@ -378,14 +378,14 @@ export default function CoachProfileEdit() {
                   </div>
                 ))}
                 {pendingCerts.map((f, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 12, background: 'rgba(155,135,245,0.10)', border: '0.5px solid rgba(155,135,245,0.28)' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 12, background: 'rgba(77,166,255,0.10)', border: '0.5px solid rgba(77,166,255,0.28)' }}>
                     <span style={{ fontSize: 13, color: 'var(--red)', display: 'flex', alignItems: 'center', gap: 10, fontWeight: 600 }}>
                       <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
                         <rect x="1" y="1" width="12" height="14" rx="2" stroke="currentColor" strokeWidth="1.4"/>
                         <path d="M4 6h6M4 9h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
                       </svg>
                       {f.name}
-                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 50, background: 'rgba(155,135,245,0.20)', color: 'var(--red)', letterSpacing: '0.06em' }}>NEW</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 50, background: 'rgba(77,166,255,0.20)', color: 'var(--red)', letterSpacing: '0.06em' }}>NEW</span>
                     </span>
                     <button onClick={() => removePending(i)} aria-label="Remove pending certificate" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--red)', fontSize: 18, padding: '0 4px', lineHeight: 1 }}>×</button>
                   </div>

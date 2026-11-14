@@ -91,7 +91,7 @@ export default function SessionFeedback() {
                   transition: 'background 0.15s, border-color 0.15s, color 0.15s',
                   background: useful === opt.value ? 'var(--red)' : 'var(--surface-1)',
                   border: `0.5px solid ${useful === opt.value ? 'var(--red)' : 'var(--surface-border)'}`,
-                  color: useful === opt.value ? '#fff' : 'var(--w80)',
+                  color: useful === opt.value ? 'var(--btn-ink)' : 'var(--w80)',
                 }}
               >
                 {opt.label}

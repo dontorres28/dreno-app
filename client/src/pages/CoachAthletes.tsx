@@ -109,7 +109,7 @@ export default function CoachAthletes() {
                       fontSize: 13, fontWeight: on ? 700 : 500,
                       padding: '8px 16px', borderRadius: 50,
                       border: 'none', background: 'transparent', cursor: 'pointer',
-                      color: on ? '#fff' : 'var(--w70)',
+                      color: on ? 'var(--btn-ink)' : 'var(--w70)',
                       fontFamily: 'var(--font-body)',
                       transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
                     }}
@@ -218,7 +218,7 @@ export default function CoachAthletes() {
                           padding: '3px 9px', borderRadius: 50, flexShrink: 0,
                           background: isActive ? 'var(--red)' : 'transparent',
                           border: isActive ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                          color: isActive ? '#fff' : 'var(--w60)',
+                          color: isActive ? 'var(--btn-ink)' : 'var(--w60)',
                           textTransform: 'uppercase',
                         }}>
                           {isActive ? 'Active' : 'Past'}

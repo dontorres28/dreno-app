@@ -85,8 +85,8 @@ function CoachNoteCard({ note, isFirst }: { note: PlaybookNote; isFirst: boolean
         ) : (
           <div style={{
             width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
-            background: 'linear-gradient(135deg, rgba(155,135,245,0.20) 0%, rgba(155,135,245,0.08) 100%)',
-            border: '0.5px solid rgba(155,135,245,0.28)',
+            background: 'linear-gradient(135deg, rgba(77,166,255,0.20) 0%, rgba(77,166,255,0.08) 100%)',
+            border: '0.5px solid rgba(77,166,255,0.28)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--red)',
             letterSpacing: '-0.02em',
@@ -196,7 +196,7 @@ export default function Playbook() {
                     fontSize: 13, fontWeight: isActive ? 700 : 500,
                     cursor: 'pointer',
                     background: 'transparent', border: 'none',
-                    color: isActive ? '#fff' : hasNotes ? 'var(--w80)' : 'var(--w50)',
+                    color: isActive ? 'var(--btn-ink)' : hasNotes ? 'var(--w80)' : 'var(--w50)',
                     fontFamily: 'var(--font-body)',
                     display: 'inline-flex', alignItems: 'center', gap: 6,
                     transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',

@@ -91,7 +91,7 @@ function StatusPill({ status }: { status: string }) {
       padding: '3px 10px', borderRadius: 50,
       background: isActive ? 'var(--red)' : 'transparent',
       border: isActive ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-      color: isActive ? '#fff' : 'var(--w60)',
+      color: isActive ? 'var(--btn-ink)' : 'var(--w60)',
     }}>
       {isActive ? t('messages.active') : t('messages.past')}
     </span>
@@ -262,7 +262,7 @@ export default function Messages() {
                         fontWeight: isOn ? 700 : 500,
                         background: 'transparent',
                         border: 'none', cursor: 'pointer',
-                        color: isOn ? '#fff' : 'var(--w70)',
+                        color: isOn ? 'var(--btn-ink)' : 'var(--w70)',
                         fontFamily: 'var(--font-body)',
                         transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
                       }}

@@ -242,7 +242,7 @@ export default function ImageCropper({ file, onCancel, onSave, outputSize = 512 
             style={{
               flex: 1, height: 44, borderRadius: 50, fontSize: 14, fontWeight: 700,
               fontFamily: 'var(--font-body)', letterSpacing: '-0.005em',
-              background: 'var(--red)', border: '0.5px solid var(--red)', color: '#fff',
+              background: 'var(--red)', border: '0.5px solid var(--red)', color: 'var(--btn-ink)',
               cursor: saving || !imgSize ? 'not-allowed' : 'pointer',
               opacity: saving || !imgSize ? 0.6 : 1,
               transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)',

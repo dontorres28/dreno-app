@@ -28,92 +28,103 @@
   --space-7: 96px;  /* page-level vertical rhythm */
 }
 
-/* ── Dark (default) ── */
+/* ── Dark (default) — deep navy, never pure black (warmer, holds the blue) ── */
 :root {
-  --bg:       #000000;
-  --bg-1:     #0a0a0a;
-  --bg-2:     #111111;
-  --bg-3:     #1a1a1a;
-  --line:     rgba(255,255,255,0.08);
-  --line-2:   rgba(255,255,255,0.14);
-  --white:    #ffffff;
-  --red:      #9B87F5;
-  --w85:      rgba(255,255,255,0.94);
-  --w80:      rgba(255,255,255,0.88);
-  --w70:      rgba(255,255,255,0.82);
-  --w60:      rgba(255,255,255,0.75);
-  --w50:      rgba(255,255,255,0.68);
-  --w45:      rgba(255,255,255,0.62);
-  --w40:      rgba(255,255,255,0.58);
-  --w20:      rgba(255,255,255,0.22);
-  --w08:      rgba(255,255,255,0.08);
+  --bg:       #070D18;
+  --bg-1:     #0B1322;
+  --bg-2:     #101A2E;
+  --bg-3:     #18253D;
+  --line:     rgba(173,206,255,0.10);
+  --line-2:   rgba(173,206,255,0.16);
+  --white:    #EEF4FF;
+  --red:      #4DA6FF;   /* bright accent — hero word, icons, glows, highlights */
+  --accent:         #4DA6FF;   /* bright primary */
+  --accent-soft:    #5AC8FA;   /* Apple sky, airier moments */
+  --accent-strong:  #0B5FD4;   /* deep blue — buttons bg, links, contrast-critical */
+  --btn-ink:        #071225;   /* navy text that rides on the bright-blue button (6.8:1) */
+  --link:           #7FC0FF;   /* text links on dark navy */
+  --w85:      rgba(238,244,255,0.94);
+  --w80:      rgba(238,244,255,0.88);
+  --w70:      rgba(238,244,255,0.82);
+  --w60:      rgba(238,244,255,0.74);
+  --w50:      rgba(238,244,255,0.66);
+  --w45:      rgba(238,244,255,0.60);
+  --w40:      rgba(238,244,255,0.54);
+  --w20:      rgba(238,244,255,0.22);
+  --w08:      rgba(238,244,255,0.08);
 
-  --surface-1:       rgba(255,255,255,0.05);
-  --surface-2:       rgba(255,255,255,0.07);
-  --surface-border:  rgba(255,255,255,0.10);
-  --surface-border-2:rgba(255,255,255,0.14);
-  --surface-hover:   rgba(255,255,255,0.09);
-  --input-bg:        rgba(255,255,255,0.06);
-  --input-border:    rgba(255,255,255,0.12);
-  --input-focus-bg:  rgba(255,255,255,0.08);
-  --input-focus-bdr: rgba(255,255,255,0.28);
-  --nav-bg:          rgba(0,0,0,0.72);
-  --nav-border:      rgba(255,255,255,0.08);
-  --mobile-menu-bg:  rgba(10,10,10,0.97);
-  --tag-bg:          rgba(255,255,255,0.07);
-  --tag-border:      rgba(255,255,255,0.12);
-  --shadow-card:     0 20px 60px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
-  --toggle-bg:       rgba(255,255,255,0.08);
-  --nav-active-bg:   #ffffff;
-  --nav-active-color: var(--red);
-  --logo-text:       #ffffff;
+  --surface-1:       rgba(120,170,255,0.06);
+  --surface-2:       rgba(120,170,255,0.09);
+  --surface-border:  rgba(173,206,255,0.11);
+  --surface-border-2:rgba(173,206,255,0.17);
+  --surface-hover:   rgba(120,170,255,0.12);
+  --input-bg:        rgba(120,170,255,0.07);
+  --input-border:    rgba(173,206,255,0.14);
+  --input-focus-bg:  rgba(120,170,255,0.10);
+  --input-focus-bdr: var(--accent);
+  --nav-bg:          rgba(7,13,24,0.72);
+  --nav-border:      rgba(173,206,255,0.10);
+  --mobile-menu-bg:  rgba(11,19,34,0.97);
+  --tag-bg:          rgba(120,170,255,0.09);
+  --tag-border:      rgba(173,206,255,0.14);
+  --shadow-card:     0 20px 60px rgba(0,8,24,0.6), 0 2px 8px rgba(0,8,24,0.4);
+  --toggle-bg:       rgba(120,170,255,0.10);
+  --nav-active-bg:   var(--accent);
+  --nav-active-color: var(--btn-ink);
+  --logo-text:       #EEF4FF;
 
   --font-display: 'Expose', system-ui, sans-serif;
   --font-body:    'Satoshi', system-ui, -apple-system, sans-serif;
   --font-mark:    'Chakra Petch', sans-serif;
-  --radius-sm:    10px;
-  --radius:       16px;
-  --radius-lg:    24px;
+  --radius-sm:    12px;   /* bumped slightly — squircles read tighter at the same value (PDF hack 01) */
+  --radius:       18px;
+  --radius-lg:    26px;
 }
 
-/* ── Light ── */
+/* ── Light — cool off-white, navy ink, airy ── */
 [data-theme="light"] {
-  --bg:       #F7F5F1;
-  --bg-1:     #F0EDE7;
-  --bg-2:     #E9E5DE;
-  --bg-3:     #DED9D0;
-  --line:     rgba(30,24,16,0.09);
-  --line-2:   rgba(30,24,16,0.15);
-  --white:    #1C1814;
-  --w85:      rgba(30,24,16,0.94);
-  --w80:      rgba(30,24,16,0.88);
-  --w70:      rgba(30,24,16,0.80);
-  --w60:      rgba(30,24,16,0.72);
-  --w50:      rgba(30,24,16,0.62);
-  --w45:      rgba(30,24,16,0.56);
-  --w40:      rgba(30,24,16,0.50);
-  --w20:      rgba(30,24,16,0.22);
-  --w08:      rgba(30,24,16,0.08);
+  --bg:       #F6FAFF;
+  --bg-1:     #EAF3FF;
+  --bg-2:     #DCEBFF;
+  --bg-3:     #C9E0FF;
+  --line:     rgba(10,26,47,0.09);
+  --line-2:   rgba(10,26,47,0.15);
+  --white:    #0A1A2F;   /* ink — near-black navy, warmer than pure black */
+  --red:      #4DA6FF;
+  --accent:         #4DA6FF;
+  --accent-soft:    #5AC8FA;
+  --accent-strong:  #0B5FD4;
+  --btn-ink:        #071225;
+  --link:           #0B5FD4;   /* deep blue, passes AA on white */
+  --w85:      rgba(10,26,47,0.94);
+  --w80:      rgba(10,26,47,0.88);
+  --w70:      rgba(10,26,47,0.80);
+  --w60:      rgba(10,26,47,0.70);
+  --w50:      rgba(10,26,47,0.60);
+  --w45:      rgba(10,26,47,0.54);
+  --w40:      rgba(10,26,47,0.48);
+  --w20:      rgba(10,26,47,0.22);
+  --w08:      rgba(10,26,47,0.08);
 
-  --surface-1:       rgba(30,24,16,0.05);
-  --surface-2:       rgba(30,24,16,0.08);
-  --surface-border:  rgba(30,24,16,0.10);
-  --surface-border-2:rgba(30,24,16,0.16);
-  --surface-hover:   rgba(30,24,16,0.09);
-  --input-bg:        rgba(30,24,16,0.06);
-  --input-border:    rgba(30,24,16,0.14);
-  --input-focus-bg:  rgba(30,24,16,0.08);
-  --input-focus-bdr: rgba(30,24,16,0.30);
-  --nav-bg:          rgba(247,245,241,0.82);
-  --nav-border:      rgba(30,24,16,0.09);
-  --mobile-menu-bg:  rgba(240,237,231,0.97);
-  --tag-bg:          rgba(30,24,16,0.06);
-  --tag-border:      rgba(30,24,16,0.12);
-  --shadow-card:     0 20px 60px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
-  --toggle-bg:       rgba(30,24,16,0.08);
-  --nav-active-bg:   var(--red);
-  --nav-active-color: #ffffff;
-  --logo-text:       #0D1B2A;
+  --surface-1:       rgba(10,40,90,0.05);
+  --surface-2:       rgba(10,40,90,0.08);
+  --surface-border:  rgba(10,40,90,0.11);
+  --surface-border-2:rgba(10,40,90,0.16);
+  --surface-hover:   rgba(10,40,90,0.09);
+  --input-bg:        rgba(10,40,90,0.05);
+  --input-border:    rgba(10,40,90,0.15);
+  --input-focus-bg:  rgba(77,166,255,0.07);
+  --input-focus-bdr: var(--accent-strong);
+  --nav-bg:          rgba(246,250,255,0.82);
+  --nav-border:      rgba(10,26,47,0.09);
+  --mobile-menu-bg:  rgba(234,243,255,0.97);
+  --tag-bg:          rgba(10,40,90,0.06);
+  --tag-border:      rgba(10,40,90,0.12);
+  --shadow-card:     0 20px 60px rgba(10,40,90,0.12), 0 2px 8px rgba(10,40,90,0.07);
+  --toggle-bg:       rgba(10,40,90,0.08);
+  --nav-active-bg:   var(--accent);
+  --nav-active-color: var(--btn-ink);
+  --logo-text:       #0A1A2F;
 }
 
 /* ── Global transition during theme switch only ── */
@@ -287,11 +298,14 @@ time,
 
   .btn-primary,
   .btn-danger {
-    background: var(--red);
-    color: #fff;
+    background: var(--accent);
+    color: var(--btn-ink);          /* navy ink on bright blue — 6.8:1, passes AA */
+    box-shadow: 0 8px 20px rgba(11,95,212,0.28), inset 0 1px 0 rgba(255,255,255,0.28);
   }
   .btn-primary:hover:not(:disabled),
-  .btn-danger:hover:not(:disabled) { opacity: 0.88; }
+  .btn-danger:hover:not(:disabled) { background: var(--accent-soft); }
+  .btn-primary:active:not(:disabled),
+  .btn-danger:active:not(:disabled) { box-shadow: 0 3px 10px rgba(11,95,212,0.22); }
 
   .btn-secondary {
     background: var(--surface-1);
@@ -353,7 +367,7 @@ time,
   .input:focus {
     background: var(--input-focus-bg);
     border-color: var(--input-focus-bdr);
-    box-shadow: 0 0 0 3px rgba(155,135,245,0.12);
+    box-shadow: 0 0 0 3px rgba(77,166,255,0.18);
   }
 
   .label {
@@ -381,9 +395,9 @@ time,
   }
 
   .tag-red {
-    background: rgba(155,135,245,0.12);
-    border-color: rgba(155,135,245,0.24);
-    color: var(--red);
+    background: rgba(77,166,255,0.12);
+    border-color: rgba(77,166,255,0.26);
+    color: var(--accent-strong);
   }
 
   /* --- Divider --- */
@@ -434,4 +448,37 @@ button, [role="button"], nav, header, footer, .signout-btn {
 }
 @media (prefers-reduced-motion: reduce) {
   .route-frame { animation: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Squircles (Apple hack 01). Smooth superelliptical corners on every
+   rounded element people actually see. Chrome/Edge 139+ draw them;
+   Safari/Firefox fall back to the normal radius, so nothing breaks.
+   ───────────────────────────────────────────────────────────────────── */
+@supports (corner-shape: squircle) {
+  .btn-primary, .btn-secondary, .btn-ghost, .btn-danger,
+  .card, .card-elevated, .input, .tag,
+  .squircle {
+    corner-shape: squircle;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Scroll reveal (Apple hack 02). Sections fade + rise as they enter the
+   viewport, pure CSS scroll-driven animation, no JS. Falls back to fully
+   visible where unsupported, and collapses under reduced motion.
+   Add class="reveal" to any section that should animate in.
+   ───────────────────────────────────────────────────────────────────── */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes dreno-reveal {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      animation: dreno-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
+    }
+  }
 }

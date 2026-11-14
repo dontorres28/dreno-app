@@ -8,6 +8,7 @@ import { humanizeError } from '../lib/humanizeError';
 import { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 import ThemeToggle from '../components/ThemeToggle';
 import LanguagePicker from '../components/LanguagePicker';
+import Logo from '../components/Logo';
 import { startAuthentication } from '@simplewebauthn/browser';
 
 const LANGUAGES = Object.keys(LANGUAGE_CODES);
@@ -111,15 +112,8 @@ export default function Login() {
     <div style={{ minHeight: '100dvh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
       {/* Top bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 2rem', flexShrink: 0 }}>
-        <Link
-          to="/"
-          style={{
-            display: 'inline-flex', alignItems: 'center', height: 32,
-            fontFamily: 'var(--font-mark)', fontWeight: 700, fontSize: 20,
-            letterSpacing: '-0.02em', lineHeight: 1, textDecoration: 'none',
-          }}
-        >
-          <span style={{ color: 'var(--white)' }}>DRENO</span><span style={{ color: 'var(--red)' }}>/</span>
+        <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', height: 32, textDecoration: 'none' }}>
+          <Logo size="md" />
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: 32 }}>
           <LanguagePicker />

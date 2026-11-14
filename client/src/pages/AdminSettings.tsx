@@ -223,7 +223,7 @@ export default function AdminSettings() {
         {/* Profile hero — gradient card matching athlete Settings */}
         <div style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(155,135,245,0.08) 0%, rgba(155,135,245,0.02) 100%)',
+          background: 'linear-gradient(135deg, rgba(77,166,255,0.08) 0%, rgba(77,166,255,0.02) 100%)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22,
           padding: '1.5rem',
@@ -234,17 +234,17 @@ export default function AdminSettings() {
           <div style={{
             position: 'absolute', top: -50, right: -50,
             width: 180, height: 180, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(155,135,245,0.18) 0%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(77,166,255,0.18) 0%, transparent 65%)',
             pointerEvents: 'none',
           }} />
 
           <div style={{
             width: 72, height: 72, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #B9ACF9 0%, #9B87F5 60%, #7A64E8 100%)',
+            background: 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0, color: '#fff', fontWeight: 700, fontSize: 26,
             fontFamily: 'var(--font-display)', letterSpacing: '-0.02em',
-            boxShadow: '0 4px 16px rgba(155,135,245,0.35)',
+            boxShadow: '0 4px 16px rgba(77,166,255,0.35)',
             position: 'relative',
           }}>
             {(name || email || '?').trim()[0]?.toUpperCase()}
@@ -398,7 +398,7 @@ export default function AdminSettings() {
                       letterSpacing: '-0.005em',
                       background: on ? 'var(--red)' : 'transparent',
                       border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                      color: on ? '#fff' : 'var(--w70)',
+                      color: on ? 'var(--btn-ink)' : 'var(--w70)',
                       transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
                     }}
                   >
@@ -460,7 +460,7 @@ export default function AdminSettings() {
                   cursor: coachEmail.trim() && !addingCoach ? 'pointer' : 'not-allowed',
                   background: coachEmail.trim() ? 'var(--red)' : 'transparent',
                   border: coachEmail.trim() ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                  color: coachEmail.trim() ? '#fff' : 'var(--w60)',
+                  color: coachEmail.trim() ? 'var(--btn-ink)' : 'var(--w60)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
                 }}
@@ -521,7 +521,7 @@ export default function AdminSettings() {
                         padding: '3px 9px', borderRadius: 50,
                         background: isActive ? 'var(--red)' : 'transparent',
                         border: isActive ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                        color: isActive ? '#fff' : 'var(--w60)',
+                        color: isActive ? 'var(--btn-ink)' : 'var(--w60)',
                       }}>
                         {isActive ? 'Active' : 'Pending'}
                       </span>

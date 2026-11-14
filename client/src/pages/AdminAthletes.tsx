@@ -143,7 +143,7 @@ export default function AdminAthletes() {
                 cursor: email.trim() && !inviting ? 'pointer' : 'not-allowed',
                 background: email.trim() ? 'var(--red)' : 'transparent',
                 border: email.trim() ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                color: email.trim() ? '#fff' : 'var(--w60)',
+                color: email.trim() ? 'var(--btn-ink)' : 'var(--w60)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
               }}
@@ -171,7 +171,7 @@ export default function AdminAthletes() {
                       fontSize: 13, fontWeight: on ? 700 : 500,
                       padding: '8px 16px', borderRadius: 50,
                       border: 'none', background: 'transparent', cursor: 'pointer',
-                      color: on ? '#fff' : 'var(--w70)',
+                      color: on ? 'var(--btn-ink)' : 'var(--w70)',
                       fontFamily: 'var(--font-body)',
                       transition: 'color 220ms cubic-bezier(0.32, 0.72, 0, 1)',
                     }}
@@ -264,7 +264,7 @@ export default function AdminAthletes() {
                       padding: '3px 9px', borderRadius: 50,
                       background: isActive ? 'var(--red)' : 'transparent',
                       border: isActive ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                      color: isActive ? '#fff' : 'var(--w60)',
+                      color: isActive ? 'var(--btn-ink)' : 'var(--w60)',
                     }}>
                       {isActive ? 'Active' : 'Pending'}
                     </span>
