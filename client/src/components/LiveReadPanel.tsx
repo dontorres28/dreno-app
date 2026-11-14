@@ -37,7 +37,7 @@ export default function LiveReadPanel({ bookingId }: Props) {
   useEffect(() => {
     const channel = supabase
       .channel(`live-read-${bookingId}`)
-      .on('broadcast', { event: 'signal' }, ({ payload }) => {
+      .on('broadcast', { event: 'signal' }, ({ payload }: any) => {
         if (payload === null || payload.attention === undefined) {
           setAthleteActive(false)
           setSignals(null)

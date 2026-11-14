@@ -157,7 +157,7 @@ export default function Messages() {
 
     const ch = supabase.channel(`thread:${active.id}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `thread_id=eq.${active.id}` },
-        ({ new: m }) => setMessages(p => [...p, m as Message]))
+        ({ new: m }: any) => setMessages(p => [...p, m as Message]))
       .subscribe();
 
     if (presenceChRef.current) presenceChRef.current.unsubscribe();
@@ -167,9 +167,9 @@ export default function Messages() {
 
     presenceCh
       .on('presence', { event: 'sync' }, () => {
-        const state = presenceCh.presenceState<{ user_id: string; typing: boolean }>();
-        const others = Object.values(state).flat().filter((p: { user_id: string; typing: boolean }) => p.user_id !== user?.id);
-        setOtherTyping(others.some((p: { user_id: string; typing: boolean }) => p.typing));
+        const state: any = presenceCh.presenceState();
+        const others = (Object.values(state).flat() as any[]).filter((p: any) => p.user_id !== user?.id);
+        setOtherTyping(others.some((p: any) => p.typing));
       })
       .subscribe(async (status: string) => {
         if (status === 'SUBSCRIBED') {
