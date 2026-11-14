@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CaretLeft, Check, Plus, UploadSimple, FileText } from '@phosphor-icons/react';
 import Spinner from '../../components/Spinner';
 import Stepper from '../../components/Stepper';
 import ThemeToggle from '../../components/ThemeToggle';
@@ -265,9 +266,7 @@ export default function CoachOnboard() {
               aria-label="Back"
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, padding: '8px 4px 8px 0', fontFamily: 'var(--font-body)', letterSpacing: '-0.005em' }}
             >
-              <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-                <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <CaretLeft size={16} weight="bold" />
               Back
             </button>
           )}
@@ -308,7 +307,7 @@ export default function CoachOnboard() {
               >
                 {photoPreview
                   ? <img src={photoPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="var(--w40)" strokeWidth="1.6" strokeLinecap="round"/></svg>
+                  : <Plus size={22} weight="bold" color="var(--w40)" />
                 }
               </button>
               <div>
@@ -391,9 +390,7 @@ export default function CoachOnboard() {
                     display: 'flex', alignItems: 'center', gap: 6,
                   }}
                 >
-                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                    <path d="M6.5 1v8M3 5l3.5-4L10 5M2 10h9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <UploadSimple size={14} weight="bold" />
                   Add file
                 </button>
               </div>
@@ -408,10 +405,7 @@ export default function CoachOnboard() {
                       background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
-                          <rect x="1" y="1" width="12" height="14" rx="2" stroke="var(--w40)" strokeWidth="1.2"/>
-                          <path d="M4 6h6M4 9h4" stroke="var(--w40)" strokeWidth="1.2" strokeLinecap="round"/>
-                        </svg>
+                        <FileText size={16} weight="regular" color="var(--w40)" />
                         <span style={{ fontSize: 13, color: 'var(--w70)' }}>{f.name}</span>
                       </div>
                       <button onClick={() => removePending(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w40)', fontSize: 18, padding: '0 4px', lineHeight: 1 }}>×</button>
@@ -557,9 +551,7 @@ export default function CoachOnboard() {
                   </button>
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--w60)', fontSize: 14 }}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M3 8l3.5 3.5L13 4.5" stroke="var(--red)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    <Check size={16} weight="bold" color="var(--accent)" />
                     Approved
                   </div>
                 )}
@@ -652,9 +644,7 @@ export default function CoachOnboard() {
         {step === 5 && (
           <div style={{ textAlign: 'center', maxWidth: 440, margin: '0 auto', paddingTop: '8vh' }}>
             <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(77,166,255,0.12)', border: '0.5px solid rgba(77,166,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                <path d="M8 18l7 7L28 11" stroke="var(--red)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <Check size={34} weight="bold" color="var(--accent)" />
             </div>
             <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(3rem, 9vw, 5.5rem)', lineHeight: 0.92, letterSpacing: '-0.035em', marginBottom: '1.5rem' }}>
               You're in

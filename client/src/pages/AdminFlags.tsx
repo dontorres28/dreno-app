@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { CaretDown } from '@phosphor-icons/react';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import { adminGet, adminPost } from '../lib/api';
@@ -133,9 +134,7 @@ export default function AdminFlags() {
                       </p>
                     </div>
                   </div>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ transform: expanded === f.coach_id ? 'rotate(180deg)' : 'none', transition: 'transform 220ms cubic-bezier(0.32, 0.72, 0, 1)', color: 'var(--w60)' }}>
-                    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <CaretDown size={14} weight="bold" />
                 </div>
 
                 {expanded === f.coach_id && (

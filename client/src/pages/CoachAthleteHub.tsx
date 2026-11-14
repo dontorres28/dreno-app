@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { ArrowLeft } from '@phosphor-icons/react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
@@ -173,9 +174,7 @@ export default function CoachAthleteHub() {
             fontFamily: 'var(--font-body)',
           }}
         >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M10 7H2M5 4L2 7l3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <ArrowLeft size={14} weight="bold" />
           Roster
         </Link>
 

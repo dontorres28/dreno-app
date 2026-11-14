@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CaretLeft, Check } from '@phosphor-icons/react';
 import Spinner from '../../components/Spinner';
 import Stepper from '../../components/Stepper';
 import ThemeToggle from '../../components/ThemeToggle';
@@ -138,7 +139,7 @@ export default function AthleteOnboard() {
         <div style={{ width: 72, display: 'flex', justifyContent: 'flex-start' }}>
           {step > 0 && step < TOTAL_STEPS && (
             <button onClick={() => setStep(s => s - 1)} aria-label="Back" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, padding: '8px 4px 8px 0', fontFamily: 'var(--font-body)', letterSpacing: '-0.005em' }}>
-              <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <CaretLeft size={16} weight="bold" />
               Back
             </button>
           )}
@@ -265,7 +266,7 @@ export default function AthleteOnboard() {
         {step === 3 && (
           <div style={{ textAlign: 'center', maxWidth: 440, margin: '0 auto', paddingTop: '6vh' }}>
             <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(77,166,255,0.12)', border: '0.5px solid rgba(77,166,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M8 18l7 7L28 11" stroke="var(--red)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <Check size={34} weight="bold" color="var(--accent)" />
             </div>
             <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(3rem, 9vw, 5.5rem)', lineHeight: 0.92, letterSpacing: '-0.035em', marginBottom: '1.5rem' }}>You're in</h1>
             <p style={{ fontSize: 17, color: 'var(--w60)', lineHeight: 1.7, maxWidth: 320, margin: '0 auto 3rem' }}>

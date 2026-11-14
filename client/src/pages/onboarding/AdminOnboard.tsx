@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 import { motion, LayoutGroup } from 'framer-motion';
+import { CaretLeft } from '@phosphor-icons/react';
 import Spinner from '../../components/Spinner';
 import Stepper from '../../components/Stepper';
 import ThemeToggle from '../../components/ThemeToggle';
@@ -108,7 +109,7 @@ export default function AdminOnboard() {
       <div style={{ width: 72, display: 'flex', justifyContent: 'flex-start' }}>
         {step > 0 && (
           <button onClick={() => setStep(s => s - 1)} aria-label="Back" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, padding: '8px 4px 8px 0', fontFamily: 'var(--font-body)', letterSpacing: '-0.005em' }}>
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <CaretLeft size={16} weight="bold" />
             Back
           </button>
         )}

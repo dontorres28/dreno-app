@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ArrowRight, CaretRight, User } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
@@ -132,9 +133,7 @@ export default function AdminDashboard() {
                 }}
               >
                 Upgrade or change
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <ArrowRight size={13} weight="bold" />
               </button>
             </div>
           </div>
@@ -182,9 +181,7 @@ export default function AdminDashboard() {
               color: 'var(--red)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/>
-              </svg>
+              <User size={20} weight="duotone" color="var(--accent)" />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <p className="label" style={{ margin: 0, marginBottom: 8 }}>Athletes</p>
@@ -203,9 +200,7 @@ export default function AdminDashboard() {
                 Invite and manage your roster
               </p>
             </div>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ color: 'var(--w60)', flexShrink: 0 }}>
-              <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <CaretRight size={14} weight="bold" />
           </div>
         </Link>
 

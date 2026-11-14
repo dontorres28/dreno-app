@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { CaretLeft } from '@phosphor-icons/react';
 import { LEGAL } from '../legal/config';
 
 interface LegalPageProps {
@@ -25,9 +26,7 @@ export default function LegalPage({ title, children }: LegalPageProps) {
             textDecoration: 'none', marginBottom: '2rem',
           }}
         >
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden>
-            <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <CaretLeft size={16} weight="bold" />
           Back to Dreno
         </Link>
 

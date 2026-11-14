@@ -9,6 +9,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { setLanguageFromPreference } from '../i18n';
 import toast from 'react-hot-toast';
+import { PencilSimple, ArrowRight } from '@phosphor-icons/react';
 
 const SPORTS = [
   'Ice hockey', 'Soccer', 'Basketball', 'Tennis', 'Swimming',
@@ -311,7 +312,7 @@ export default function Settings() {
             }}>
               {avatarUploading
                 ? <Spinner size={12} />
-                : <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 8.5l2.5-.5L10 2.5a1.414 1.414 0 0 0-2-2L2.5 6 2 8.5Z" stroke="var(--w80)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                : <PencilSimple size={12} weight="bold" color="var(--w80)" />
               }
             </div>
           </label>
@@ -437,9 +438,7 @@ export default function Settings() {
                 style={{ fontSize: 13, fontWeight: 500, color: 'var(--red)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 4 }}
               >
                 {t('settings.open')}
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <ArrowRight size={13} weight="bold" />
               </button>
             </Row>
           </Section>

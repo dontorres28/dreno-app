@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { CaretRight } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
@@ -242,9 +243,7 @@ export default function CoachAthletes() {
                   </div>
 
                   {/* Chevron */}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, color: 'var(--w60)' }}>
-                    <path d="M5 3l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <CaretRight size={14} weight="bold" />
                 </Link>
               );
             })}

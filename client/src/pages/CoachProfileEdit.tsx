@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { CaretLeft, PencilSimple, UploadSimple, FileText } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
@@ -231,9 +232,7 @@ export default function CoachProfileEdit() {
           onMouseEnter={e => (e.currentTarget.style.color = 'var(--white)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'var(--w70)')}
         >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <CaretLeft size={16} weight="bold" />
           Back
         </button>
 
@@ -281,9 +280,7 @@ export default function CoachProfileEdit() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 8.5l2.5-.5L10 2.5a1.414 1.414 0 0 0-2-2L2.5 6 2 8.5Z" stroke="var(--w80)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <PencilSimple size={12} weight="bold" color="var(--w80)" />
             </span>
           </button>
 
@@ -358,7 +355,7 @@ export default function CoachProfileEdit() {
                   className="btn-secondary"
                   style={{ fontSize: 12, minHeight: 32, padding: '0 14px', gap: 5 }}
                 >
-                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v7M2.5 4l3-3.5L8.5 4M1.5 9h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <UploadSimple size={12} weight="bold" />
                   Upload
                 </button>
               </div>
@@ -368,10 +365,7 @@ export default function CoachProfileEdit() {
                 {certFiles.map(c => (
                   <div key={c.url} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 12, background: 'var(--surface-2)', border: '0.5px solid var(--surface-border-2)' }}>
                     <a href={c.url} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: 'var(--w80)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
-                        <rect x="1" y="1" width="12" height="14" rx="2" stroke="var(--w60)" strokeWidth="1.4"/>
-                        <path d="M4 6h6M4 9h4" stroke="var(--w60)" strokeWidth="1.4" strokeLinecap="round"/>
-                      </svg>
+                      <FileText size={16} weight="regular" color="var(--w40)" />
                       {c.name}
                     </a>
                     <button onClick={() => removeCert(c.url)} aria-label="Remove certificate" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w60)', fontSize: 18, padding: '0 4px', lineHeight: 1 }}>×</button>
@@ -380,10 +374,7 @@ export default function CoachProfileEdit() {
                 {pendingCerts.map((f, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 12, background: 'rgba(77,166,255,0.10)', border: '0.5px solid rgba(77,166,255,0.28)' }}>
                     <span style={{ fontSize: 13, color: 'var(--red)', display: 'flex', alignItems: 'center', gap: 10, fontWeight: 600 }}>
-                      <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
-                        <rect x="1" y="1" width="12" height="14" rx="2" stroke="currentColor" strokeWidth="1.4"/>
-                        <path d="M4 6h6M4 9h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                      </svg>
+                      <FileText size={16} weight="regular" color="var(--w40)" />
                       {f.name}
                       <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 50, background: 'rgba(77,166,255,0.20)', color: 'var(--red)', letterSpacing: '0.06em' }}>NEW</span>
                     </span>

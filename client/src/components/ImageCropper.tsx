@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { MagnifyingGlassPlus, MagnifyingGlassMinus } from '@phosphor-icons/react';
 
 interface Props {
   file: File;
@@ -196,11 +197,7 @@ export default function ImageCropper({ file, onCancel, onSave, outputSize = 512 
 
         {/* Zoom slider */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ color: 'var(--w60)', flexShrink: 0 }}>
-            <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
-            <path d="M4.5 6.5h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-            <path d="M10 10l2.5 2.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-          </svg>
+          <MagnifyingGlassMinus size={14} color="var(--w60)" />
           <input
             type="range"
             min={MIN_ZOOM}
@@ -212,11 +209,7 @@ export default function ImageCropper({ file, onCancel, onSave, outputSize = 512 
               flex: 1, accentColor: 'var(--red)', height: 4, cursor: 'pointer',
             }}
           />
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ color: 'var(--w60)', flexShrink: 0 }}>
-            <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
-            <path d="M4.5 6.5h4M6.5 4.5v4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-            <path d="M10 10l2.5 2.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-          </svg>
+          <MagnifyingGlassPlus size={14} color="var(--w60)" />
         </div>
 
         {/* Actions */}

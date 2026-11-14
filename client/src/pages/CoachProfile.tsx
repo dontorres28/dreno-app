@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CaretLeft, SealCheck } from '@phosphor-icons/react';
+import { CaretLeft, SealCheck, ArrowUpRight } from '@phosphor-icons/react';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import Tooltip from '../components/Tooltip';
@@ -277,9 +277,7 @@ export default function CoachProfile() {
               }}
             >
               {t('coaches.linkedin')}
-              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-                <path d="M6 3h5v5M11 3L4 10" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <ArrowUpRight size={14} weight="bold" />
             </a>
           </div>
         )}

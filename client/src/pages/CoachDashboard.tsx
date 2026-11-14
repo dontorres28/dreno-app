@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ArrowRight, UsersThree } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
@@ -95,12 +96,7 @@ function WeekHero({ confirmedThisWeek, uniqueAthletes, profilePct, bookings }: {
               border: '0.5px solid rgba(77,166,255,0.30)',
               cursor: 'help', flexShrink: 0,
             }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
+              <UsersThree size={20} weight="duotone" color="var(--accent)" />
               <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--red)', letterSpacing: '0.02em' }}>
                 {uniqueAthletes} athlete{uniqueAthletes !== 1 ? 's' : ''}
               </span>
@@ -161,9 +157,7 @@ function WeekHero({ confirmedThisWeek, uniqueAthletes, profilePct, bookings }: {
             display: 'inline-flex', alignItems: 'center', gap: 4,
           }}>
             Finish it
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ArrowRight size={13} weight="bold" />
           </Link>
         </p>
       )}

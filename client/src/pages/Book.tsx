@@ -7,6 +7,7 @@ import { supabase } from '../lib/supabase';
 import { apiPost } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { CaretLeft } from '@phosphor-icons/react';
 import { humanizeError } from '../lib/humanizeError';
 
 interface Slot { id: string; day_of_week: string; start_time: string; end_time: string; }
@@ -209,7 +210,7 @@ export default function Book() {
             aria-label="Back"
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, padding: '8px 4px 8px 0', fontFamily: 'var(--font-body)', letterSpacing: '-0.005em' }}
           >
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <CaretLeft size={16} weight="bold" />
             Back
           </button>
         </div>

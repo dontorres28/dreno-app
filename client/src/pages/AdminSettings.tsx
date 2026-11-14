@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ArrowRight } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
@@ -330,9 +331,7 @@ export default function AdminSettings() {
                 }}
               >
                 Upgrade or change
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <ArrowRight size={13} weight="bold" />
               </button>
             </div>
           </div>
@@ -586,9 +585,7 @@ export default function AdminSettings() {
               }}
             >
               Email us
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <ArrowRight size={13} weight="bold" />
             </a>
           </Row>
           <Row label="Sign out" border={false}>

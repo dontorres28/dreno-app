@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { X } from '@phosphor-icons/react';
 import { motion, LayoutGroup } from 'framer-motion';
 import Spinner from './Spinner';
 import toast from 'react-hot-toast';
@@ -118,9 +119,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
               transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), color 200ms',
             }}
           >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2.5 2.5l7 7M9.5 2.5l-7 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-            </svg>
+            <X size={14} weight="bold" />
           </button>
         </div>
 

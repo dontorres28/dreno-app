@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { CaretLeft, Check } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -48,9 +49,7 @@ const Shell = ({ children, title, onBack }: { children: React.ReactNode; title: 
           onClick={onBack}
           style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w70)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 500, padding: '8px 0', fontFamily: 'var(--font-body)' }}
         >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <CaretLeft size={18} weight="bold" />
           Back
         </button>
       )}
@@ -319,9 +318,7 @@ export default function DrillSigh() {
           boxShadow: '0 0 40px rgba(77,166,255,0.4)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
-            <path d="M12 22l6 6L30 14" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <Check size={40} weight="bold" color="var(--btn-ink)" />
         </div>
 
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 3.75rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '0.75rem' }}>
