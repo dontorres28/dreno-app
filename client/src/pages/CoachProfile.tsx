@@ -19,8 +19,8 @@ const card: React.CSSProperties = {
 };
 
 const sectionLabel: React.CSSProperties = {
-  fontSize: 12, fontWeight: 700, letterSpacing: '0.12em',
-  textTransform: 'uppercase', color: 'var(--w60)', marginBottom: '0.75rem',
+  fontSize: 15, fontWeight: 600, letterSpacing: '-0.005em',
+  color: 'var(--w70)', marginBottom: '0.75rem',
 };
 
 export default function CoachProfile() {
@@ -113,21 +113,14 @@ export default function CoachProfile() {
         </button>
 
         {/* ── Hero header ── */}
-        <div style={{
+        <div className="squircle" style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(77,166,255,0.08) 0%, rgba(77,166,255,0.02) 100%)',
+          background: 'var(--surface-1)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22, padding: '1.75rem',
           marginBottom: 12,
           overflow: 'hidden',
         }}>
-          <div style={{
-            position: 'absolute', top: -60, right: -60,
-            width: 240, height: 240, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(77,166,255,0.18) 0%, transparent 65%)',
-            pointerEvents: 'none',
-          }} />
-
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1.25rem' }}>
             {coach.photo_url ? (
               <img
@@ -138,11 +131,10 @@ export default function CoachProfile() {
             ) : (
               <div style={{
                 width: 80, height: 80, borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
+                background: 'var(--surface-2)', border: '0.5px solid var(--surface-border-2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 30, fontWeight: 700, color: 'var(--btn-ink)',
+                fontSize: 30, fontWeight: 700, color: 'var(--w70)',
                 fontFamily: 'var(--font-display)', letterSpacing: '-0.03em',
-                boxShadow: '0 4px 16px rgba(77,166,255,0.35)',
               }}>
                 {name.charAt(0)}
               </div>
