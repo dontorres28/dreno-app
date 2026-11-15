@@ -6,6 +6,7 @@ import Spinner from '../components/Spinner';
 import ImageCropper from '../components/ImageCropper';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import FloatingField, { FloatingTextarea } from '../components/FloatingField';
 import toast from 'react-hot-toast';
 
 const EXPERTISE_OPTIONS = [
@@ -301,27 +302,17 @@ export default function CoachProfileEdit() {
           {/* ── Basic info ── */}
           <SectionCard title="Basic info">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
-              <div>
-                <label className="label">Full name</label>
-                <input className="input" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" />
-              </div>
-              <div>
-                <label className="label">Headline</label>
-                <input className="input" value={headline} onChange={e => setHeadline(e.target.value)} placeholder="e.g. Focus and composure for contact sports" />
-              </div>
-              <div>
-                <label className="label">Bio <span style={{ color: 'var(--w60)', fontWeight: 400 }}>(optional)</span></label>
-                <textarea className="input" rows={5} value={bio} onChange={e => setBio(e.target.value)} placeholder="Your background and approach" style={{ resize: 'none', lineHeight: 1.65 }} />
-              </div>
+              <FloatingField label="Full name" value={name} onChange={e => setName(e.target.value)} />
+              <FloatingField label="Headline" value={headline} onChange={e => setHeadline(e.target.value)} />
+              <FloatingTextarea label="Bio (optional)" rows={5} value={bio} onChange={e => setBio(e.target.value)} />
             </div>
           </SectionCard>
 
           {/* ── Rate + session length ── */}
           <SectionCard title="Sessions" sub="Set your price and preferred session lengths.">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div>
-                <label className="label">Hourly rate (CHF)</label>
-                <input className="input" type="number" min={0} value={hourlyRate} onChange={e => setHourlyRate(e.target.value)} placeholder="e.g. 120" style={{ maxWidth: 180 }} />
+              <div style={{ maxWidth: 200 }}>
+                <FloatingField label="Hourly rate (CHF)" type="number" min={0} value={hourlyRate} onChange={e => setHourlyRate(e.target.value)} />
               </div>
               <div>
                 <label className="label">Minimum length</label>
@@ -396,8 +387,7 @@ export default function CoachProfileEdit() {
             </div>
 
             <div style={{ marginTop: '1.25rem' }}>
-              <label className="label">LinkedIn <span style={{ color: 'var(--w60)', fontWeight: 400 }}>(optional)</span></label>
-              <input className="input" value={linkedinUrl} onChange={e => setLinkedinUrl(e.target.value)} placeholder="https://linkedin.com/in/…" />
+              <FloatingField label="LinkedIn (optional)" value={linkedinUrl} onChange={e => setLinkedinUrl(e.target.value)} />
             </div>
           </SectionCard>
 

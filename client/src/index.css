@@ -571,6 +571,37 @@ button, [role="button"], nav, header, footer, .signout-btn {
   font-weight: 600;
   letter-spacing: 0.02em;
 }
+
+/* Textareas: grow vertically, label pinned to the top. */
+.float > textarea.input {
+  height: auto;
+  min-height: 118px;
+  padding: 26px 16px 12px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.float > textarea.input + label { top: 20px; }
+
+/* Selects never match :placeholder-shown, so the label stays floated (they
+   always hold a value). Add a caret and room for it. */
+.float--select > select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  cursor: pointer;
+}
+.float--select::after {
+  content: '';
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  width: 9px; height: 9px;
+  border-right: 1.5px solid var(--w60);
+  border-bottom: 1.5px solid var(--w60);
+  transform: translateY(-60%) rotate(45deg);
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .float > label { transition: none; }
 }

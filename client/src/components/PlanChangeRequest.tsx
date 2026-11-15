@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X } from '@phosphor-icons/react';
 import { motion, LayoutGroup } from 'framer-motion';
 import Spinner from './Spinner';
+import { FloatingTextarea } from './FloatingField';
 import toast from 'react-hot-toast';
 
 interface Tier {
@@ -243,24 +244,7 @@ export default function PlanChangeRequest({ currentTier, orgName, contactEmail, 
         </div>
 
         {/* Note */}
-        <div>
-          <p className="label" style={{ margin: 0, marginBottom: 8 }}>Note <span style={{ color: 'var(--w60)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span></p>
-          <textarea
-            value={note}
-            onChange={e => setNote(e.target.value)}
-            placeholder="Anything you'd like us to know? Timing, custom needs, questions…"
-            rows={3}
-            style={{
-              width: '100%', boxSizing: 'border-box',
-              background: 'var(--surface-2)',
-              border: '0.5px solid var(--surface-border-2)',
-              borderRadius: 14, padding: '12px 14px',
-              fontSize: 15, lineHeight: 1.5, letterSpacing: '-0.005em',
-              color: 'var(--white)', fontFamily: 'var(--font-body)',
-              resize: 'vertical', minHeight: 80, outline: 'none',
-            }}
-          />
-        </div>
+        <FloatingTextarea label="Note (optional)" value={note} onChange={e => setNote(e.target.value)} rows={3} />
 
         {/* Recipient hint */}
         <p style={{ fontSize: 12, color: 'var(--w60)', letterSpacing: '-0.005em', textAlign: 'center', lineHeight: 1.5 }}>

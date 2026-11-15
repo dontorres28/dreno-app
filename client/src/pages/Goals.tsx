@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Layout from '../components/Layout';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import FloatingField from '../components/FloatingField';
 import toast from 'react-hot-toast';
 import { humanizeError } from '../lib/humanizeError';
 
@@ -180,21 +181,17 @@ export default function Goals() {
                     display: 'flex', flexDirection: 'column', gap: '0.75rem',
                   }}
                 >
-                  <input
-                    className="input"
+                  <FloatingField
+                    label={t('goals.goalPlaceholder')}
                     value={title}
                     onChange={e => setTitle(e.target.value)}
-                    placeholder={t('goals.goalPlaceholder')}
-                    style={{ fontSize: 14 }}
                     autoFocus
                     required
                   />
-                  <input
-                    className="input"
+                  <FloatingField
+                    label={t('goals.detailPlaceholder')}
                     value={detail}
                     onChange={e => setDetail(e.target.value)}
-                    placeholder={t('goals.detailPlaceholder')}
-                    style={{ fontSize: 13 }}
                   />
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <button

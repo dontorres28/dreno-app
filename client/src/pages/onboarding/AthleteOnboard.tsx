@@ -4,6 +4,7 @@ import { CaretLeft, Check } from '@phosphor-icons/react';
 import Spinner from '../../components/Spinner';
 import Stepper from '../../components/Stepper';
 import ThemeToggle from '../../components/ThemeToggle';
+import FloatingField, { FloatingSelect } from '../../components/FloatingField';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -167,23 +168,13 @@ export default function AthleteOnboard() {
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
+              <FloatingField label="Full name" value={name} onChange={e => setName(e.target.value)} autoFocus />
+              <FloatingField label="Date of birth" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} max={new Date(Date.now() - 10 * 365.25 * 864e5).toISOString().slice(0,10)} />
               <div>
-                <label className="label">Full name</label>
-                <input className="input" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={{ fontSize: 16 }} autoFocus />
-              </div>
-              <div>
-                <label className="label">Date of birth</label>
-                <input className="input" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} max={new Date(Date.now() - 10 * 365.25 * 864e5).toISOString().slice(0,10)} style={{ fontSize: 15 }} />
-              </div>
-              <div>
-                <label className="label">Country</label>
-                <input className="input" list="countries" value={country} onChange={e => setCountry(e.target.value)} placeholder="e.g. Switzerland" style={{ fontSize: 15 }} />
+                <FloatingField label="Country" list="countries" value={country} onChange={e => setCountry(e.target.value)} />
                 <datalist id="countries">{COUNTRIES.map(c => <option key={c} value={c} />)}</datalist>
               </div>
-              <div>
-                <label className="label">Your sport</label>
-                <input className="input" value={sport} onChange={e => setSport(e.target.value)} placeholder="e.g. Ice hockey" style={{ fontSize: 16 }} />
-              </div>
+              <FloatingField label="Your sport" value={sport} onChange={e => setSport(e.target.value)} />
               <div>
                 <label className="label">Competition level</label>
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginTop: 4 }}>
@@ -251,13 +242,10 @@ export default function AthleteOnboard() {
                 </div>
               </div>
 
-              <div>
-                <label className="label">Timezone</label>
-                <select className="input" value={timezone} onChange={e => setTimezone(e.target.value)} style={{ fontSize: 15, color: timezone ? 'var(--white)' : 'var(--w40)' }}>
-                  <option value="">Select your timezone</option>
-                  {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>)}
-                </select>
-              </div>
+              <FloatingSelect label="Timezone" value={timezone} onChange={e => setTimezone(e.target.value)}>
+                <option value="">Select your timezone</option>
+                {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>)}
+              </FloatingSelect>
             </div>
           </div>
         )}

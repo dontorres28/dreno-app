@@ -8,6 +8,7 @@ import { apiPost } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { CaretLeft } from '@phosphor-icons/react';
+import FloatingField from '../components/FloatingField';
 import { humanizeError } from '../lib/humanizeError';
 
 interface Slot { id: string; day_of_week: string; start_time: string; end_time: string; }
@@ -276,14 +277,8 @@ export default function Book() {
                     </p>
                   )}
                 </div>
-                <div>
-                  <label className="label">Date</label>
-                  <input className="input" type="date" value={manualDate} min={todayStr} onChange={e => setManualDate(e.target.value)} style={{ fontSize: 15 }} />
-                </div>
-                <div>
-                  <label className="label">Time</label>
-                  <input className="input" type="time" value={manualTime} onChange={e => setManualTime(e.target.value)} style={{ fontSize: 15 }} />
-                </div>
+                <FloatingField label="Date" type="date" value={manualDate} min={todayStr} onChange={e => setManualDate(e.target.value)} />
+                <FloatingField label="Time" type="time" value={manualTime} onChange={e => setManualTime(e.target.value)} />
                 {allowedDurations.length > 0 && (
                   <div>
                     <label className="label">Duration</label>

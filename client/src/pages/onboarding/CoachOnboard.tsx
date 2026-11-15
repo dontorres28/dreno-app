@@ -7,6 +7,7 @@ import ThemeToggle from '../../components/ThemeToggle';
 import ImageCropper from '../../components/ImageCropper';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
+import FloatingField from '../../components/FloatingField';
 import toast from 'react-hot-toast';
 
 const SPORT_OPTIONS = [
@@ -318,23 +319,13 @@ export default function CoachOnboard() {
             <input ref={photoInputRef} type="file" accept="image/*" onChange={onPhotoChange} style={{ display: 'none' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
+              <FloatingField label="Full name" value={name} onChange={e => setName(e.target.value)} autoFocus />
+              <FloatingField label="Date of birth" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} max={new Date(Date.now() - 18 * 365.25 * 864e5).toISOString().slice(0,10)} />
               <div>
-                <label className="label">Full name</label>
-                <input className="input" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={{ fontSize: 16 }} autoFocus />
-              </div>
-              <div>
-                <label className="label">Date of birth</label>
-                <input className="input" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} max={new Date(Date.now() - 18 * 365.25 * 864e5).toISOString().slice(0,10)} style={{ fontSize: 15 }} />
-              </div>
-              <div>
-                <label className="label">Country</label>
-                <input className="input" list="coach-countries" value={country} onChange={e => setCountry(e.target.value)} placeholder="e.g. Switzerland" style={{ fontSize: 15 }} />
+                <FloatingField label="Country" list="coach-countries" value={country} onChange={e => setCountry(e.target.value)} />
                 <datalist id="coach-countries">{COUNTRIES.map(c => <option key={c} value={c} />)}</datalist>
               </div>
-              <div>
-                <label className="label">Headline</label>
-                <input className="input" value={headline} onChange={e => setHeadline(e.target.value)} placeholder="e.g. Focus and composure for contact sports" style={{ fontSize: 16 }} />
-              </div>
+              <FloatingField label="Headline" value={headline} onChange={e => setHeadline(e.target.value)} />
             </div>
 
             <div>
@@ -435,8 +426,7 @@ export default function CoachOnboard() {
             </div>
 
             <div>
-              <label className="label">LinkedIn <span style={{ color: 'var(--w60)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span></label>
-              <input className="input" value={linkedin} onChange={e => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." style={{ fontSize: 15 }} />
+              <FloatingField label="LinkedIn (optional)" value={linkedin} onChange={e => setLinkedin(e.target.value)} />
             </div>
           </div>
         )}
@@ -576,8 +566,7 @@ export default function CoachOnboard() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '2.5rem' }}>
               <div>
-                <label className="label">Hourly rate (CHF)</label>
-                <input className="input" type="number" value={rate} onChange={e => setRate(e.target.value)} placeholder="e.g. 120" min={1} style={{ fontSize: 18, fontWeight: 600 }} />
+                <FloatingField label="Hourly rate (CHF)" type="number" value={rate} onChange={e => setRate(e.target.value)} min={1} />
               </div>
 
               <div>

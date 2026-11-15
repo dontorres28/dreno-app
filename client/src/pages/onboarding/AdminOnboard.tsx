@@ -8,6 +8,7 @@ import { CaretLeft } from '@phosphor-icons/react';
 import Spinner from '../../components/Spinner';
 import Stepper from '../../components/Stepper';
 import ThemeToggle from '../../components/ThemeToggle';
+import FloatingField from '../../components/FloatingField';
 
 const SPORT_OPTIONS = [
   'Ice hockey', 'Soccer', 'Basketball', 'Tennis', 'Swimming',
@@ -190,14 +191,8 @@ export default function AdminOnboard() {
         </h1>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div>
-            {fieldLabel('Your name')}
-            <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} placeholder="Full name" />
-          </div>
-          <div>
-            {fieldLabel('Organization name')}
-            <input style={inputStyle} value={orgName} onChange={e => setOrgName(e.target.value)} placeholder="e.g. Zurich Hockey Academy" />
-          </div>
+          <FloatingField label="Your name" value={name} onChange={e => setName(e.target.value)} />
+          <FloatingField label="Organization name" value={orgName} onChange={e => setOrgName(e.target.value)} />
           <div>
             {fieldLabel('Organization type')}
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 6, marginTop: 4 }}>
@@ -266,13 +261,9 @@ export default function AdminOnboard() {
               })}
             </div>
             {sports.includes('Other') && (
-              <input
-                style={{ ...inputStyle, marginTop: 10 }}
-                value={sportOther}
-                onChange={e => setSportOther(e.target.value)}
-                placeholder="Which sport or activity?"
-                autoFocus
-              />
+              <div style={{ marginTop: 10 }}>
+                <FloatingField label="Which sport or activity?" value={sportOther} onChange={e => setSportOther(e.target.value)} autoFocus />
+              </div>
             )}
           </div>
 
@@ -411,14 +402,8 @@ export default function AdminOnboard() {
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div>
-            {fieldLabel('Phone number (optional)')}
-            <input style={inputStyle} value={phone} onChange={e => setPhone(e.target.value)} placeholder="+41 79 000 00 00" type="tel" />
-          </div>
-          <div>
-            {fieldLabel('How did you hear about Dreno?')}
-            <input style={inputStyle} value={referral} onChange={e => setReferral(e.target.value)} placeholder="Coach referral, social media, conference..." />
-          </div>
+          <FloatingField label="Phone number (optional)" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+          <FloatingField label="How did you hear about Dreno?" value={referral} onChange={e => setReferral(e.target.value)} />
 
           {/* Summary */}
           <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', borderRadius: 16, padding: '1.25rem' }}>

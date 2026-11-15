@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { CaretDown } from '@phosphor-icons/react';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
+import FloatingField from '../components/FloatingField';
 import { adminGet, adminPost } from '../lib/api';
 
 interface FlaggedCoach {
@@ -56,15 +57,15 @@ export default function AdminFlags() {
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
             Flags queue
           </h1>
-          <input
-            type="password"
-            className="input"
-            placeholder="Admin password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && load(password)}
-            style={{ marginBottom: '1rem' }}
-          />
+          <div style={{ marginBottom: '1rem' }}>
+            <FloatingField
+              type="password"
+              label="Admin password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && load(password)}
+            />
+          </div>
           {error && <p style={{ fontSize: 13, color: 'var(--red)', marginBottom: '1rem' }}>{error}</p>}
           <button className="btn-primary" style={{ width: '100%' }} disabled={loading} onClick={() => load(password)}>
             {loading ? <Spinner size={18} /> : 'Enter'}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Layout from '../components/Layout';
+import FloatingField from '../components/FloatingField';
 import { apiPost, apiGet } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -125,10 +126,9 @@ export default function SessionFeedback() {
 
         {/* Admin note (shown without labeling it as a report) */}
         <div style={{ width: '100%', marginBottom: '3rem' }}>
-          <input
+          <FloatingField
             type="text"
-            className="input"
-            placeholder={t('feedback.adminNote')}
+            label={t('feedback.adminNote')}
             value={adminNote}
             onChange={e => setAdminNote(e.target.value)}
             maxLength={500}

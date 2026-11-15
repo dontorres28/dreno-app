@@ -1,8 +1,12 @@
-import type { InputHTMLAttributes } from 'react'
+import type { InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes, ReactNode } from 'react'
 
-// Text input whose hint floats up into a label on focus / once filled, so the
-// user never loses it. Pure CSS (.float in index.css); placeholder=" " is what
-// makes :placeholder-shown flip, and the label must follow the input.
+// Floating-label fields, one consistent treatment for everything a person fills
+// in. The hint rests inside the box and floats up into a label on focus / once
+// filled. Pure CSS (.float in index.css): the input/textarea carry
+// placeholder=" " so :placeholder-shown drives it; selects and date inputs are
+// never placeholder-shown, so their label simply stays floated — which is what
+// we want, since they always have a value.
+
 export default function FloatingField({
   label,
   ...props
@@ -10,6 +14,31 @@ export default function FloatingField({
   return (
     <div className="float">
       <input {...props} className="input" placeholder=" " />
+      <label>{label}</label>
+    </div>
+  )
+}
+
+export function FloatingTextarea({
+  label,
+  ...props
+}: { label: string } & TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return (
+    <div className="float">
+      <textarea {...props} className="input" placeholder=" " />
+      <label>{label}</label>
+    </div>
+  )
+}
+
+export function FloatingSelect({
+  label,
+  children,
+  ...props
+}: { label: string; children: ReactNode } & SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <div className="float float--select">
+      <select {...props} className="input">{children}</select>
       <label>{label}</label>
     </div>
   )
