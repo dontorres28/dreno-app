@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { setLanguageFromPreference } from '../i18n';
 import toast from 'react-hot-toast';
-import { PencilSimple, ArrowRight } from '@phosphor-icons/react';
+import { PencilSimple, ArrowRight, EnvelopeSimple } from '@phosphor-icons/react';
 
 const SPORTS = [
   'Ice hockey', 'Soccer', 'Basketball', 'Tennis', 'Swimming',
@@ -204,7 +204,7 @@ export default function Settings() {
       if (email !== currentEmail) {
         promises.push(supabase.auth.updateUser({ email }).then(({ error }) => {
           if (error) throw error;
-          toast('Check your new email to confirm the change.', { icon: '✉️' });
+          toast('Check your new email to confirm the change.', { icon: <EnvelopeSimple size={18} weight="fill" color="var(--accent-strong)" /> });
         }));
       }
 

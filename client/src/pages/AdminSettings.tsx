@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight } from '@phosphor-icons/react';
+import { ArrowRight, EnvelopeSimple } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
@@ -150,7 +150,7 @@ export default function AdminSettings() {
         }).eq('id', user.id),
         email !== (user.email ?? '') ? supabase.auth.updateUser({ email }).then(({ error }) => {
           if (error) throw error;
-          toast('Check your new email to confirm the change.', { icon: '✉️' });
+          toast('Check your new email to confirm the change.', { icon: <EnvelopeSimple size={18} weight="fill" color="var(--accent-strong)" /> });
         }) : Promise.resolve(),
       ]);
       toast.success('Saved.');
