@@ -510,7 +510,7 @@ export default function CoachOnboard() {
 
             {frameworkBullets && (
               <div style={{ marginBottom: '1.5rem' }}>
-                <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--w50)', marginBottom: '0.875rem' }}>Your coaching approach</p>
+                <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w70)', marginBottom: '0.875rem' }}>Your coaching approach</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '1.5rem' }}>
                   {frameworkBullets.map((bullet, i) => (
                     <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', borderRadius: 12, padding: '12px 14px' }}>
@@ -573,7 +573,7 @@ export default function CoachOnboard() {
                 <label className="label" style={{ marginBottom: '0.875rem' }}>Session length</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.875rem' }}>
                   <div>
-                    <p style={{ fontSize: 12, color: 'var(--w50)', marginBottom: 8, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Minimum</p>
+                    <p style={{ fontSize: 12, color: 'var(--w50)', marginBottom: 8, fontWeight: 600, letterSpacing: '0.06em' }}>Minimum</p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {[30, 45, 60].map(m => (
                         <button key={m} type="button" onClick={() => { setMinSession(m); if (maxSession < m) setMaxSession(m); }}
@@ -584,7 +584,7 @@ export default function CoachOnboard() {
                     </div>
                   </div>
                   <div>
-                    <p style={{ fontSize: 12, color: 'var(--w50)', marginBottom: 8, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Maximum</p>
+                    <p style={{ fontSize: 12, color: 'var(--w50)', marginBottom: 8, fontWeight: 600, letterSpacing: '0.06em' }}>Maximum</p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {[60, 90, 120].map(m => (
                         <button key={m} type="button" onClick={() => { setMaxSession(m); if (minSession > m) setMinSession(m); }}
