@@ -65,7 +65,7 @@ export default function SessionFeedback() {
         padding: '2rem',
         maxWidth: 480, margin: '0 auto',
       }}>
-        <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w40)', marginBottom: '1.5rem' }}>
+        <p style={{ fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em', color: 'var(--w60)', marginBottom: '1.5rem' }}>
           {t('feedback.sessionComplete')}
         </p>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 8vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '3rem', textAlign: 'center' }}>
