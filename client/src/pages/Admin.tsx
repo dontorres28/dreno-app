@@ -194,7 +194,7 @@ export default function Admin() {
                     </div>
                     <span style={{
                       flexShrink: 0,
-                      fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
+                      fontSize: 10, fontWeight: 700, letterSpacing: '0.06em',
                       padding: '3px 10px', borderRadius: 50,
                       background: status.bg, border: `0.5px solid ${status.border}`,
                       color: status.color,

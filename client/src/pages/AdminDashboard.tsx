@@ -66,22 +66,17 @@ export default function AdminDashboard() {
 
         {/* Plan hero, red gradient */}
         {tier && (
-          <div style={{
+          <div className="squircle" style={{
             position: 'relative',
             borderRadius: 24,
             padding: '1.75rem',
             marginBottom: '1.25rem',
-            background: 'linear-gradient(135deg, #0B5FD4 0%, #083C86 100%)',
+            background: 'var(--accent-strong)',   /* solid, not glossy */
             overflow: 'hidden',
           }}>
-            <div style={{
-              position: 'absolute', top: -50, right: -40, width: 220, height: 220,
-              background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)',
-              pointerEvents: 'none',
-            }}/>
             <div style={{ position: 'relative' }}>
               <p style={{
-                fontSize: 11, fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase',
+                fontSize: 11, fontWeight: 700, letterSpacing: '0.10em',
                 color: 'rgba(255,255,255,0.75)', marginBottom: 10,
               }}>
                 {org?.plan_tier ? `${org.plan_tier.charAt(0).toUpperCase() + org.plan_tier.slice(1)} plan` : 'Plan'}
@@ -149,7 +144,6 @@ export default function AdminDashboard() {
           }}>
             <div style={{
               width: 8, height: 8, borderRadius: '50%', background: 'var(--red)',
-              boxShadow: '0 0 8px rgba(77,166,255,0.6)',
               flexShrink: 0, marginTop: 6,
             }} />
             <div>

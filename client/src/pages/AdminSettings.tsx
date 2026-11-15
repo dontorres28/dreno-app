@@ -31,7 +31,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <div style={{ marginBottom: '1.5rem' }}>
       <p style={{
-        fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+        fontSize: 12, fontWeight: 700, letterSpacing: '0.12em',
         color: 'var(--w60)', marginBottom: '0.875rem', paddingLeft: 4,
       }}>
         {title}
@@ -221,10 +221,10 @@ export default function AdminSettings() {
           Settings
         </h1>
 
-        {/* Profile hero, gradient card matching athlete Settings */}
-        <div style={{
+        {/* Profile hero */}
+        <div className="squircle" style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(77,166,255,0.08) 0%, rgba(77,166,255,0.02) 100%)',
+          background: 'var(--surface-1)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22,
           padding: '1.5rem',
@@ -233,19 +233,11 @@ export default function AdminSettings() {
           display: 'flex', alignItems: 'center', gap: 18,
         }}>
           <div style={{
-            position: 'absolute', top: -50, right: -50,
-            width: 180, height: 180, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(77,166,255,0.18) 0%, transparent 65%)',
-            pointerEvents: 'none',
-          }} />
-
-          <div style={{
             width: 72, height: 72, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
+            background: 'var(--surface-2)', border: '0.5px solid var(--surface-border-2)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, color: 'var(--btn-ink)', fontWeight: 700, fontSize: 26,
+            flexShrink: 0, color: 'var(--w70)', fontWeight: 700, fontSize: 26,
             fontFamily: 'var(--font-display)', letterSpacing: '-0.02em',
-            boxShadow: '0 4px 16px rgba(77,166,255,0.35)',
             position: 'relative',
           }}>
             {(name || email || '?').trim()[0]?.toUpperCase()}
@@ -270,21 +262,16 @@ export default function AdminSettings() {
 
         {/* Plan */}
         {tier && (
-          <div style={{
+          <div className="squircle" style={{
             position: 'relative',
             borderRadius: 22, padding: '1.5rem',
             marginBottom: '1.5rem',
-            background: 'linear-gradient(135deg, #0B5FD4 0%, #083C86 100%)',
+            background: 'var(--accent-strong)',   /* solid, not glossy */
             overflow: 'hidden',
           }}>
-            <div style={{
-              position: 'absolute', top: -50, right: -40, width: 220, height: 220,
-              background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)',
-              pointerEvents: 'none',
-            }}/>
             <div style={{ position: 'relative' }}>
               <p style={{
-                fontSize: 11, fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase',
+                fontSize: 11, fontWeight: 700, letterSpacing: '0.10em',
                 color: 'rgba(255,255,255,0.75)', marginBottom: 10,
               }}>
                 {planTier.charAt(0).toUpperCase() + planTier.slice(1)} plan
@@ -366,7 +353,7 @@ export default function AdminSettings() {
         {/* Program, sport selector */}
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{
-            fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+            fontSize: 12, fontWeight: 700, letterSpacing: '0.12em',
             color: 'var(--w60)', marginBottom: '0.875rem', paddingLeft: 4,
           }}>
             Program
@@ -426,7 +413,7 @@ export default function AdminSettings() {
         {/* Coaches */}
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{
-            fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+            fontSize: 12, fontWeight: 700, letterSpacing: '0.12em',
             color: 'var(--w60)', marginBottom: '0.875rem', paddingLeft: 4,
           }}>
             Coaches
@@ -516,7 +503,7 @@ export default function AdminSettings() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexShrink: 0 }}>
                       <span style={{
-                        fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
+                        fontSize: 10, fontWeight: 700, letterSpacing: '0.06em',
                         padding: '3px 9px', borderRadius: 50,
                         background: isActive ? 'var(--red)' : 'transparent',
                         border: isActive ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
