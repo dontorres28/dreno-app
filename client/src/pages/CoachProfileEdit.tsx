@@ -52,7 +52,7 @@ function SectionCard({ title, sub, children }: { title: string; sub?: string; ch
   return (
     <section>
       <div style={{ paddingLeft: 4, marginBottom: 12 }}>
-        <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{title}</p>
+        <p style={{ fontSize: 15, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w70)' }}>{title}</p>
         {sub && <p style={{ fontSize: 12.5, color: 'var(--w60)', marginTop: 4 }}>{sub}</p>}
       </div>
       <div style={{
@@ -237,10 +237,10 @@ export default function CoachProfileEdit() {
           Back
         </button>
 
-        {/* ── Hero header, mirrors CoachProfile / Settings hero ── */}
-        <div style={{
+        {/* ── Hero header ── */}
+        <div className="squircle" style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(77,166,255,0.08) 0%, rgba(77,166,255,0.02) 100%)',
+          background: 'var(--surface-1)',
           border: '0.5px solid var(--surface-border-2)',
           borderRadius: 22,
           padding: '1.5rem',
@@ -248,26 +248,17 @@ export default function CoachProfileEdit() {
           overflow: 'hidden',
           display: 'flex', alignItems: 'center', gap: 18,
         }}>
-          <div style={{
-            position: 'absolute', top: -50, right: -50,
-            width: 200, height: 200, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(77,166,255,0.20) 0%, transparent 65%)',
-            pointerEvents: 'none',
-          }} />
-
           <button
             onClick={() => photoRef.current?.click()}
             style={{
               position: 'relative', flexShrink: 0,
               width: 76, height: 76, borderRadius: '50%',
-              background: photoPreview
-                ? 'transparent'
-                : 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
-              overflow: 'hidden', border: 'none', padding: 0, cursor: 'pointer',
+              background: photoPreview ? 'transparent' : 'var(--surface-2)',
+              border: photoPreview ? 'none' : '0.5px solid var(--surface-border-2)',
+              overflow: 'hidden', padding: 0, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--btn-ink)', fontFamily: 'var(--font-display)', fontSize: 26,
+              color: 'var(--w70)', fontFamily: 'var(--font-display)', fontSize: 26,
               fontWeight: 700, letterSpacing: '-0.02em',
-              boxShadow: photoPreview ? 'none' : '0 4px 16px rgba(77,166,255,0.35)',
             }}
           >
             {photoPreview

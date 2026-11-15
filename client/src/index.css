@@ -431,13 +431,12 @@ time,
 
   .label {
     display: block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.10em;        /* wider positive tracking for small caps (§15) */
-    text-transform: uppercase;
-    color: var(--w60);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;      /* plain sentence case, no eyebrow */
+    color: var(--w70);
     margin-bottom: 8px;
-    line-height: 1.3;              /* explicit leading — small caps default was too tight */
+    line-height: 1.3;
   }
 
   /* --- Badges / tags --- */
