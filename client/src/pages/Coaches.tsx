@@ -78,11 +78,14 @@ export default function Coaches() {
     <Layout>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
         <h1 style={{
-          fontFamily: 'var(--font-display)', fontSize: 44,
-          lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '1.75rem',
+          fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 3.5rem)',
+          lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '0.6rem',
         }}>
-          Coaches
+          Find a coach
         </h1>
+        <p style={{ fontSize: 16, color: 'var(--w70)', lineHeight: 1.5, marginBottom: '1.75rem', maxWidth: 480 }}>
+          A coach helps with the mental side of your sport. Tap anyone to see more.
+        </p>
 
         {/* Filters, sliding pill with liquid feel */}
         {allSports.length > 1 && (
@@ -128,7 +131,7 @@ export default function Coaches() {
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '4rem' }}><Spinner size={28} /></div>
         ) : filtered.length === 0 ? (
-          <p style={{ color: 'var(--w60)', paddingTop: '2rem' }}>No coaches yet.</p>
+          <p style={{ color: 'var(--w60)', paddingTop: '2rem' }}>No coaches here yet. Check back soon.</p>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
             {filtered.map((coach) => (

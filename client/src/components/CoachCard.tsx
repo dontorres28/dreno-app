@@ -47,9 +47,9 @@ export default function CoachCard({ coach, sportMatch, matchedTags = [] }: Props
           ) : (
             <div style={{
               width: 52, height: 52, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
+              background: 'var(--surface-2)', border: '0.5px solid var(--surface-border-2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 16, fontWeight: 700, color: 'var(--btn-ink)', flexShrink: 0,
+              fontSize: 16, fontWeight: 700, color: 'var(--w70)', flexShrink: 0,
               fontFamily: 'var(--font-display)', letterSpacing: '-0.02em',
             }}>
               {initials}
@@ -67,7 +67,7 @@ export default function CoachCard({ coach, sportMatch, matchedTags = [] }: Props
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, alignSelf: 'flex-start', padding: '4px 10px', borderRadius: 50, background: 'rgba(77,166,255,0.14)', border: '0.5px solid rgba(77,166,255,0.3)' }}>
             <SealCheck size={13} weight="fill" color="var(--accent)" />
             <span style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--accent-strong)', letterSpacing: '0.01em' }}>
-              {sportMatch ? 'Your sport' : `Matches ${matchedTags.length} of your focus`}
+              {sportMatch ? 'Plays your sport' : 'Good match for you'}
             </span>
           </div>
         )}
