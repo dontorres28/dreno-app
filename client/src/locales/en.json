@@ -1,7 +1,7 @@
 {
   "nav": {
     "coaches": "Coaches",
-    "dashboard": "Dashboard",
+    "dashboard": "Home",
     "drills": "Train",
     "goals": "Goals",
     "journal": "Journal",
@@ -74,13 +74,13 @@
   },
   "dashboard": {
     "nextSession": "Next session",
-    "noUpcoming": "No upcoming sessions",
+    "noUpcoming": "No sessions yet",
     "findCoach": "Find a coach",
-    "drillLabel": "Drill",
-    "journalLabel": "Journal",
+    "drillLabel": "Play",
+    "journalLabel": "Write",
     "doneTodayDrill": "Done for today",
-    "trainFocus": "Train your focus",
-    "writeToday": "Write today",
+    "trainFocus": "Play a quick game",
+    "writeToday": "Say how you feel",
     "entrySaved": "Entry saved",
     "drillsStat": "Drills",
     "streakStat": "Streak",

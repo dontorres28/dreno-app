@@ -52,20 +52,12 @@ function WeekHero({ drillsThisWeek, streak, drillResults }: {
   return (
     <div className="squircle" style={{
       position: 'relative',
-      background: 'linear-gradient(145deg, rgba(77,166,255,0.14) 0%, rgba(77,166,255,0.03) 55%, transparent 100%)',
+      background: 'var(--surface-1)',
       border: '0.5px solid var(--surface-border-2)',
       borderRadius: 28,
       padding: 'clamp(22px, 5vw, 32px)',
       overflow: 'hidden',
     }}>
-      {/* The single ambient glow of the whole page, the week is the anchor. */}
-      <div style={{
-        position: 'absolute', top: -90, right: -90,
-        width: 300, height: 300, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(77,166,255,0.26) 0%, transparent 62%)',
-        pointerEvents: 'none',
-      }} />
-
       <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
         <div>
           <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3.5rem, 11vw, 5.5rem)', lineHeight: 0.82, letterSpacing: '-0.05em' }}>
@@ -106,8 +98,7 @@ function WeekHero({ drillsThisWeek, streak, drillResults }: {
                 background: d.isToday ? 'var(--nav-active-bg)' : d.done ? 'var(--accent)' : 'transparent',
                 border: d.isToday || d.done ? 'none' : '1px solid var(--surface-border-2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: d.done && !d.isToday ? '0 3px 14px rgba(77,166,255,0.32)' : 'none',
-                transition: 'background 400ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 400ms',
+                transition: 'background 400ms cubic-bezier(0.23, 1, 0.32, 1)',
               }}>
                 <span style={{
                   fontFamily: 'var(--font-display)', fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1,
@@ -310,7 +301,7 @@ export default function Dashboard() {
                   {task.done && <Check size={13} weight="bold" color="var(--btn-ink)" />}
                 </span>
               </div>
-              <p style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: task.done ? 'var(--accent-strong)' : 'var(--w60)', marginBottom: 5 }}>{task.label}</p>
+              <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em', color: task.done ? 'var(--accent-strong)' : 'var(--w60)', marginBottom: 5 }}>{task.label}</p>
               <p style={{ fontSize: 14.5, fontWeight: 500, color: task.done ? 'var(--w60)' : 'var(--white)', textDecoration: task.done ? 'line-through' : 'none', textDecorationColor: 'var(--w40)' }}>
                 {task.done ? task.doneText : task.todoText}
               </p>
@@ -321,7 +312,7 @@ export default function Dashboard() {
         {/* ── Goals, quiet section, hairline not a box ── */}
         <div className="reveal" style={{ marginBottom: 'clamp(1.5rem, 4vh, 2.25rem)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', paddingBottom: 14, borderBottom: '0.5px solid var(--surface-border)', marginBottom: 16 }}>
-            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{t('dashboard.goalsStat')}</p>
+            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '-0.005em', color: 'var(--w60)' }}>{t('dashboard.goalsStat')}</p>
             <Link to="/goals" style={{ fontSize: 13, color: 'var(--link)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
               {t('dashboard.all')}
               <ArrowRight size={13} weight="bold" />
@@ -336,7 +327,7 @@ export default function Dashboard() {
                     <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: HORIZON_COLOR[g.horizon] ?? 'var(--w40)', cursor: 'help' }} />
                   </Tooltip>
                   <span style={{ fontSize: 14.5, color: 'var(--white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{g.title}</span>
-                  <span style={{ fontSize: 11, color: 'var(--w60)', flexShrink: 0, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>{g.horizon}</span>
+                  <span style={{ fontSize: 11, color: 'var(--w60)', flexShrink: 0, letterSpacing: '0.06em', fontWeight: 600 }}>{g.horizon}</span>
                 </div>
               ))}
             </div>
@@ -352,7 +343,7 @@ export default function Dashboard() {
         {lastEntry && (
           <Link to="/journal" className="reveal" style={{ textDecoration: 'none', display: 'block' }}>
             <div style={{ paddingBottom: 14, borderBottom: '0.5px solid var(--surface-border)', marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-              <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)' }}>{t('dashboard.recent')}</p>
+              <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '-0.005em', color: 'var(--w60)' }}>{t('dashboard.recent')}</p>
               <p style={{ fontSize: 12, color: 'var(--w60)', letterSpacing: '0.02em' }}>
                 {new Date(lastEntry.created_at).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
               </p>

@@ -288,7 +288,7 @@ export default function Journal() {
           const text = parsed.plain ?? (parsed.blocks ?? []).map(b => b.a).join(' ');
           return (
             <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 16, padding: '1rem 1.25rem', marginBottom: '2.5rem' }}>
-              <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--w50)', marginBottom: '0.5rem' }}>
+              <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--w50)', marginBottom: '0.5rem' }}>
                 On this day &middot; {new Date(onThisDay.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
               </p>
               <p style={{ fontSize: 14, color: 'var(--w60)', lineHeight: 1.65 }}>{text.slice(0, 200)}</p>
@@ -421,7 +421,7 @@ export default function Journal() {
           <p style={{ fontSize: 14, color: 'var(--w50)' }}>Nothing written yet.</p>
         ) : groups.map(group => (
           <div key={group.label} style={{ marginBottom: '2.5rem' }}>
-            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--w50)', marginBottom: '1rem' }}>{group.label}</p>
+            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--w50)', marginBottom: '1rem' }}>{group.label}</p>
 
             {group.items.map((entry, i) => {
               const parsed = parseBody(entry.body);
