@@ -11,6 +11,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import LanguagePicker from '../components/LanguagePicker';
 import Logo from '../components/Logo';
 import FloatingField from '../components/FloatingField';
+import { PersonSimpleRun, ClipboardText, Buildings, EnvelopeSimple } from '@phosphor-icons/react';
 
 const REDIRECT_URL = `${window.location.origin}/auth/callback`;
 
@@ -136,26 +137,9 @@ export default function Signup() {
           {/* Role tiles */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: '1.25rem' }}>
             {([
-              { key: 'athlete', label: 'Athlete', icon: (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="4.5" r="2.2"/>
-                  <path d="M8 22l1.5-7 3-2 3 3 3 1"/>
-                  <path d="M6 12l3-3 2 1 3-1"/>
-                </svg>
-              )},
-              { key: 'coach', label: 'Coach', icon: (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3l9 4-9 4-9-4 9-4z"/>
-                  <path d="M7 9v4c0 1.7 2.2 3 5 3s5-1.3 5-3V9"/>
-                  <path d="M21 7v5"/>
-                </svg>
-              )},
-              { key: 'administrator', label: 'Admin', icon: (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 21V10l8-5 8 5v11"/>
-                  <path d="M9 21V13h6v8"/>
-                </svg>
-              )},
+              { key: 'athlete', label: 'Athlete', Icon: PersonSimpleRun },
+              { key: 'coach', label: 'Coach', Icon: ClipboardText },
+              { key: 'administrator', label: 'Admin', Icon: Buildings },
             ] as const).map(r => {
               const on = role === r.key;
               return (
@@ -166,9 +150,9 @@ export default function Signup() {
                   background: on ? 'var(--red)' : 'var(--surface-1)',
                   border: on ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
                   color: on ? 'var(--btn-ink)' : 'var(--w80)',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
                 }}>
-                  {r.icon}
+                  <r.Icon size={28} weight={on ? 'fill' : 'regular'} />
                   <span style={{ fontSize: 14, fontWeight: 600, color: on ? 'var(--btn-ink)' : 'var(--white)' }}>{r.label}</span>
                 </button>
               );
@@ -255,10 +239,7 @@ export default function Signup() {
                 className="email-pill"
                 aria-label="Sign up with email instead"
               >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
-                  <rect x="1.75" y="3.25" width="12.5" height="9.5" rx="1.75" stroke="currentColor" strokeWidth="1.2"/>
-                  <path d="M2.5 4.5l5.5 4 5.5-4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <EnvelopeSimple size={16} weight="regular" aria-hidden />
                 Use email instead
               </button>
             </>

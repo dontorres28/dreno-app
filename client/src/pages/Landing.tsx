@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { CaretRight } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
 import { motion, Variants, useReducedMotion } from 'framer-motion';
 import Layout from '../components/Layout';
@@ -226,9 +227,7 @@ export default function Landing() {
                 }}
               >
                 {t('landing.signIn')}
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-                  <path d="M3.5 2.5l3.5 3.5-3.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <CaretRight size={13} weight="bold" aria-hidden />
               </Link>
             </div>
           </AnimatedGroup>

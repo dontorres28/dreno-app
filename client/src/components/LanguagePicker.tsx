@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { CaretDown, Check } from '@phosphor-icons/react';
 import i18n, { LANGUAGE_CODES, setLanguageFromPreference } from '../i18n';
 
 const LANGUAGES = Object.keys(LANGUAGE_CODES);
@@ -73,8 +74,7 @@ export default function LanguagePicker() {
         }}
       >
         {AUTONYM[current] ?? current}
-        <svg
-          width="10" height="10" viewBox="0 0 10 10" fill="none"
+        <span
           style={{
             display: 'block', flexShrink: 0,
             transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
@@ -82,8 +82,8 @@ export default function LanguagePicker() {
           }}
           aria-hidden
         >
-          <path d="M2 4l3 3 3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+          <CaretDown size={11} weight="bold" />
+        </span>
         <style>{`
           .lang-pill:hover { background: var(--surface-2); color: var(--white); }
           .lang-pill:active { transform: scale(0.96); transition: transform 90ms cubic-bezier(0.4, 0, 1, 1); }
@@ -141,9 +141,7 @@ export default function LanguagePicker() {
               >
                 <span>{AUTONYM[lang] ?? lang}</span>
                 {isCurrent && (
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: 'var(--red)', flexShrink: 0 }} aria-hidden>
-                    <path d="M2.5 6l2.5 2.5L9.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <Check size={13} weight="bold" style={{ color: 'var(--red)', flexShrink: 0 }} aria-hidden />
                 )}
               </button>
             );
