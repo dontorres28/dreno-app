@@ -235,7 +235,7 @@ export default function DrillEyeTrack() {
   // ── Select screen ─────────────────────────────────────────────────────────
   if (phase === 'select') {
     return (
-      <TestShell title="Focus" onBack={() => navigate("/drills")} align="top">
+      <TestShell title="Follow the Dot" onBack={() => navigate("/drills")} align="top">
         <div style={{ width: '100%', maxWidth: 480 }}>
           <h1 style={{
             fontFamily: 'var(--font-display)',
@@ -404,7 +404,7 @@ export default function DrillEyeTrack() {
   const nextN = activeN + 1;
   const rem = nextN <= 5 ? needed(nextN) : 0;
   return (
-    <TestShell title="Focus">
+    <TestShell title="Follow the Dot">
       <div style={{ textAlign: 'center', maxWidth: 460 }}>
         <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-strong)', letterSpacing: '-0.005em', marginBottom: 14 }}>
           Level {activeN} complete

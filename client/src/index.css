@@ -284,10 +284,10 @@ body {
 .signal-orb { position: relative; border-radius: 50%; }
 .signal-orb::after {
   content: '';
-  position: absolute; top: 13%; left: 17%; width: 32%; height: 26%;
+  position: absolute; top: 15%; left: 20%; width: 34%; height: 28%;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.85), rgba(255,255,255,0) 72%);
-  filter: blur(1px);
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.30), rgba(255,255,255,0) 72%);
+  filter: blur(3px);
   pointer-events: none;
 }
 
@@ -359,12 +359,12 @@ time,
   .btn-danger {
     background: var(--accent);
     color: var(--btn-ink);          /* navy ink on bright blue — 6.8:1, passes AA */
-    box-shadow: 0 8px 20px rgba(11,95,212,0.28), inset 0 1px 0 rgba(255,255,255,0.28);
+    box-shadow: 0 1px 2px rgba(11,60,140,0.12);   /* matte, no gloss highlight */
   }
   .btn-primary:hover:not(:disabled),
   .btn-danger:hover:not(:disabled) { background: var(--accent-soft); }
   .btn-primary:active:not(:disabled),
-  .btn-danger:active:not(:disabled) { box-shadow: 0 3px 10px rgba(11,95,212,0.22); }
+  .btn-danger:active:not(:disabled) { box-shadow: 0 1px 2px rgba(11,60,140,0.10); }
 
   .btn-secondary {
     background: var(--surface-1);

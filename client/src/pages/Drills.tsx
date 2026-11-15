@@ -1,449 +1,150 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Flame, ArrowRight, TrendUp, TrendDown, Trophy } from '@phosphor-icons/react';
-import Layout from '../components/Layout';
-import Tooltip from '../components/Tooltip';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Check, Trophy } from '@phosphor-icons/react'
+import Layout from '../components/Layout'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 
-interface Result {
-  drill_type: string;
-  composite_score: number;
-  raw_score: number;
-  completed_at: string;
-}
+interface Result { drill_type: string; completed_at: string }
 
-const EASE = 'cubic-bezier(0.23, 1, 0.32, 1)';
+const EASE = 'cubic-bezier(0.23, 1, 0.32, 1)'
 
-function streakDays(results: Result[]): number {
-  let s = 0;
-  const today = new Date();
-  for (let i = 0; i < 60; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    const ds = d.toISOString().slice(0, 10);
-    if (results.some(r => r.completed_at.slice(0, 10) === ds)) s++;
-    else break;
-  }
-  return s;
-}
+// Four games, in order. Names and one-liners a 10-year-old gets at a glance.
+const TESTS = [
+  { key: 'reaction_time', name: 'Quick Tap',     what: 'Tap the moment it lights up.',          to: '/drills/reaction' },
+  { key: 'go_no_go',      name: 'Stop & Go',      what: 'Tap fast — but freeze on blue.',        to: '/drills/go-no-go' },
+  { key: 'eye_track',     name: 'Follow the Dot', what: 'Keep your eyes on the moving dot.',      to: '/drills/eye-track' },
+  { key: 'the_sigh',      name: 'Breathe',        what: 'Breathe with the circle to calm down.', to: '/drills/sigh' },
+]
 
-function Delta({ current, previous, unit, lowerIsBetter }: { current: number; previous: number; unit: string; lowerIsBetter: boolean }) {
-  const diff = current - previous;
-  if (diff === 0) {
-    return (
-      <p style={{ fontSize: 12, color: 'var(--w60)', letterSpacing: '0.02em', fontWeight: 500 }}>
-        Same as last
-      </p>
-    );
-  }
-  const better = lowerIsBetter ? diff < 0 : diff > 0;
-  const abs = Math.abs(Math.round(diff));
-  const Arrow = diff < 0 ? TrendDown : TrendUp;
+function TestRow({ n, name, what, to, done }: { n: number; name: string; what: string; to: string; done: boolean }) {
   return (
-    <p style={{
-      fontSize: 12, fontWeight: 600, letterSpacing: '0.01em',
-      color: better ? 'var(--accent-strong)' : 'var(--w60)',
-      display: 'inline-flex', alignItems: 'center', gap: 5,
-    }}>
-      <Arrow size={13} weight="bold" aria-hidden />
-      {abs}{unit} {better ? 'better' : 'off'} than last
-    </p>
-  );
-}
+    <Link
+      to={to}
+      className="squircle"
+      style={{
+        display: 'flex', alignItems: 'center', gap: 18,
+        padding: '20px 22px', textDecoration: 'none', color: 'inherit',
+        background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)',
+        borderRadius: 20,
+        transition: `background 200ms ${EASE}, border-color 200ms ${EASE}, transform 160ms ${EASE}`,
+      }}
+      onMouseEnter={e => { const el = e.currentTarget; el.style.background = 'var(--surface-hover)'; el.style.borderColor = 'var(--line-2)'; el.style.transform = 'translateY(-2px)' }}
+      onMouseLeave={e => { const el = e.currentTarget; el.style.background = 'var(--surface-1)'; el.style.borderColor = 'var(--surface-border-2)'; el.style.transform = 'translateY(0)' }}
+    >
+      {/* Step number — the path is 1, 2, 3, 4 */}
+      <span style={{
+        fontFamily: 'var(--font-display)', fontSize: 22, lineHeight: 1, letterSpacing: '-0.03em',
+        color: done ? 'var(--accent-strong)' : 'var(--w40)', minWidth: 30, flexShrink: 0,
+        fontVariantNumeric: 'tabular-nums',
+      }}>
+        {n}
+      </span>
 
-interface DrillProps {
-  title: string;
-  subtitle: string;
-  to: string;
-  color: string;
-  visual: React.ReactNode;
-  metric: React.ReactNode;
-  done: boolean;
-  isNew: boolean;
-}
-
-function DrillTile({ title, subtitle, to, visual, metric, done, isNew }: DrillProps) {
-  return (
-    <Link to={to} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-      <div
-        className="squircle"
-        style={{
-          position: 'relative',
-          background: 'var(--surface-1)',
-          border: '0.5px solid var(--surface-border-2)',
-          borderRadius: 22,
-          padding: 24,
-          height: '100%', minHeight: 256,
-          display: 'flex', flexDirection: 'column',
-          overflow: 'hidden',
-          transition: `background 220ms ${EASE}, border-color 220ms ${EASE}, transform 200ms ${EASE}`,
-          cursor: 'pointer',
-        }}
-        onMouseEnter={e => {
-          const el = e.currentTarget as HTMLElement;
-          el.style.background = 'var(--surface-hover)';
-          el.style.borderColor = 'var(--line-2)';
-          el.style.transform = 'translateY(-3px)';
-        }}
-        onMouseLeave={e => {
-          const el = e.currentTarget as HTMLElement;
-          el.style.background = 'var(--surface-1)';
-          el.style.borderColor = 'var(--surface-border-2)';
-          el.style.transform = 'translateY(0)';
-        }}
-      >
-        {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 24, position: 'relative' }}>
-          <div>
-            <p style={{ fontSize: 13, fontWeight: done ? 600 : 500, letterSpacing: '-0.005em', color: done ? 'var(--accent-strong)' : 'var(--w60)', marginBottom: 6 }}>
-              {done ? 'Done today' : isNew ? 'New' : 'Practice'}
-            </p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: 24, lineHeight: 1.05, letterSpacing: '-0.03em', color: 'var(--white)' }}>
-              {title}
-            </p>
-          </div>
-          <div style={{ width: 56, height: 56, flexShrink: 0, opacity: 0.95 }}>
-            {visual}
-          </div>
-        </div>
-
-        {/* Metric block */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', position: 'relative' }}>
-          <div style={{ marginBottom: 16 }}>
-            {metric}
-          </div>
-          <p style={{ fontSize: 13, color: 'var(--w70)', lineHeight: 1.5, marginBottom: 14 }}>
-            {subtitle}
-          </p>
-          <div style={{
-            display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 6,
-            color: 'var(--accent-strong)', fontSize: 13.5, fontWeight: 700, letterSpacing: '-0.005em',
-          }}>
-            {isNew ? 'Start now' : 'Run again'}
-            <ArrowRight size={14} weight="bold" />
-          </div>
-        </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: 21, lineHeight: 1.1, letterSpacing: '-0.025em', color: 'var(--white)', marginBottom: 3 }}>
+          {name}
+        </p>
+        <p style={{ fontSize: 14, color: 'var(--w70)', lineHeight: 1.45 }}>{what}</p>
       </div>
-    </Link>
-  );
-}
 
-// ── Signature visuals per drill ─────────────────────────────────────────
-function ReactionVisual() {
-  return (
-    <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%, #8CC5FF 0%, #4DA6FF 55%, #0B5FD4 100%)', boxShadow: '0 0 24px rgba(77,166,255,0.35)' }} />
-  );
-}
-function GoNoGoVisual() {
-  return (
-    <svg viewBox="0 0 56 56" style={{ display: 'block' }}>
-      <circle cx="20" cy="28" r="14" fill="var(--white)" opacity="0.9"/>
-      <circle cx="42" cy="28" r="14" fill="#4DA6FF"/>
-    </svg>
-  );
-}
-function FocusVisual() {
-  return (
-    <svg viewBox="0 0 56 56" style={{ display: 'block' }}>
-      <circle cx="28" cy="28" r="22" fill="none" stroke="var(--w40)" strokeWidth="1" strokeDasharray="2 3"/>
-      <circle cx="28" cy="28" r="6" fill="#4DA6FF">
-        <animate attributeName="cx" values="12;44;28;12" dur="4s" repeatCount="indefinite"/>
-        <animate attributeName="cy" values="28;28;44;28" dur="4s" repeatCount="indefinite"/>
-      </circle>
-    </svg>
-  );
-}
-function BreathingVisual() {
-  return (
-    <div style={{ position: 'relative', width: 56, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{
-        position: 'absolute', width: 56, height: 56, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(77,166,255,0.25) 0%, transparent 70%)',
-      }} />
-      <div style={{
-        width: 36, height: 36, borderRadius: '50%',
-        background: 'radial-gradient(circle at 35% 30%, #8CC5FF 0%, #4DA6FF 55%, #0B5FD4 100%)',
-        animation: 'trainBreathe 3.5s ease-in-out infinite',
-      }} />
-      <style>{`@keyframes trainBreathe { 0%,100% { transform: scale(0.7); } 50% { transform: scale(1); } }`}</style>
-    </div>
-  );
-}
-
-// ── Big metric renderers ────────────────────────────────────────────────
-function BigMetric({ value, unit }: { value: string | null; unit: string }) {
-  if (value === null) {
-    return <p style={{ fontFamily: 'var(--font-display)', fontSize: 42, lineHeight: 0.9, letterSpacing: '-0.045em', color: 'var(--w50)' }}>—</p>;
-  }
-  return (
-    <p style={{ fontFamily: 'var(--font-display)', fontSize: 48, lineHeight: 0.9, letterSpacing: '-0.045em', color: 'var(--white)' }}>
-      {value}<span style={{ fontSize: 16, color: 'var(--w60)', marginLeft: 5, letterSpacing: '0.02em' }}>{unit}</span>
-    </p>
-  );
-}
-
-function MetricWithDelta({ value, unit, prev, lowerIsBetter }: { value: number | null; unit: string; prev: number | null; lowerIsBetter: boolean }) {
-  return (
-    <div>
-      <BigMetric value={value !== null ? String(Math.round(value)) : null} unit={unit} />
-      {value !== null && prev !== null && (
-        <div style={{ marginTop: 6 }}>
-          <Delta current={value} previous={prev} unit={unit} lowerIsBetter={lowerIsBetter} />
-        </div>
+      {/* Clear path: a check once done today, otherwise an obvious play arrow */}
+      {done ? (
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--accent-strong)', fontSize: 13.5, fontWeight: 600, flexShrink: 0 }}>
+          <Check size={16} weight="bold" /> Done
+        </span>
+      ) : (
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: 'var(--accent-strong)', fontSize: 14, fontWeight: 600, flexShrink: 0 }}>
+          Play <ArrowRight size={15} weight="bold" />
+        </span>
       )}
-    </div>
-  );
+    </Link>
+  )
 }
 
-// ── Main page ───────────────────────────────────────────────────────────
 export default function Drills() {
-  const { t } = useTranslation();
-  const { user } = useAuth();
-  const [results, setResults] = useState<Result[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { user } = useAuth()
+  const [results, setResults] = useState<Result[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) return
     supabase
       .from('drill_results')
-      .select('drill_type, composite_score, raw_score, completed_at')
+      .select('drill_type, completed_at')
       .eq('athlete_id', user.id)
-      .order('completed_at', { ascending: true })
-      .then(({ data }) => { setResults(data ?? []); setLoading(false); });
-  }, [user]);
+      .then(({ data }) => { setResults(data ?? []); setLoading(false) })
+  }, [user])
 
-  const rtResults   = results.filter(r => r.drill_type === 'reaction_time');
-  const gngResults  = results.filter(r => r.drill_type === 'go_no_go');
-  const etResults   = results.filter(r => r.drill_type === 'eye_track');
-  const sighResults = results.filter(r => r.drill_type === 'the_sigh');
+  const today = new Date().toISOString().slice(0, 10)
+  const doneToday = new Set(results.filter(r => r.completed_at.slice(0, 10) === today).map(r => r.drill_type))
 
-  const today = new Date().toISOString().slice(0, 10);
-  const doneTodaySet = new Set(results.filter(r => r.completed_at.slice(0, 10) === today).map(r => r.drill_type));
-  const doneToday = doneTodaySet.size;
-
-  const overallStreak = (() => {
-    let s = 0;
-    const t = new Date();
+  const streak = (() => {
+    let s = 0
+    const t = new Date()
     for (let i = 0; i < 60; i++) {
-      const d = new Date(t);
-      d.setDate(d.getDate() - i);
-      const ds = d.toISOString().slice(0, 10);
-      if (results.some(r => r.completed_at.slice(0, 10) === ds)) s++;
-      else break;
+      const d = new Date(t); d.setDate(d.getDate() - i)
+      if (results.some(r => r.completed_at.slice(0, 10) === d.toISOString().slice(0, 10))) s++
+      else break
     }
-    return s;
-  })();
+    return s
+  })()
 
-  const drills = [
-    { key: 'reaction_time', label: 'Reaction' },
-    { key: 'go_no_go', label: 'Go/No-go' },
-    { key: 'eye_track', label: 'Focus' },
-    { key: 'the_sigh', label: 'Breathing' },
-  ];
+  const doneCount = TESTS.filter(tst => doneToday.has(tst.key)).length
 
   return (
     <Layout>
-      <div style={{ maxWidth: 920, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
 
-        {/* ── Header ── */}
-        <div style={{ marginBottom: '1.75rem' }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 7vw, 4.5rem)', lineHeight: 0.92, letterSpacing: '-0.04em', marginBottom: '0.5rem' }}>
-            Train the head game
-          </h1>
-          <p style={{ fontSize: 16, color: 'var(--w70)', lineHeight: 1.5, maxWidth: 520 }}>
-            Four short drills. Ten minutes a day is enough.
-          </p>
-        </div>
+        {/* Header — plain and clear */}
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '0.6rem' }}>
+          Train your brain
+        </h1>
+        <p style={{ fontSize: 16, color: 'var(--w70)', lineHeight: 1.5, marginBottom: '2rem' }}>
+          Four quick games. A few minutes a day.
+        </p>
 
-        {/* ── Today card, session progress ── */}
+        {/* Today — one simple line */}
         {!loading && (
-          <div className="squircle" style={{
-            position: 'relative',
-            background: 'linear-gradient(145deg, rgba(77,166,255,0.13) 0%, rgba(77,166,255,0.03) 55%, transparent 100%)',
-            border: '0.5px solid var(--surface-border-2)',
-            borderRadius: 26,
-            padding: 'clamp(22px, 5vw, 28px)',
-            marginBottom: 14,
-            overflow: 'hidden',
-          }}>
-            {/* Right-side glow */}
-            <div style={{
-              position: 'absolute', top: -60, right: -60,
-              width: 240, height: 240, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(77,166,255,0.22) 0%, transparent 65%)',
-              pointerEvents: 'none',
-            }} />
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, position: 'relative', flexWrap: 'wrap' }}>
-              <div style={{ minWidth: 200 }}>
-                <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '-0.005em', color: 'var(--w70)', marginBottom: 10 }}>
-                  Today
-                </p>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 6vw, 4rem)', lineHeight: 0.9, letterSpacing: '-0.045em' }}>
-                  {doneToday}<span style={{ color: 'var(--w40)' }}>/4</span>
-                </p>
-                <p style={{ fontSize: 13.5, color: 'var(--w70)', marginTop: 8 }}>
-                  {doneToday === 0 ? "Let's get started." :
-                   doneToday === 4 ? "Full set. That's a good day." :
-                   doneToday === 1 ? '1 drill done, 3 to go.' :
-                   `${doneToday} drills done, ${4 - doneToday} to go.`}
-                </p>
-              </div>
-
-              {/* Streak + progress dots */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-end' }}>
-                {overallStreak > 0 && (
-                  <Tooltip label={`${overallStreak} day${overallStreak !== 1 ? 's' : ''} in a row of training`} side="left">
-                    <div style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 5,
-                      padding: '7px 13px', borderRadius: 50,
-                      background: 'rgba(77,166,255,0.16)',
-                      border: '0.5px solid rgba(77,166,255,0.32)',
-                      cursor: 'help',
-                    }}>
-                      <Flame size={14} weight="fill" color="var(--accent)" />
-                      <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--accent-strong)', letterSpacing: '0.01em' }}>
-                        {overallStreak}-day streak
-                      </span>
-                    </div>
-                  </Tooltip>
-                )}
-                <div style={{ display: 'flex', gap: 6 }}>
-                  {drills.map(d => (
-                    <Tooltip key={d.key} label={`${d.label}, ${doneTodaySet.has(d.key) ? 'done today' : 'not yet'}`} side="top">
-                      <span style={{
-                        display: 'inline-block',
-                        width: 34, height: 6, borderRadius: 6,
-                        background: doneTodaySet.has(d.key) ? 'var(--red)' : 'var(--surface-border-2)',
-                        transition: `background 400ms ${EASE}`,
-                        cursor: 'help',
-                      }} />
-                    </Tooltip>
-                  ))}
-                </div>
-              </div>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}>
+            <p style={{ fontSize: 15, color: 'var(--w70)' }}>
+              <span style={{ color: 'var(--white)', fontWeight: 600 }}>{doneCount} of 4</span> done today
+            </p>
+            {streak > 0 && (
+              <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--accent-strong)' }}>
+                {streak}-day streak
+              </span>
+            )}
           </div>
         )}
 
-        {/* ── Drill tiles ── */}
+        {/* The four games, in order */}
         {!loading && (
-          <div className="drills-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-            gap: 14,
-            marginBottom: '2rem',
-          }}>
-            <DrillTile
-              title="Reaction"
-              subtitle="Test and train your response speed."
-              to="/drills/reaction"
-              color="var(--red)"
-              visual={<ReactionVisual />}
-              done={doneTodaySet.has('reaction_time')}
-              isNew={rtResults.length === 0}
-              metric={
-                <MetricWithDelta
-                  value={rtResults.length > 0 ? rtResults[rtResults.length - 1].raw_score : null}
-                  unit="ms"
-                  prev={rtResults.length >= 2 ? rtResults[rtResults.length - 2].raw_score : null}
-                  lowerIsBetter
-                />
-              }
-            />
-
-            <DrillTile
-              title="Go / No-go"
-              subtitle="Train inhibitory control under pressure."
-              to="/drills/go-no-go"
-              color="var(--red)"
-              visual={<GoNoGoVisual />}
-              done={doneTodaySet.has('go_no_go')}
-              isNew={gngResults.length === 0}
-              metric={
-                <MetricWithDelta
-                  value={gngResults.length > 0 ? gngResults[gngResults.length - 1].composite_score : null}
-                  unit="%"
-                  prev={gngResults.length >= 2 ? gngResults[gngResults.length - 2].composite_score : null}
-                  lowerIsBetter={false}
-                />
-              }
-            />
-
-            <DrillTile
-              title="Focus"
-              subtitle="Hold your focus on a moving target."
-              to="/drills/eye-track"
-              color="var(--red)"
-              visual={<FocusVisual />}
-              done={doneTodaySet.has('eye_track')}
-              isNew={etResults.length === 0}
-              metric={
-                <BigMetric
-                  value={etResults.length > 0 ? `L${Math.round(etResults[etResults.length - 1].composite_score)}` : null}
-                  unit=""
-                />
-              }
-            />
-
-            <DrillTile
-              title="Breathing"
-              subtitle="Reset your nervous system in 40 seconds."
-              to="/drills/sigh"
-              color="var(--red)"
-              visual={<BreathingVisual />}
-              done={doneTodaySet.has('the_sigh')}
-              isNew={sighResults.length === 0}
-              metric={
-                <BigMetric
-                  value={sighResults.length > 0 ? String(sighResults.length) : null}
-                  unit={sighResults.length === 1 ? 'session' : 'sessions'}
-                />
-              }
-            />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {TESTS.map((tst, i) => (
+              <TestRow key={tst.key} n={i + 1} name={tst.name} what={tst.what} to={tst.to} done={doneToday.has(tst.key)} />
+            ))}
           </div>
         )}
 
-        <style>{`
-          @media (max-width: 640px) {
-            .drills-grid { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
-
-        {/* ── Footer link ── */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        {/* Scores */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
           <Link
             to="/drills/leaderboard"
             style={{
-              fontSize: 13, fontWeight: 600, color: 'var(--w70)',
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '10px 16px', borderRadius: 50,
-              border: '0.5px solid var(--surface-border-2)',
-              background: 'var(--surface-1)',
-              textDecoration: 'none',
-              transition: `border-color 200ms ${EASE}, color 200ms ${EASE}, background 200ms ${EASE}`,
+              fontSize: 14, fontWeight: 600, color: 'var(--w70)',
+              display: 'inline-flex', alignItems: 'center', gap: 7,
+              padding: '11px 18px', borderRadius: 50,
+              border: '0.5px solid var(--surface-border-2)', background: 'var(--surface-1)',
+              textDecoration: 'none', transition: `color 180ms ${EASE}, border-color 180ms ${EASE}`,
             }}
-            onMouseEnter={e => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.borderColor = 'var(--line-2)';
-              el.style.color = 'var(--white)';
-              el.style.background = 'var(--surface-hover)';
-            }}
-            onMouseLeave={e => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.borderColor = 'var(--surface-border-2)';
-              el.style.color = 'var(--w70)';
-              el.style.background = 'var(--surface-1)';
-            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--white)'; e.currentTarget.style.borderColor = 'var(--line-2)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--w70)'; e.currentTarget.style.borderColor = 'var(--surface-border-2)' }}
           >
-            <Trophy size={15} weight="fill" />
-            Leaderboard
-            <ArrowRight size={13} weight="bold" />
+            <Trophy size={16} weight="fill" /> See the scoreboard
           </Link>
         </div>
       </div>
     </Layout>
-  );
+  )
 }

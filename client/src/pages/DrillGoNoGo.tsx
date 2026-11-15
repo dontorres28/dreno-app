@@ -186,7 +186,7 @@ export default function DrillGoNoGo() {
     const { hits, correctNogo, commissions, omissions, acc } = roundStats(roundSlice)
     const isLastRound = completedRound === TOTAL_ROUNDS
     return (
-      <TestShell title="Go / No-go" onBack={() => navigate('/drills')}>
+      <TestShell title="Stop & Go" onBack={() => navigate('/drills')}>
         <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 420 }}>
           <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-strong)', letterSpacing: '-0.005em', marginBottom: 12 }}>
             Round {completedRound} of {TOTAL_ROUNDS}
@@ -216,7 +216,7 @@ export default function DrillGoNoGo() {
     const acc = Math.round(((hits + correctNogo) / TOTAL) * 100)
     const rating = acc >= 95 ? 'Elite' : acc >= 85 ? 'Sharp' : acc >= 70 ? 'Solid' : 'Warming up'
     return (
-      <TestShell title="Go / No-go" onBack={() => navigate('/drills')}>
+      <TestShell title="Stop & Go" onBack={() => navigate('/drills')}>
         <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 460 }}>
           <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-strong)', letterSpacing: '-0.005em', marginBottom: 14 }}>
             {rating}
@@ -242,7 +242,7 @@ export default function DrillGoNoGo() {
 
   // ── Intro ──
   return (
-    <TestShell title="Go / No-go" onBack={() => navigate('/drills')}>
+    <TestShell title="Stop & Go" onBack={() => navigate('/drills')}>
       <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 460 }}>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 7vw, 4.25rem)', lineHeight: 0.98, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
           Tap fast.<br />Freeze on blue.

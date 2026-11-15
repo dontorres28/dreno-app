@@ -204,7 +204,7 @@ export default function DrillReaction() {
   // ── Intro ──
   if (phase === 'intro') {
     return (
-      <TestShell title="Reaction" onBack={() => navigate('/drills')}>
+      <TestShell title="Quick Tap" onBack={() => navigate('/drills')}>
         <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 440 }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.75rem, 7vw, 4.25rem)', lineHeight: 0.98, letterSpacing: '-0.035em', marginBottom: '1.25rem' }}>
             Tap the moment<br />it lights up
@@ -229,7 +229,7 @@ export default function DrillReaction() {
 
   // ── Done ──
   return (
-    <TestShell title="Reaction" onBack={() => navigate('/drills')}>
+    <TestShell title="Quick Tap" onBack={() => navigate('/drills')}>
       <div className={reduced ? '' : 'materialize'} style={{ textAlign: 'center', maxWidth: 460 }}>
         <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-strong)', letterSpacing: '-0.005em', marginBottom: 14 }}>
           {med !== null ? rating(med) : ''}
