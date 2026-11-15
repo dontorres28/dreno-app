@@ -340,7 +340,7 @@ export default function Book() {
                   display: 'flex', gap: '1rem', padding: '14px 18px',
                   borderBottom: i < arr.length - 1 ? '0.5px solid var(--surface-border)' : 'none',
                 }}>
-                  <span style={{ fontSize: 11, color: 'var(--w60)', fontWeight: 700, letterSpacing: '0.08em', minWidth: 72, flexShrink: 0, paddingTop: 3 }}>{row.label}</span>
+                  <span style={{ fontSize: 13, color: 'var(--w60)', fontWeight: 500, letterSpacing: '-0.005em', minWidth: 72, flexShrink: 0, paddingTop: 2 }}>{row.label}</span>
                   <span style={{ fontSize: 14, color: 'var(--white)', lineHeight: 1.55, flex: 1 }}>{row.value}</span>
                 </div>
               ))}
