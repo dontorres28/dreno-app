@@ -30,10 +30,22 @@ const DOMAINS = (domainsArg ? domainsArg.slice('--domains='.length) : 'dreno-neo
   .split(',').map(s => s.trim()).filter(Boolean)
 
 // ── connection string ───────────────────────────────────────────────────────
+// We pass ssl options to pg explicitly, so drop sslmode/channel_binding from the
+// URL — otherwise pg prints a noisy deprecation warning about SSL mode aliases.
+function clean(url) {
+  if (!url) return url
+  try {
+    const u = new URL(url)
+    u.searchParams.delete('sslmode')
+    u.searchParams.delete('channel_binding')
+    return u.toString()
+  } catch { return url }
+}
+
 function connectionString() {
   const strip = v => v && v.replace(/^["']|["']$/g, '')
   let url = strip(process.env.DATABASE_URL_UNPOOLED) || strip(process.env.DATABASE_URL)
-  if (url) return url
+  if (url) return clean(url)
   // fall back to repo-root .env.local
   const envPath = new URL('../../.env.local', import.meta.url)
   let text
@@ -42,7 +54,7 @@ function connectionString() {
   }
   for (const key of ['DATABASE_URL_UNPOOLED', 'DATABASE_URL']) {
     const line = text.split('\n').find(l => l.startsWith(key + '='))
-    if (line) return strip(line.slice(key.length + 1).trim())
+    if (line) return clean(strip(line.slice(key.length + 1).trim()))
   }
   throw new Error('No DATABASE_URL_UNPOOLED / DATABASE_URL found in .env.local.')
 }
