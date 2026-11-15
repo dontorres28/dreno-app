@@ -29,8 +29,8 @@ type Tab = 'all' | 'active' | 'past';
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'all', label: 'All' },
-  { key: 'active', label: 'Active' },
-  { key: 'past', label: 'Past' },
+  { key: 'active', label: 'Upcoming' },
+  { key: 'past', label: 'Done' },
 ];
 
 function timeAgo(iso: string) {
@@ -332,7 +332,7 @@ export default function Messages() {
                       {new Date(t.starts_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                       {t.duration_min ? `, ${t.duration_min}min` : ''}
                       {', '}
-                      {t.status === 'completed' ? 'Completed' : 'Confirmed'}
+                      {t.status === 'completed' ? 'Done' : 'Booked'}
                     </p>
                   </div>
                 </button>
@@ -406,7 +406,7 @@ export default function Messages() {
                 borderRadius: 16,
                 display: 'flex', flexDirection: 'column', gap: '0.875rem',
               }}>
-                <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--w50)' }}>
+                <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w60)' }}>
                   {t('messages.sessionInfo')}
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
@@ -414,10 +414,10 @@ export default function Messages() {
                     { label: t('messages.with'), value: active.other_name },
                     { label: t('messages.when'), value: sessionLabel(active.starts_at) },
                     { label: t('messages.duration'), value: active.duration_min ? `${active.duration_min} ${t('messages.min')}` : 'TBD' },
-                    { label: t('messages.status'), value: active.status === 'confirmed' ? 'Confirmed' : 'Completed' },
+                    { label: t('messages.status'), value: active.status === 'confirmed' ? 'Booked' : 'Done' },
                   ].map(row => (
                     <div key={row.label}>
-                      <p style={{ fontSize: 12, color: 'var(--w50)', marginBottom: 3, fontWeight: 600, letterSpacing: '0.06em', }}>{row.label}</p>
+                      <p style={{ fontSize: 12, color: 'var(--w50)', marginBottom: 3, fontWeight: 500, letterSpacing: '-0.005em' }}>{row.label}</p>
                       <p style={{ fontSize: 13, color: 'var(--w80)', fontWeight: 500 }}>{row.value}</p>
                     </div>
                   ))}
