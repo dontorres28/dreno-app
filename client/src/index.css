@@ -515,12 +515,29 @@ button, [role="button"], nav, header, footer, .signout-btn {
    Safari/Firefox fall back to the normal radius, so nothing breaks.
    ───────────────────────────────────────────────────────────────────── */
 @supports (corner-shape: squircle) {
-  .btn-primary, .btn-secondary, .btn-ghost, .btn-danger,
-  .card, .card-elevated, .input, .tag,
-  .squircle {
-    corner-shape: squircle;
+  /* Every rounded rectangle on every page, not just the primitives. */
+  *, *::before, *::after { corner-shape: squircle; }
+
+  /* …but true circles and pill ends must stay perfect arcs — a squircle there
+     reads as a rounded square (wrong for avatars, the test orbs, toggles, dots).
+     React serialises inline styles to the style attribute, so we can catch
+     inline circles by value, plus the class-based ones. */
+  [style*="border-radius: 50%"],
+  [style*="border-radius:50%"],
+  [style*="border-radius: 50px"],
+  [style*="border-radius: 9999"],
+  [style*="border-radius:9999"],
+  [style*="border-radius: 999px"],
+  [style*="border-radius: 100px"],
+  .btn-primary, .btn-secondary, .lang-pill, .lang-chip,
+  .theme-toggle-slider, .signal-orb, .rounded-full {
+    corner-shape: round;
   }
 }
+
+/* Apple-style branded text selection, on every page. */
+::selection    { background: rgba(77, 166, 255, 0.28); }
+::-moz-selection { background: rgba(77, 166, 255, 0.28); }
 
 /* ─────────────────────────────────────────────────────────────────────
    Scroll reveal (Apple hack 02). Sections fade + rise as they enter the
