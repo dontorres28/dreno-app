@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import ThemeToggle from '../components/ThemeToggle';
+import FloatingField, { FloatingSelect } from '../components/FloatingField';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -54,12 +55,15 @@ const COUNTRIES = [
   'Argentina', 'South Africa', 'New Zealand', 'Ireland',
 ];
 
+const GROUP_TITLE: React.CSSProperties = {
+  fontSize: 13, fontWeight: 500, letterSpacing: '-0.005em',
+  color: 'var(--w60)', marginBottom: '0.75rem', paddingLeft: 4,
+};
+
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ marginBottom: '1.5rem' }}>
-      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--w60)', marginBottom: '0.875rem', paddingLeft: 4 }}>
-        {title}
-      </p>
+      <p style={GROUP_TITLE}>{title}</p>
       <div style={{
         background: 'var(--surface-1)',
         border: '0.5px solid var(--surface-border-2)',
@@ -68,6 +72,17 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       }}>
         {children}
       </div>
+    </div>
+  );
+}
+
+// Fill-in fields as stacked floating-label inputs (no card — the fields carry
+// their own box), so Settings matches every other form in the app.
+function FieldGroup({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div style={{ marginBottom: '1.5rem' }}>
+      <p style={GROUP_TITLE}>{title}</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>{children}</div>
     </div>
   );
 }
@@ -87,20 +102,6 @@ function Row({ label, children, border = true }: { label: string; children: Reac
     </div>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  background: 'transparent', border: 'none', outline: 'none',
-  color: 'var(--white)', fontSize: 15, fontFamily: 'var(--font-body)',
-  textAlign: 'right', width: '100%', maxWidth: 240,
-  letterSpacing: '-0.005em',
-};
-
-const selectStyle: React.CSSProperties = {
-  background: 'transparent', border: 'none', outline: 'none',
-  color: 'var(--white)', fontSize: 15, fontFamily: 'var(--font-body)',
-  textAlign: 'right', cursor: 'pointer',
-  letterSpacing: '-0.005em',
-};
 
 export default function Settings() {
   const { t } = useTranslation();
@@ -328,86 +329,41 @@ export default function Settings() {
         </div>
 
         {/* Contact section */}
-        <Section title={t('settings.profile')}>
-          <div style={{ display: 'contents' }}>
-            <Row label={t('settings.name')}>
-              <input
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder={t('settings.namePlaceholder')}
-                style={inputStyle}
-              />
-            </Row>
-            <Row label={t('settings.email')}>
-              <input
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                type="email"
-                placeholder="Email"
-                style={inputStyle}
-              />
-            </Row>
-            <Row label="Phone">
-              <input
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                type="tel"
-                placeholder="Optional"
-                style={inputStyle}
-              />
-            </Row>
-            <Row label="Instagram" border={false}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 15, color: 'var(--w60)' }}>@</span>
-                <input
-                  value={instagram.replace(/^@/, '')}
-                  onChange={e => setInstagram(e.target.value)}
-                  placeholder="Optional"
-                  style={{ ...inputStyle, maxWidth: 200 }}
-                />
-              </div>
-            </Row>
-          </div>
-        </Section>
+        <FieldGroup title={t('settings.profile')}>
+          <FloatingField label={t('settings.name')} value={name} onChange={e => setName(e.target.value)} />
+          <FloatingField label={t('settings.email')} type="email" value={email} onChange={e => setEmail(e.target.value)} />
+          <FloatingField label="Phone" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+          <FloatingField label="Instagram" value={instagram.replace(/^@/, '')} onChange={e => setInstagram(e.target.value)} />
+        </FieldGroup>
 
         {/* Athlete-specific */}
         {!isCoach && (
           <>
-            <Section title={t('settings.trainingProfile')}>
-              <Row label={t('settings.sport')}>
-                <select value={sport} onChange={e => setSport(e.target.value)} style={selectStyle}>
-                  <option value="">{t('common.select')}</option>
-                  {SPORTS.map(s => <option key={s} value={s}>{s}</option>)}
-                  {sport && !SPORTS.includes(sport) && <option value={sport}>{sport}</option>}
-                </select>
-              </Row>
-              <Row label={t('settings.level')}>
-                <select value={level} onChange={e => setLevel(e.target.value)} style={selectStyle}>
-                  <option value="">{t('common.select')}</option>
-                  {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-                  {level && !LEVELS.includes(level) && <option value={level}>{level}</option>}
-                </select>
-              </Row>
-              <Row label={t('settings.country')}>
-                <input list="country-list" value={country} onChange={e => setCountry(e.target.value)} placeholder="e.g. Switzerland" style={inputStyle} />
+            <FieldGroup title={t('settings.trainingProfile')}>
+              <FloatingSelect label={t('settings.sport')} value={sport} onChange={e => setSport(e.target.value)}>
+                <option value="">{t('common.select')}</option>
+                {SPORTS.map(s => <option key={s} value={s}>{s}</option>)}
+                {sport && !SPORTS.includes(sport) && <option value={sport}>{sport}</option>}
+              </FloatingSelect>
+              <FloatingSelect label={t('settings.level')} value={level} onChange={e => setLevel(e.target.value)}>
+                <option value="">{t('common.select')}</option>
+                {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+                {level && !LEVELS.includes(level) && <option value={level}>{level}</option>}
+              </FloatingSelect>
+              <div>
+                <FloatingField label={t('settings.country')} list="country-list" value={country} onChange={e => setCountry(e.target.value)} />
                 <datalist id="country-list">{COUNTRIES.map(c => <option key={c} value={c} />)}</datalist>
-              </Row>
-              <Row label={t('settings.dob')}>
-                <input type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} style={{ ...inputStyle, maxWidth: 180 }} />
-              </Row>
-              <Row label={t('settings.timezone')}>
-                <select value={timezone} onChange={e => setTimezone(e.target.value)} style={selectStyle}>
-                  <option value="">{t('common.select')}</option>
-                  {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>)}
-                </select>
-              </Row>
-              <Row label={t('settings.sessionFormat')} border={false}>
-                <select value={format} onChange={e => setFormat(e.target.value)} style={selectStyle}>
-                  <option value="">{t('common.select')}</option>
-                  {FORMATS.map(f => <option key={f.key} value={f.key}>{f.label}</option>)}
-                </select>
-              </Row>
-            </Section>
+              </div>
+              <FloatingField label={t('settings.dob')} type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} />
+              <FloatingSelect label={t('settings.timezone')} value={timezone} onChange={e => setTimezone(e.target.value)}>
+                <option value="">{t('common.select')}</option>
+                {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>)}
+              </FloatingSelect>
+              <FloatingSelect label={t('settings.sessionFormat')} value={format} onChange={e => setFormat(e.target.value)}>
+                <option value="">{t('common.select')}</option>
+                {FORMATS.map(f => <option key={f.key} value={f.key}>{f.label}</option>)}
+              </FloatingSelect>
+            </FieldGroup>
 
             <Section title={t('settings.languages')}>
               <div style={{ padding: '15px 18px', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
