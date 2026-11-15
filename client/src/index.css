@@ -348,7 +348,7 @@ time,
     font-size: 14.5px;
     line-height: 1;                 /* stops button text from adding vertical drift */
     letter-spacing: -0.005em;       /* body-sized text near-zero, per §15 */
-    border-radius: 50px;
+    border-radius: 14px;            /* squircle rounded-rect, not a pill */
     border: 0.5px solid transparent;
     cursor: pointer;
     white-space: nowrap;
@@ -529,7 +529,7 @@ button, [role="button"], nav, header, footer, .signout-btn {
   [style*="border-radius:9999"],
   [style*="border-radius: 999px"],
   [style*="border-radius: 100px"],
-  .btn-primary, .btn-secondary, .lang-pill, .lang-chip,
+  .lang-pill, .lang-chip,
   .theme-toggle-slider, .signal-orb, .rounded-full {
     corner-shape: round;
   }
