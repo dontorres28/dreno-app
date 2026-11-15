@@ -54,6 +54,11 @@ export default function Signup() {
     if (!agreed) { toast.error('Please accept the Terms and Privacy Policy to continue.'); return; }
     setLoading(true);
     try {
+      // Clear any lingering session first (Better Auth keeps it in an httpOnly
+      // cookie). Otherwise signUp runs against the already-signed-in user and the
+      // profile insert hits a duplicate-key. No-op when nobody is signed in.
+      await supabase.auth.signOut().catch(() => {});
+
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
       const uid = data.user?.id;
