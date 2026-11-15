@@ -218,10 +218,10 @@ export default function SessionRoom() {
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.25rem',
             }}>
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontSize: 15, color: 'rgba(235,228,210,0.5)', marginBottom: 6 }}>
+                <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.6)', marginBottom: 6 }}>
                   {t('session.noRoom')}
                 </p>
-                <p style={{ fontSize: 13, color: 'rgba(235,228,210,0.25)' }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.32)' }}>
                   {t('session.noRoomSub')}
                 </p>
               </div>
@@ -239,7 +239,7 @@ export default function SessionRoom() {
           background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)',
           borderRadius: 16, padding: '1.5rem',
         }}>
-          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--w50)', marginBottom: '1rem' }}>
+          <p style={{ fontSize: 15, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w70)', marginBottom: '1rem' }}>
             {profile?.role === 'coach' ? t('session.sessionNotes') : t('session.yourNotes')}
           </p>
           <textarea
@@ -250,15 +250,7 @@ export default function SessionRoom() {
             placeholder={t('session.notesPlaceholder')}
             style={{ width: '100%', resize: 'vertical', marginBottom: '0.875rem' }}
           />
-          <button
-            onClick={saveNotes}
-            disabled={savingNotes}
-            style={{
-              fontSize: 13, fontWeight: 600, padding: '8px 20px', borderRadius: 50,
-              background: 'var(--surface-border)', border: '0.5px solid var(--surface-border-2)',
-              color: 'var(--w60)', cursor: 'pointer', transition: 'color 0.15s',
-            }}
-          >
+          <button onClick={saveNotes} disabled={savingNotes} className="btn-secondary" style={{ fontSize: 13, minHeight: 38, padding: '0 20px' }}>
             {savingNotes ? <Spinner size={14} /> : t('session.saveNotes')}
           </button>
         </div>

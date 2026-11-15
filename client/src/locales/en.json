@@ -298,8 +298,8 @@
     "notesPlaceholder": "Write anything from this session...",
     "saveNotes": "Save notes",
     "saving": "Saving...",
-    "noRoom": "Video room not set up yet.",
-    "noRoomSub": "A coach needs to activate the room first.",
+    "noRoom": "The video hasn't started yet.",
+    "noRoomSub": "The coach opens the room to begin.",
     "startRoom": "Start video room",
     "at": "at"
   },
