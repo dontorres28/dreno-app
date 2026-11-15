@@ -92,11 +92,14 @@ export default function Goals() {
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
 
         <h1 style={{
-          fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4.5rem)',
-          lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2.5rem',
+          fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 7vw, 4rem)',
+          lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '0.6rem',
         }}>
           {t('goals.title')}
         </h1>
+        <p style={{ fontSize: 16, color: 'var(--w70)', lineHeight: 1.5, marginBottom: '2.5rem', maxWidth: 480 }}>
+          Things you want to get better at. Tap the circle when you do one.
+        </p>
 
         {!loading && HORIZONS.map(({ key, label, timeframe, accent }) => {
           const list = byHorizon(key);

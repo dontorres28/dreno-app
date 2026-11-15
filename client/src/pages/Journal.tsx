@@ -274,7 +274,7 @@ export default function Journal() {
     <Layout>
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '2.5rem 1.5rem 5rem' }}>
 
-        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em' }}>Journal</h1>
           {streak > 0 && (
             <span style={{ fontSize: 12, color: 'var(--w40)', fontWeight: 500 }}>
@@ -282,14 +282,17 @@ export default function Journal() {
             </span>
           )}
         </div>
+        <p style={{ fontSize: 16, color: 'var(--w70)', lineHeight: 1.5, marginBottom: '2.5rem', maxWidth: 480 }}>
+          Write how you feel. Nobody sees it unless you choose to share.
+        </p>
 
         {onThisDay && (() => {
           const parsed = parseBody(onThisDay.body);
           const text = parsed.plain ?? (parsed.blocks ?? []).map(b => b.a).join(' ');
           return (
             <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border)', borderRadius: 16, padding: '1rem 1.25rem', marginBottom: '2.5rem' }}>
-              <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--w50)', marginBottom: '0.5rem' }}>
-                On this day &middot; {new Date(onThisDay.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+              <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '-0.005em', color: 'var(--w50)', marginBottom: '0.5rem' }}>
+                On this day, {new Date(onThisDay.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
               </p>
               <p style={{ fontSize: 14, color: 'var(--w60)', lineHeight: 1.65 }}>{text.slice(0, 200)}</p>
             </div>

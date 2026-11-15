@@ -33,10 +33,9 @@ export default function You() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 'clamp(2rem, 5vh, 2.75rem)' }}>
           <div style={{
             width: 64, height: 64, borderRadius: 22, flexShrink: 0,
-            background: 'linear-gradient(135deg, #8CC5FF 0%, #4DA6FF 60%, #0B5FD4 100%)',
+            background: 'var(--surface-2)', border: '0.5px solid var(--surface-border-2)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--btn-ink)', fontFamily: 'var(--font-display)', fontSize: 28, letterSpacing: '-0.02em',
-            boxShadow: '0 6px 20px rgba(11,95,212,0.30)',
+            color: 'var(--w80)', fontFamily: 'var(--font-display)', fontSize: 28, letterSpacing: '-0.02em',
           }}>
             {initial}
           </div>
