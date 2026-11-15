@@ -18,6 +18,14 @@ import { readFileSync } from 'node:fs'
 import pg from 'pg'
 const { Client } = pg
 
+// Swallow pg's noisy SSL-mode deprecation warning (we set ssl options ourselves).
+const _emitWarning = process.emitWarning.bind(process)
+process.emitWarning = (warning, ...rest) => {
+  const msg = typeof warning === 'string' ? warning : warning?.message || ''
+  if (/ssl mode|sslmode|verify-full/i.test(msg)) return
+  return _emitWarning(warning, ...rest)
+}
+
 // ── args ───────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2)
 if (args.includes('--help') || args.includes('-h')) {
@@ -75,8 +83,8 @@ const REF_COLS = ['athlete_id', 'coach_id', 'administrator_id', 'sender_id', 're
 
 async function main() {
   const client = new Client({ connectionString: connectionString(), ssl: { rejectUnauthorized: false } })
-  await client.connect()
   try {
+    await client.connect()
     const likes = DOMAINS.map((_, i) => `email like $${i + 1}`).join(' or ')
     const { rows } = await client.query(
       `select id, email from neon_auth."user" where ${likes} order by email`,
@@ -118,10 +126,10 @@ async function main() {
   } catch (err) {
     try { await client.query('rollback') } catch { /* not in txn */ }
     console.error('\nFailed:', err.message)
-    console.error('(If a foreign key blocked it, add that table/column to the script.)')
+    if (err.code === '23503') console.error('(A foreign key blocked it — add that table/column to the script.)')
     process.exitCode = 1
   } finally {
-    await client.end()
+    try { await client.end() } catch { /* already closed */ }
   }
 }
 
