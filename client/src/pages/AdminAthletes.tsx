@@ -260,7 +260,7 @@ export default function AdminAthletes() {
                   {/* Status pill + remove */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexShrink: 0 }}>
                     <span style={{
-                      fontSize: 10, fontWeight: 700, letterSpacing: '0.06em',
+                      fontSize: 11, fontWeight: 600, letterSpacing: '-0.005em',
                       padding: '3px 9px', borderRadius: 50,
                       background: isActive ? 'var(--red)' : 'transparent',
                       border: isActive ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
