@@ -21,7 +21,7 @@ export default function Navbar() {
     <nav
       style={{
         position: 'sticky', top: 0, zIndex: 100, height: 60,
-        display: 'flex', alignItems: 'center', padding: '0 clamp(1.25rem, 4vw, 2rem)',
+        display: 'flex', alignItems: 'center', padding: '0 clamp(1rem, 4vw, 2rem)',
         background: 'var(--nav-bg)',
         backdropFilter: 'saturate(180%) blur(20px)',
         WebkitBackdropFilter: 'saturate(180%) blur(20px)',
@@ -60,13 +60,13 @@ export default function Navbar() {
             <div className="md:hidden"><ThemeToggle /></div>
           </>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <LanguagePicker />
             <ThemeToggle />
             <Link to="/login" className="hidden min-[400px]:inline-flex" style={{ fontSize: 14, fontWeight: 500, padding: '7px 10px', color: 'var(--w70)', textDecoration: 'none' }}>
               {t('nav.signIn')}
             </Link>
-            <Link to="/signup" className="btn-primary" style={{ padding: '8px 18px', fontSize: 14, letterSpacing: '-0.005em' }}>
+            <Link to="/signup" className="btn-primary" style={{ padding: '8px 14px', fontSize: 14, letterSpacing: '-0.005em' }}>
               {t('nav.getStarted')}
             </Link>
           </div>
