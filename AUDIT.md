@@ -79,8 +79,8 @@ radials — correct Apple technique, not shine.
 - [x] `client/src/pages/Drills.tsx:15` — em dash in body copy. Fixed: now "Tap fast, but freeze on blue."
 - [x] Em dash used as the empty-value glyph. Fixed: text fallbacks (AdminDashboard, Admin,
   AdminOnboard) now "Not set" / "No email"; the numeric stat slot (CoachAthleteHub) uses an
-  en dash (Apple Health's no-data glyph). Remaining `—` in CoachOnboard is a decorative list
-  bullet, folded into the eyebrow/decoration sweep below.
+  en dash (Apple Health's no-data glyph). The decorative red em-dash bullet in CoachOnboard
+  is now a small round dot. No rendered em dashes remain (the rest are code comments only).
 
 ---
 

@@ -514,7 +514,7 @@ export default function CoachOnboard() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '1.5rem' }}>
                   {frameworkBullets.map((bullet, i) => (
                     <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', borderRadius: 12, padding: '12px 14px' }}>
-                      <span style={{ color: 'var(--red)', fontWeight: 700, fontSize: 14, marginTop: 1, flexShrink: 0 }}>—</span>
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--red)', marginTop: 9, flexShrink: 0 }} />
                       <textarea
                         value={bullet}
                         onChange={e => setFrameworkBullets(prev => prev ? prev.map((b, idx) => idx === i ? e.target.value : b) : prev)}
