@@ -12,7 +12,7 @@ const EASE = 'cubic-bezier(0.23, 1, 0.32, 1)'
 // Four games, in order. Names and one-liners a 10-year-old gets at a glance.
 const TESTS = [
   { key: 'reaction_time', name: 'Quick Tap',     what: 'Tap the moment it lights up.',          to: '/drills/reaction' },
-  { key: 'go_no_go',      name: 'Stop & Go',      what: 'Tap fast — but freeze on blue.',        to: '/drills/go-no-go' },
+  { key: 'go_no_go',      name: 'Stop & Go',      what: 'Tap fast, but freeze on blue.',         to: '/drills/go-no-go' },
   { key: 'eye_track',     name: 'Follow the Dot', what: 'Keep your eyes on the moving dot.',      to: '/drills/eye-track' },
   { key: 'the_sigh',      name: 'Breathe',        what: 'Breathe with the circle to calm down.', to: '/drills/sigh' },
 ]

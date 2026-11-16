@@ -76,8 +76,7 @@ radials — correct Apple technique, not shine.
 
 ### 4. Copy rule violations (standing "no em dash / no middle-dot" rule)
 
-- [ ] `client/src/pages/Drills.tsx:15` — `"Tap fast — but freeze on blue."` — em dash in
-  body copy. Should be a comma.
+- [x] `client/src/pages/Drills.tsx:15` — em dash in body copy. Fixed: now "Tap fast, but freeze on blue."
 - [ ] Em dash used as the empty-value glyph (`value || '—'`) in AdminDashboard, Admin,
   AdminOnboard, CoachAthleteHub. Minor, but it's an em dash in the UI; pick a neutral placeholder.
 
