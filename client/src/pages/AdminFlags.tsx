@@ -51,7 +51,7 @@ export default function AdminFlags() {
     return (
       <Layout>
         <div style={{ maxWidth: 400, margin: '8rem auto', padding: '0 1.5rem', textAlign: 'center' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', color: 'var(--w60)', marginBottom: '1.5rem' }}>
+          <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w60)', marginBottom: '1.5rem' }}>
             Admin
           </p>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
@@ -80,7 +80,7 @@ export default function AdminFlags() {
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '4rem 1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3rem' }}>
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', color: 'var(--w60)', marginBottom: 8 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w60)', marginBottom: 8 }}>
               Admin
             </p>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', lineHeight: 0.95, letterSpacing: '-0.035em' }}>
