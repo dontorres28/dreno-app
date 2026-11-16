@@ -332,7 +332,7 @@ export default function AdminOnboard() {
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
                         <p style={{ fontSize: 15, fontWeight: 700, color: active ? 'var(--btn-ink)' : 'var(--white)' }}>{t.label}</p>
-                        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', color: active ? 'rgba(255,255,255,0.7)' : 'var(--w50)' }}>
+                        <span style={{ fontSize: 12, fontWeight: 500, letterSpacing: '-0.005em', color: active ? 'rgba(255,255,255,0.7)' : 'var(--w50)' }}>
                           {t.desc}
                         </span>
                       </div>
@@ -407,7 +407,7 @@ export default function AdminOnboard() {
 
           {/* Summary */}
           <div style={{ background: 'var(--surface-1)', border: '0.5px solid var(--surface-border-2)', borderRadius: 16, padding: '1.25rem' }}>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--w60)', marginBottom: '1rem' }}>
+            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w60)', marginBottom: '1rem' }}>
               Plan summary
             </p>
             {[
