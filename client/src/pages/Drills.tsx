@@ -14,7 +14,7 @@ const TESTS = [
   { key: 'reaction_time', name: 'Quick Tap',     what: 'Tap the moment it lights up.',          to: '/drills/reaction' },
   { key: 'go_no_go',      name: 'Stop & Go',      what: 'Tap fast, but freeze on blue.',         to: '/drills/go-no-go' },
   { key: 'eye_track',     name: 'Follow the Dot', what: 'Keep your eyes on the moving dot.',      to: '/drills/eye-track' },
-  { key: 'the_sigh',      name: 'Breathe',        what: 'Breathe with the circle to calm down.', to: '/drills/sigh' },
+  { key: 'the_sigh',      name: 'Breathe',        what: 'Breathe with the circle to reset fast.',  to: '/drills/sigh' },
 ]
 
 function TestRow({ n, name, what, to, done }: { n: number; name: string; what: string; to: string; done: boolean }) {
