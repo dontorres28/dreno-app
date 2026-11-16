@@ -76,7 +76,7 @@ export default function AdminDashboard() {
           }}>
             <div style={{ position: 'relative' }}>
               <p style={{
-                fontSize: 11, fontWeight: 700, letterSpacing: '0.10em',
+                fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em',
                 color: 'rgba(255,255,255,0.75)', marginBottom: 10,
               }}>
                 {org?.plan_tier ? `${org.plan_tier.charAt(0).toUpperCase() + org.plan_tier.slice(1)} plan` : 'Plan'}
