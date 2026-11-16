@@ -77,8 +77,10 @@ radials — correct Apple technique, not shine.
 ### 4. Copy rule violations (standing "no em dash / no middle-dot" rule)
 
 - [x] `client/src/pages/Drills.tsx:15` — em dash in body copy. Fixed: now "Tap fast, but freeze on blue."
-- [ ] Em dash used as the empty-value glyph (`value || '—'`) in AdminDashboard, Admin,
-  AdminOnboard, CoachAthleteHub. Minor, but it's an em dash in the UI; pick a neutral placeholder.
+- [x] Em dash used as the empty-value glyph. Fixed: text fallbacks (AdminDashboard, Admin,
+  AdminOnboard) now "Not set" / "No email"; the numeric stat slot (CoachAthleteHub) uses an
+  en dash (Apple Health's no-data glyph). Remaining `—` in CoachOnboard is a decorative list
+  bullet, folded into the eyebrow/decoration sweep below.
 
 ---
 

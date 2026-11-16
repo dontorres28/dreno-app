@@ -211,7 +211,7 @@ export default function AdminDashboard() {
               { label: 'Type', value: org?.org_type },
               { label: 'Sport', value: org?.sport },
               { label: 'Plan', value: org?.plan_tier ? org.plan_tier.charAt(0).toUpperCase() + org.plan_tier.slice(1) : 'Small' },
-              { label: 'Contact', value: org?.phone || '—' },
+              { label: 'Contact', value: org?.phone || 'Not set' },
             ].map((row, i) => (
               <div
                 key={row.label}
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
               >
                 <span style={{ fontSize: 13, color: 'var(--w60)', letterSpacing: '-0.005em' }}>{row.label}</span>
                 <span style={{ fontSize: 14, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w80)' }}>
-                  {row.value ?? '—'}
+                  {row.value ?? 'Not set'}
                 </span>
               </div>
             ))}

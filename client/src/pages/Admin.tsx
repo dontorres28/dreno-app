@@ -184,7 +184,7 @@ export default function Admin() {
                         {coach.profiles?.name ?? 'Unnamed'}
                       </p>
                       <p style={{ fontSize: 13, color: 'var(--w60)', letterSpacing: '-0.005em' }}>
-                        {coach.profiles?.email ?? '—'}
+                        {coach.profiles?.email ?? 'No email'}
                       </p>
                       {coach.headline && (
                         <p style={{ fontSize: 13, color: 'var(--w70)', letterSpacing: '-0.005em', marginTop: 8, lineHeight: 1.5 }}>

@@ -413,7 +413,7 @@ export default function AdminOnboard() {
             {[
               { label: 'Organization', value: orgName },
               { label: 'Type', value: orgType },
-              { label: 'Sport', value: resolvedSport || '—' },
+              { label: 'Sport', value: resolvedSport || 'Not set' },
               { label: 'Plan', value: `${tier.label}, ${tier.desc}` },
               { label: 'Billing', value: annual ? 'Annual' : 'Monthly' },
               { label: 'Monthly', value: `$${monthlyPrice.toLocaleString()}` },

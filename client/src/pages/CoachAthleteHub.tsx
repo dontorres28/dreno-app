@@ -311,7 +311,7 @@ export default function CoachAthleteHub() {
                           fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700,
                           letterSpacing: '-0.035em', lineHeight: 1,
                         }}>
-                          {d.last != null ? Math.round(d.last) : '—'}
+                          {d.last != null ? Math.round(d.last) : '–'}
                         </p>
                       </div>
                       <MiniSparkline scores={d.scores} />
