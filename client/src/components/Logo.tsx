@@ -3,10 +3,11 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-// Real DRENO SPORTS artwork (public/dreno-logo.png), painted as a mask so the
-// single transparent asset recolors per theme, navy on light, off-white on
-// dark, with no second file. Aspect is locked to the trimmed artwork.
-const LOGO_ASPECT = 900 / 198;
+// DRENO wordmark (public/dreno-wordmark.png — the "SPORTS" subtitle removed),
+// painted as a mask so the single transparent asset recolors per theme, navy on
+// light, off-white on dark, with no second file. Aspect is locked to the trimmed
+// artwork. (The full DRENO SPORTS lockup is still at /dreno-logo.png.)
+const LOGO_ASPECT = 900 / 133;
 
 const heights = { sm: 18, md: 26, lg: 40 } as const;
 
@@ -24,14 +25,14 @@ export default function Logo({ variant, size = 'md' }: LogoProps) {
   return (
     <span
       role="img"
-      aria-label="Dreno Sports"
+      aria-label="Dreno"
       style={{
         display: 'inline-block',
         width: height * LOGO_ASPECT,
         height,
         background: color,
-        WebkitMaskImage: 'url(/dreno-logo.png)',
-        maskImage: 'url(/dreno-logo.png)',
+        WebkitMaskImage: 'url(/dreno-wordmark.png)',
+        maskImage: 'url(/dreno-wordmark.png)',
         WebkitMaskRepeat: 'no-repeat',
         maskRepeat: 'no-repeat',
         WebkitMaskPosition: 'center',
