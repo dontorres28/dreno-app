@@ -31,7 +31,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <div style={{ marginBottom: '1.5rem' }}>
       <p style={{
-        fontSize: 12, fontWeight: 700, letterSpacing: '0.12em',
+        fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em',
         color: 'var(--w60)', marginBottom: '0.875rem', paddingLeft: 4,
       }}>
         {title}
@@ -271,7 +271,7 @@ export default function AdminSettings() {
           }}>
             <div style={{ position: 'relative' }}>
               <p style={{
-                fontSize: 11, fontWeight: 700, letterSpacing: '0.10em',
+                fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em',
                 color: 'rgba(255,255,255,0.75)', marginBottom: 10,
               }}>
                 {planTier.charAt(0).toUpperCase() + planTier.slice(1)} plan
@@ -353,7 +353,7 @@ export default function AdminSettings() {
         {/* Program, sport selector */}
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{
-            fontSize: 12, fontWeight: 700, letterSpacing: '0.12em',
+            fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em',
             color: 'var(--w60)', marginBottom: '0.875rem', paddingLeft: 4,
           }}>
             Program
@@ -413,7 +413,7 @@ export default function AdminSettings() {
         {/* Coaches */}
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{
-            fontSize: 12, fontWeight: 700, letterSpacing: '0.12em',
+            fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em',
             color: 'var(--w60)', marginBottom: '0.875rem', paddingLeft: 4,
           }}>
             Coaches
@@ -503,7 +503,7 @@ export default function AdminSettings() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexShrink: 0 }}>
                       <span style={{
-                        fontSize: 10, fontWeight: 700, letterSpacing: '0.06em',
+                        fontSize: 11, fontWeight: 600, letterSpacing: '-0.005em',
                         padding: '3px 9px', borderRadius: 50,
                         background: isActive ? 'var(--red)' : 'transparent',
                         border: isActive ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
@@ -561,8 +561,8 @@ export default function AdminSettings() {
           </Row>
         </Section>
 
-        {/* Account */}
-        <Section title="Account">
+        {/* Support & session */}
+        <Section title="Support">
           <Row label="Contact support">
             <a
               href="mailto:hello@dreno.app"
