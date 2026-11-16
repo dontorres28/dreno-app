@@ -73,7 +73,8 @@ export default function LanguagePicker() {
           WebkitTapHighlightColor: 'transparent',
         }}
       >
-        {AUTONYM[current] ?? current}
+        <span className="lang-full">{AUTONYM[current] ?? current}</span>
+        <span className="lang-code">{(LANGUAGE_CODES[current] ?? 'en').toUpperCase()}</span>
         <span
           style={{
             display: 'block', flexShrink: 0,
@@ -88,6 +89,8 @@ export default function LanguagePicker() {
           .lang-pill:hover { background: var(--surface-2); color: var(--white); }
           .lang-pill:active { transform: scale(0.96); transition: transform 90ms cubic-bezier(0.4, 0, 1, 1); }
           @media (prefers-reduced-motion: reduce) { .lang-pill:active { transform: none; } }
+          .lang-code { display: none; }
+          @media (max-width: 480px) { .lang-full { display: none; } .lang-code { display: inline; } }
         `}</style>
       </button>
       <div

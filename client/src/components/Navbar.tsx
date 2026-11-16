@@ -63,7 +63,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <LanguagePicker />
             <ThemeToggle />
-            <Link to="/login" style={{ fontSize: 14, fontWeight: 500, padding: '7px 10px', color: 'var(--w70)', textDecoration: 'none' }}>
+            <Link to="/login" className="hidden min-[400px]:inline-flex" style={{ fontSize: 14, fontWeight: 500, padding: '7px 10px', color: 'var(--w70)', textDecoration: 'none' }}>
               {t('nav.signIn')}
             </Link>
             <Link to="/signup" className="btn-primary" style={{ padding: '8px 18px', fontSize: 14, letterSpacing: '-0.005em' }}>

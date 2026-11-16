@@ -204,12 +204,12 @@ export default function Landing() {
                 className="cta-btn"
                 style={{
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  height: 44, padding: '0 22px', borderRadius: 50,
+                  height: 44, padding: '0 22px', borderRadius: 14,
                   fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em',
                   fontFamily: 'var(--font-body)',
                   background: 'var(--red)', color: 'var(--btn-ink)',
                   border: '0.5px solid var(--red)', textDecoration: 'none',
-                  boxShadow: '0 10px 32px rgba(77,166,255,0.28)',
+                  boxShadow: '0 1px 2px rgba(11,60,140,0.12)',
                 }}
               >
                 {t('landing.signUpFree')}
@@ -219,7 +219,7 @@ export default function Landing() {
                 className="cta-btn"
                 style={{
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                  height: 44, padding: '0 18px', borderRadius: 50,
+                  height: 44, padding: '0 18px', borderRadius: 14,
                   fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em',
                   fontFamily: 'var(--font-body)',
                   background: 'transparent', color: 'var(--w80)',
@@ -342,7 +342,7 @@ export default function Landing() {
             className="cta-btn"
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              height: 46, padding: '0 26px', borderRadius: 50,
+              height: 46, padding: '0 26px', borderRadius: 14,
               fontSize: 14, fontWeight: 500, letterSpacing: '-0.005em',
               fontFamily: 'var(--font-body)',
               background: 'var(--red)', color: 'var(--btn-ink)',
