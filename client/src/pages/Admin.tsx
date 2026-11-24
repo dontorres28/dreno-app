@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
-import { adminGet, adminPost } from '../lib/api';
+import { listCoaches, verifyCoach, rejectCoach } from '../lib/admin';
 import toast from 'react-hot-toast';
 
 interface Coach {
@@ -19,31 +19,22 @@ const STATUS_META: Record<string, { label: string; color: string; bg: string; bo
 };
 
 export default function Admin() {
-  const [password, setPassword] = useState('');
-  const [authed, setAuthed] = useState(false);
   const [coaches, setCoaches] = useState<Coach[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [rejectReason, setRejectReason] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
 
-  async function login(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const data = await adminGet('/api/admin/coaches', password);
-      setCoaches(data);
-      setAuthed(true);
-    } catch (err: any) {
-      toast.error(err.message ?? 'Wrong password');
-    } finally {
-      setLoading(false);
-    }
-  }
+  useEffect(() => {
+    listCoaches()
+      .then(d => setCoaches(d as unknown as Coach[]))
+      .catch((err: any) => toast.error(err.message ?? 'Could not load coaches'))
+      .finally(() => setLoading(false));
+  }, []);
 
   async function verify(id: string) {
     setBusy(id + ':v');
     try {
-      await adminPost(`/api/admin/coaches/${id}/verify`, {}, password);
+      await verifyCoach(id);
       setCoaches(prev => prev.map(c => c.id === id ? { ...c, verified_status: 'verified', rejection_reason: null } : c));
       toast.success('Coach verified');
     } catch (err: any) {
@@ -56,7 +47,7 @@ export default function Admin() {
   async function reject(id: string) {
     setBusy(id + ':r');
     try {
-      await adminPost(`/api/admin/coaches/${id}/reject`, { reason: rejectReason[id] ?? '' }, password);
+      await rejectCoach(id, rejectReason[id] ?? '');
       setCoaches(prev => prev.map(c => c.id === id ? { ...c, verified_status: 'rejected', rejection_reason: rejectReason[id] ?? '' } : c));
       toast.success('Coach rejected');
     } catch (err: any) {
@@ -66,64 +57,8 @@ export default function Admin() {
     }
   }
 
-  if (!authed) {
-    return (
-      <Layout>
-        <div style={{ maxWidth: 400, margin: '5rem auto', padding: '0 1.5rem' }}>
-          <h1 style={{
-            fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 6vw, 2.75rem)',
-            lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: 8,
-          }}>
-            Admin
-          </h1>
-          <p style={{ fontSize: 14, color: 'var(--w70)', letterSpacing: '-0.005em', marginBottom: '2rem' }}>
-            Coach verification portal.
-          </p>
-          <form
-            onSubmit={login}
-            style={{
-              background: 'var(--surface-1)',
-              border: '0.5px solid var(--surface-border-2)',
-              borderRadius: 20, padding: '1.5rem',
-              display: 'flex', flexDirection: 'column', gap: '1rem',
-            }}
-          >
-            <div>
-              <label className="label" style={{ display: 'block', marginBottom: 8 }}>Admin password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                autoFocus
-                style={{
-                  width: '100%', padding: '13px 14px', boxSizing: 'border-box',
-                  background: 'var(--surface-2)', border: '0.5px solid var(--surface-border-2)',
-                  borderRadius: 12, fontSize: 16, letterSpacing: '-0.005em',
-                  color: 'var(--white)', fontFamily: 'var(--font-body)', outline: 'none',
-                }}
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading || !password}
-              style={{
-                height: 48, borderRadius: 50, fontSize: 15, fontWeight: 700,
-                fontFamily: 'var(--font-body)', letterSpacing: '-0.005em',
-                background: password ? 'var(--red)' : 'transparent',
-                border: password ? '0.5px solid var(--red)' : '0.5px solid var(--surface-border-2)',
-                color: password ? 'var(--btn-ink)' : 'var(--w60)',
-                cursor: password && !loading ? 'pointer' : 'not-allowed',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                transition: 'background 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms, color 200ms',
-              }}
-            >
-              {loading ? <Spinner size={16} /> : 'Enter'}
-            </button>
-          </form>
-        </div>
-      </Layout>
-    );
+  if (loading) {
+    return <Layout><div style={{ display: 'flex', justifyContent: 'center', paddingTop: '5rem' }}><Spinner size={28} /></div></Layout>;
   }
 
   const pending = coaches.filter(c => c.verified_status !== 'verified' && c.verified_status !== 'rejected');

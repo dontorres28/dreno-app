@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { CaretDown } from '@phosphor-icons/react';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
-import FloatingField from '../components/FloatingField';
-import { adminGet, adminPost } from '../lib/api';
+import { getFlags, recomputeStats } from '../lib/admin';
 
 interface FlaggedCoach {
   coach_id: string;
@@ -13,32 +12,23 @@ interface FlaggedCoach {
 }
 
 export default function AdminFlags() {
-  const [password, setPassword] = useState('');
-  const [authed, setAuthed] = useState(false);
   const [flags, setFlags] = useState<FlaggedCoach[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [recomputing, setRecomputing] = useState(false);
   const [error, setError] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  async function load(pw: string) {
-    setLoading(true);
-    setError('');
-    try {
-      const data = await adminGet('/api/admin/flags', pw);
-      setFlags(data);
-      setAuthed(true);
-    } catch {
-      setError('Wrong password or server error.');
-    } finally {
-      setLoading(false);
-    }
-  }
+  useEffect(() => {
+    getFlags()
+      .then(d => setFlags(d as unknown as FlaggedCoach[]))
+      .catch((e: any) => setError(e.message ?? 'Could not load flags'))
+      .finally(() => setLoading(false));
+  }, []);
 
   async function recompute() {
     setRecomputing(true);
     try {
-      const res = await adminPost('/api/admin/recompute-stats', {}, password);
+      const res = await recomputeStats();
       alert(`Done. ${res.coaches} coaches updated, ${res.aggregates} aggregates updated.`);
     } catch (e: any) {
       alert(e.message);
@@ -47,32 +37,8 @@ export default function AdminFlags() {
     }
   }
 
-  if (!authed) {
-    return (
-      <Layout>
-        <div style={{ maxWidth: 400, margin: '8rem auto', padding: '0 1.5rem', textAlign: 'center' }}>
-          <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '-0.005em', color: 'var(--w60)', marginBottom: '1.5rem' }}>
-            Admin
-          </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', lineHeight: 0.95, letterSpacing: '-0.035em', marginBottom: '2rem' }}>
-            Flags queue
-          </h1>
-          <div style={{ marginBottom: '1rem' }}>
-            <FloatingField
-              type="password"
-              label="Admin password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && load(password)}
-            />
-          </div>
-          {error && <p style={{ fontSize: 13, color: 'var(--red)', marginBottom: '1rem' }}>{error}</p>}
-          <button className="btn-primary" style={{ width: '100%' }} disabled={loading} onClick={() => load(password)}>
-            {loading ? <Spinner size={18} /> : 'Enter'}
-          </button>
-        </div>
-      </Layout>
-    );
+  if (loading) {
+    return <Layout><div style={{ display: 'flex', justifyContent: 'center', paddingTop: '5rem' }}><Spinner size={28} /></div></Layout>;
   }
 
   return (

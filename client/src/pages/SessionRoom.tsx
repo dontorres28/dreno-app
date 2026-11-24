@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import { supabase } from '../lib/supabase';
-import { apiPost } from '../lib/api';
+import { getOrCreateRoom } from '../lib/bookings';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -85,7 +85,7 @@ export default function SessionRoom() {
     if (!bookingId) return;
     setCreatingRoom(true);
     try {
-      const data = await apiPost(`/api/bookings/${bookingId}/create-room`, {});
+      const data = await getOrCreateRoom(bookingId);
       setBooking((prev: any) => ({ ...prev, room_url: data.room_url }));
     } catch (err: any) {
       toast.error(err.message ?? 'Could not create room');

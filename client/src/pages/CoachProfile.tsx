@@ -6,7 +6,7 @@ import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import Tooltip from '../components/Tooltip';
 import { supabase } from '../lib/supabase';
-import { apiGet } from '../lib/api';
+import { getRebookStats } from '../lib/coach';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -38,7 +38,7 @@ export default function CoachProfile() {
       try {
         const [{ data, error }] = await Promise.all([
           supabase.from('coaches').select('*, profiles(name, email)').eq('id', id).single(),
-          apiGet(`/api/coach/${id}/rebook-stats`).then(d => setRebookStats(d)).catch(() => {}),
+          getRebookStats(id).then(d => setRebookStats(d)).catch(() => {}),
         ]);
         if (error) throw error;
         setCoach(data);

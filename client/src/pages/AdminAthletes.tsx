@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
-import { apiGet, apiPost } from '../lib/api';
+import { getOrgOverview, inviteAthlete, removeMember } from '../lib/admin';
 import toast from 'react-hot-toast';
 
 interface Member {
@@ -41,8 +41,8 @@ export default function AdminAthletes() {
 
   async function load() {
     try {
-      const data = await apiGet('/api/org/overview');
-      setMembers(data.members ?? []);
+      const data = await getOrgOverview();
+      setMembers((data.members ?? []) as Member[]);
     } catch (err: any) {
       toast.error(err.message ?? 'Could not load athletes');
     } finally {
@@ -57,7 +57,7 @@ export default function AdminAthletes() {
     if (!email.trim()) return;
     setInviting(true);
     try {
-      const data = await apiPost('/api/org/invite', { email: email.trim() });
+      const data = await inviteAthlete(email.trim());
       toast.success(data.already_registered ? `${email} added` : `Invite sent to ${email}`);
       setEmail('');
       load();
@@ -71,12 +71,7 @@ export default function AdminAthletes() {
   async function remove(memberId: string) {
     setRemoving(memberId);
     try {
-      const { supabase } = await import('../lib/supabase');
-      const { data: { session } } = await supabase.auth.getSession();
-      await fetch(`${import.meta.env.VITE_SERVER_URL}/api/org/members/${memberId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${session?.access_token}` },
-      });
+      await removeMember(memberId);
       toast.success('Removed');
       setMembers(m => m.filter(x => x.id !== memberId));
     } catch {

@@ -7,7 +7,7 @@ import PlanChangeRequest from '../components/PlanChangeRequest';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { apiGet, apiPost } from '../lib/api';
+import { getOrgOverview, inviteCoachToOrg, removeOrgCoach } from '../lib/admin';
 import toast from 'react-hot-toast';
 
 const SPORT_OPTIONS = [
@@ -110,7 +110,7 @@ export default function AdminSettings() {
 
     Promise.all([
       supabase.from('administrators').select('*').eq('id', user.id).single(),
-      apiGet('/api/org/overview').catch(() => null),
+      getOrgOverview().catch(() => null),
     ]).then(([{ data }, overview]) => {
       if (data) {
         setPhone(data.phone ?? '');
@@ -166,10 +166,10 @@ export default function AdminSettings() {
     if (!coachEmail.trim()) return;
     setAddingCoach(true);
     try {
-      await apiPost('/api/org/invite-coach', { email: coachEmail.trim() });
+      await inviteCoachToOrg(coachEmail.trim());
       toast.success(`Coach invite sent to ${coachEmail}`);
       setCoachEmail('');
-      const overview = await apiGet('/api/org/overview');
+      const overview = await getOrgOverview();
       setCoaches(overview.coaches ?? []);
     } catch (err: any) {
       toast.error(err.message ?? 'Could not invite coach');
@@ -181,11 +181,7 @@ export default function AdminSettings() {
   async function removeCoach(coachId: string) {
     setRemovingCoach(coachId);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      await fetch(`${import.meta.env.VITE_SERVER_URL}/api/org/coaches/${coachId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${session?.access_token}` },
-      });
+      await removeOrgCoach(coachId);
       toast.success('Coach removed');
       setCoaches(c => c.filter(x => x.id !== coachId));
     } catch {

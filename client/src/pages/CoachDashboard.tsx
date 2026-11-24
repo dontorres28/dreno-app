@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import Layout from '../components/Layout'
 import Spinner from '../components/Spinner'
 import { supabase } from '../lib/supabase'
-import { apiPost, apiGet } from '../lib/api'
+import { confirmBooking, cancelBooking } from '../lib/bookings'
+import { getCheckInAggregate } from '../lib/coach'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 
@@ -109,7 +110,7 @@ export default function CoachDashboard() {
       if (coachRes.error) throw coachRes.error
       setBookings((bookRes.data ?? []) as unknown as Booking[])
       setCoach(coachRes.data)
-      apiGet('/api/coach/check-in-aggregate').then(d => setCheckInAgg(d)).catch(() => {})
+      getCheckInAggregate().then(d => setCheckInAgg(d)).catch(() => {})
     } catch (err: any) {
       toast.error(err.message ?? 'Could not load dashboard')
     } finally { setLoading(false) }
@@ -118,13 +119,13 @@ export default function CoachDashboard() {
 
   async function confirm(id: string) {
     setActing(id)
-    try { await apiPost(`/api/bookings/${id}/confirm`, {}); toast.success('Confirmed.'); load() }
+    try { await confirmBooking(id); toast.success('Confirmed.'); load() }
     catch (err: any) { toast.error(err.message ?? 'Could not confirm') }
     finally { setActing(null) }
   }
   async function cancel(id: string) {
     setActing(id)
-    try { await apiPost(`/api/bookings/${id}/cancel`, {}); toast.success('Cancelled.'); load() }
+    try { await cancelBooking(id); toast.success('Cancelled.'); load() }
     catch (err: any) { toast.error(err.message ?? 'Could not cancel') }
     finally { setActing(null) }
   }

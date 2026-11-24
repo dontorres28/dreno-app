@@ -52,6 +52,9 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
+      // Clear any lingering session first, otherwise signing in while another
+      // account is active returns that account instead of switching. Mirrors Signup.
+      await supabase.auth.signOut().catch(() => {});
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       const uid = data.user?.id;

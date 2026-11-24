@@ -2,20 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
-import { apiGet, apiPost } from '../lib/api';
+import { fetchPlaybook, markNoteSeen, type PlaybookNote } from '../lib/playbook';
 import { useTypewriter } from '../hooks/useTypewriter';
-
-interface PlaybookNote {
-  id: string;
-  section: string;
-  body: string;
-  created_at: string;
-  first_viewed_at: string | null;
-  coach_id: string;
-  coach_name: string | null;
-  coach_photo: string | null;
-  eligible_for_animation: boolean;
-}
 
 const SECTIONS = ['general', 'focus', 'pre-performance', 'resilience', 'identity', 'recovery'];
 
@@ -44,7 +32,7 @@ function CoachNoteCard({ note, isFirst }: { note: PlaybookNote; isFirst: boolean
   useEffect(() => {
     if (!shouldAnimate || markedRef.current) return;
     markedRef.current = true;
-    apiPost('/api/playbook/mark-seen', { note_id: note.id }).catch(() => {});
+    markNoteSeen(note.id).catch(() => {});
   }, [shouldAnimate, note.id]);
 
   useEffect(() => {
@@ -149,7 +137,7 @@ export default function Playbook() {
   const [activeSection, setActiveSection] = useState('general');
 
   useEffect(() => {
-    apiGet('/api/playbook')
+    fetchPlaybook()
       .then(setNotes)
       .catch(() => {})
       .finally(() => setLoading(false));

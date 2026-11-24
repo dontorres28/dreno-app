@@ -111,7 +111,7 @@ export default function App() {
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/coaches" element={<ProtectedRoute><Coaches /></ProtectedRoute>} />
             <Route path="/coach/:id" element={<ProtectedRoute><CoachProfile /></ProtectedRoute>} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<ProtectedRoute role="administrator"><Admin /></ProtectedRoute>} />
             <Route path="/payment/success" element={<PaymentSuccess />} />
 
             <Route path="/onboarding/athlete" element={<ProtectedRoute><AthleteOnboard /></ProtectedRoute>} />
@@ -145,7 +145,7 @@ export default function App() {
             <Route path="/playbook" element={<ProtectedRoute role="athlete"><Playbook /></ProtectedRoute>} />
             <Route path="/you" element={<ProtectedRoute role="athlete"><You /></ProtectedRoute>} />
             <Route path="/session/:bookingId/feedback" element={<ProtectedRoute role="athlete"><SessionFeedback /></ProtectedRoute>} />
-            <Route path="/admin/flags" element={<AdminFlags />} />
+            <Route path="/admin/flags" element={<ProtectedRoute role="administrator"><AdminFlags /></ProtectedRoute>} />
 
             {/* Legal — public, no auth required */}
             <Route path="/legal/terms"    element={<LegalTerms />} />

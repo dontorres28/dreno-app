@@ -4,7 +4,8 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
-import { apiGet, apiPost } from '../lib/api';
+import { getCoachAthlete } from '../lib/coach';
+import { addCoachNote } from '../lib/playbook';
 import toast from 'react-hot-toast';
 
 const PLAYBOOK_SECTIONS = [
@@ -97,8 +98,8 @@ export default function CoachAthleteHub() {
 
   useEffect(() => {
     if (!id) return;
-    apiGet(`/api/coach/athletes/${id}`)
-      .then(setData)
+    getCoachAthlete(id)
+      .then(d => setData(d as AthleteData))
       .catch(e => setErr(e.message))
       .finally(() => setLoading(false));
   }, [id]);
@@ -107,10 +108,10 @@ export default function CoachAthleteHub() {
     if (!id || !noteBody.trim()) return;
     setNoteSaving(true);
     try {
-      await apiPost('/api/coach/playbook/note', { athlete_id: id, section: noteSection, body: noteBody.trim() });
+      await addCoachNote(id, noteSection, noteBody.trim());
       toast.success('Note saved');
       setNoteBody('');
-      apiGet(`/api/coach/athletes/${id}`).then(setData).catch(() => {});
+      getCoachAthlete(id).then(d => setData(d as AthleteData)).catch(() => {});
     } catch (e: any) {
       toast.error(e.message ?? 'Could not save note');
     } finally {

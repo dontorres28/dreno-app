@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Layout from '../components/Layout';
 import FloatingField from '../components/FloatingField';
-import { apiPost, apiGet } from '../lib/api';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
 export default function SessionFeedback() {
@@ -21,22 +21,28 @@ export default function SessionFeedback() {
 
   useEffect(() => {
     if (!bookingId || !user) return;
-    apiGet(`/api/session-feedback/${bookingId}`)
-      .then(d => { if (d) setAlreadyDone(true); })
-      .catch(() => {});
+    supabase.from('session_feedback').select('id')
+      .eq('booking_id', bookingId).eq('athlete_id', user.id).maybeSingle()
+      .then(({ data }: { data: { id: string } | null }) => { if (data) setAlreadyDone(true); });
   }, [bookingId, user]);
 
   async function submit(skip = false) {
     if (saving) return;
     setSaving(true);
     try {
-      if (!skip) {
-        await apiPost('/api/session-feedback', {
-          booking_id: bookingId,
-          useful: useful ?? undefined,
-          mood: moodTouched ? mood : undefined,
-          admin_note: adminNote.trim() || undefined,
-        });
+      if (!skip && bookingId && user) {
+        const { data: booking } = await supabase.from('bookings')
+          .select('coach_id, status').eq('id', bookingId).eq('athlete_id', user.id).single();
+        if (booking) {
+          await supabase.from('session_feedback').upsert({
+            booking_id: bookingId,
+            athlete_id: user.id,
+            coach_id: booking.coach_id,
+            useful: useful ?? null,
+            mood: moodTouched ? mood : null,
+            admin_note: adminNote.trim() || null,
+          }, { onConflict: 'booking_id,athlete_id' });
+        }
       }
     } catch {
       // silent, don't block navigation on feedback error

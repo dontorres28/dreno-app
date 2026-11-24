@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion, LayoutGroup } from 'framer-motion';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
-import { apiGet } from '../lib/api';
+import { listCoachAthletes } from '../lib/coach';
 
 interface Athlete {
   id: string;
@@ -55,7 +55,7 @@ export default function CoachAthletes() {
   const [filter, setFilter] = useState<Filter>('all');
 
   useEffect(() => {
-    apiGet('/api/coach/athletes')
+    listCoachAthletes()
       .then(setAthletes)
       .catch(e => setErr(e.message))
       .finally(() => setLoading(false));

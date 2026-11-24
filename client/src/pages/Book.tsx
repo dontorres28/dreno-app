@@ -4,7 +4,7 @@ import Spinner from '../components/Spinner';
 import Stepper from '../components/Stepper';
 import ThemeToggle from '../components/ThemeToggle';
 import { supabase } from '../lib/supabase';
-import { apiPost } from '../lib/api';
+import { createBooking } from '../lib/bookings';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { CaretLeft } from '@phosphor-icons/react';
@@ -155,8 +155,8 @@ export default function Book() {
         startsAt = start.toISOString();
         durationMin = manualDuration;
       }
-      await apiPost('/api/bookings', {
-        coachId, availabilityId, startsAt, durationMin,
+      await createBooking({
+        coachId: coachId!, availabilityId, startsAt, durationMin,
         priceCents: isIntro ? 0 : (coach.hourly_rate ?? 0) * 100,
         // Prefix so the coach immediately sees this is an intro call, not a paid session.
         notes: [isIntro ? '[Free intro call]' : null, notes.trim() || null].filter(Boolean).join(', ') || undefined,

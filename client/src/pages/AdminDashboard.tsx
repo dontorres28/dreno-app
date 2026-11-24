@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Spinner from '../components/Spinner';
 import PlanChangeRequest from '../components/PlanChangeRequest';
-import { apiGet } from '../lib/api';
+import { getOrgOverview } from '../lib/admin';
 import { useAuth } from '../context/AuthContext';
 
 const TIER_META: Record<string, { price: number; desc: string }> = {
@@ -20,7 +20,7 @@ export default function AdminDashboard() {
   const [planModalOpen, setPlanModalOpen] = useState(false);
 
   useEffect(() => {
-    apiGet('/api/org/overview')
+    getOrgOverview()
       .then(setData)
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -134,8 +134,8 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Pending activation banner */}
-        {!org?.onboarded && (
+        {/* Pending activation banner — shows until Dreno approves the org */}
+        {!org?.approved && (
           <div style={{
             display: 'flex', alignItems: 'flex-start', gap: '0.875rem',
             padding: '1rem 1.25rem', borderRadius: 16, marginBottom: '1.25rem',

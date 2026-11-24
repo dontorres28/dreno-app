@@ -39,6 +39,9 @@ CREATE TABLE IF NOT EXISTS public.coaches (
 
 CREATE TABLE IF NOT EXISTS public.administrators (
   id TEXT PRIMARY KEY REFERENCES public.profiles(id) ON DELETE CASCADE,
+  org_name TEXT, org_type TEXT, sport TEXT, athlete_limit INTEGER, plan_tier TEXT,
+  phone TEXT, referral TEXT, onboarded BOOLEAN DEFAULT FALSE,
+  approved BOOLEAN NOT NULL DEFAULT FALSE,  -- platform-admin powers gate (is_admin)
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -139,9 +142,10 @@ CREATE TABLE IF NOT EXISTS public.playbook_notes (
 );
 
 -- ── Admin helper (SECURITY DEFINER bypasses RLS to avoid recursion) ────────────
+-- Platform-admin powers require approval; unapproved admins only manage their own org.
 CREATE OR REPLACE FUNCTION public.is_admin() RETURNS boolean
   LANGUAGE sql SECURITY DEFINER STABLE SET search_path = public AS
-$$ SELECT EXISTS (SELECT 1 FROM public.administrators WHERE id = auth.user_id()) $$;
+$$ SELECT EXISTS (SELECT 1 FROM public.administrators WHERE id = auth.user_id() AND approved = true) $$;
 
 -- ── RLS ────────────────────────────────────────────────────────────────────────
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
